@@ -44,7 +44,6 @@
     
     <router-link to="/">Hello</router-link>
     <router-link to="/signin">Signin</router-link>
-    <img src="./assets/logo.png">
     <router-view></router-view>
   </div>
 </template>
