@@ -44,13 +44,18 @@
     
     <router-link to="/">Hello</router-link>
     <router-link to="/signin">Signin</router-link>
-    <router-view></router-view>
+    <router-view :serverUri="serverU"></router-view>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'app'
+  name: 'app',
+  data: function () {
+    return {
+      serverUri: 'http://localhost:9001/'
+    }
+  }
 }
 </script>
 
