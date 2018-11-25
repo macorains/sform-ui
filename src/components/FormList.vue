@@ -12,23 +12,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td>Larry</td>
-          <td>the Bird</td>
-          <td>@twitter</td>
+        <tr v-for="item in formList" v-bind:key="item.id" v-on:click="edit(item.hashed_id)">
+          <td scope="row">{{item.hashed_id}}</td>
+          <td scope="row">{{item.name}}</td>
+          <td scope="row">{{item.title}}</td>
+          <td scope="row">{{item.status}}</td>
         </tr>
       </tbody>
     </table>
@@ -39,8 +27,35 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
-  name: 'form_list'
+  name: 'form_list',
+  props: ['serverUri'],
+  data: function () {
+    return {
+      formList: {}
+    }
+  },
+  created: function () {
+    var token = localStorage.getItem('sformToken')
+    let config = {
+      headers: {
+        'x-Requested-With': '*',
+        'X-Auth-Token': token,
+        'Access-Control-Allow-Origin': this.$props.serverUri
+      }
+    }
+    axios.get(this.$props.serverUri + 'form/list', config)
+    .then(response => {
+      this.$data.formList = JSON.parse(response.data.dataset)
+    })
+  },
+  methods: {
+    edit: function (hashedId) {
+      this.$emit('updateHashedFormId', hashedId)
+      this.$router.push({name: 'formedit', params: {hashedFormId: hashedId}})
+    }
+  }
 }
 </script>
 

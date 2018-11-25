@@ -9,23 +9,23 @@ import FormEdit from '@/components/FormEdit.vue'
 Vue.use(VueRouter)
 
 var router = new VueRouter({
-  routes: [
-    {
-      path: '/',
-      component: Hello
-    },
-    {
-      path: '/signin',
-      component: Signin
-    },
-    {
-      path: '/formlist',
-      component: FormList
-    },
-    {
-      path: '/formedit',
-      component: FormEdit
-    }
+  routes: [{
+    path: '/',
+    component: Hello
+  },
+  {
+    path: '/signin',
+    component: Signin
+  },
+  {
+    path: '/formlist',
+    component: FormList
+  },
+  {
+    path: '/formedit',
+    name: 'formedit',
+    component: FormEdit
+  }
   ]
 })
 

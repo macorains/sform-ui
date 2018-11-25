@@ -35,25 +35,28 @@ export default {
     return {
       email: '',
       group: '',
-      password: ''
+      password: '',
+      formList: {}
     }
   },
   methods: {
     send: function (event) {
-      console.log(this.email)
-      console.log(this.serverUri)
       let config = {
         headers: {
           'x-Requested-With': '*',
-          'Access-Control-Allow-Origin': 'http://localhost:9001'
+          'Access-Control-Allow-Origin': this.$props.serverUri
         }
       }
       var params = new URLSearchParams()
       params.append('email', this.email)
       params.append('group', this.group)
       params.append('password', this.password)
-      axios.post(this.serverUri + 'signIn', params, config)
-      .then(response => console.log(response))
+      axios.post(this.$props.serverUri + 'signIn', params, config)
+      .then(response => {
+        let token = response.headers['x-auth-token']
+        localStorage.setItem('sformToken', token)
+        this.$router.push({path: 'formlist', params: {'serverUri': this.$props.serverUri}})
+      })
     }
   }
 }

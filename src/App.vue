@@ -44,7 +44,7 @@
     
     <router-link to="/">Hello</router-link>
     <router-link to="/signin">Signin</router-link>
-    <router-view :serverUri="serverU"></router-view>
+    <router-view :serverUri="serverUri" :hashedFormId="hashedFormId" @updateHashedFormId="updateHashedFormId"></router-view>
   </div>
 </template>
 
@@ -53,7 +53,13 @@ export default {
   name: 'app',
   data: function () {
     return {
-      serverUri: 'http://localhost:9001/'
+      serverUri: 'http://localhost:9001/',
+      hashedFormId: ''
+    }
+  },
+  methods: {
+    updateHashedFormId: function (hashedFormId) {
+      this.$data.hashedFormId = hashedFormId
     }
   }
 }
