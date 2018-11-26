@@ -62,6 +62,12 @@
           <transfers v-bind:serverUri="serverUri" v-bind:hashedFormId="hashedFormId"></transfers>
         </b-col>
       </b-row>
+      <b-row>
+        <b-col>
+          <b-button class="mt-4" v-on:click="cancel">Cancel</b-button>
+          <b-button class="mt-4" v-on:click="save">Save Change</b-button>
+        </b-col>
+      </b-row>
     </b-container>
 
     <b-modal size="lg" ref="modalColedit" hide-footer title="フォーム項目編集">
@@ -76,7 +82,7 @@
         </b-row>
         <b-row class="mb-3">
           <b-col cols="4">型</b-col>
-          <b-col><b-form-input id="formColType" type="text" v-model="formColData.coltype"></b-form-input></b-col>
+          <b-col><b-form-select v-model="formColData.coltype" :options="optionFormColType" class="mb-3" /></b-col>
         </b-row>
         <b-row class="mb-3">
           <b-col cols="4">選択項目</b-col>
@@ -99,6 +105,7 @@
                 </tr>
               </tbody>
             </table>
+            <b-btn class="mt-3" block @click="addColSelectList">追加</b-btn>
           </b-col>
         </b-row>
         <b-row class="mb-3">
@@ -107,7 +114,7 @@
         </b-row>
         <b-row class="mb-3">
           <b-col cols="4">バリデーション</b-col>
-          <b-col><b-form-input id="formColId" type="text" v-model="formColData.colId"></b-form-input></b-col>
+          <b-col><b-form-select v-model="formColData.validations.inputType" :options="optionFormColValidation" class="mb-3" /></b-col>
         </b-row>
         <b-row class="mb-3">
           <b-col cols="4">数値範囲</b-col>
@@ -125,16 +132,13 @@
         </b-row>
         <b-row class="mb-3">
           <b-col cols="4">必須項目</b-col>
-          <b-col><b-form-input id="formColRequired" type="text" v-model="formColData.required"></b-form-input></b-col>
+          <b-col><b-form-checkbox id="formColRequired" v-model="formColData.required" value="true" unchecked-value="false"/></b-col>
         </b-row>
         <b-row class="mb-3">
           <b-col><b-btn class="mt-3" block @click="endEditCol">編集終了</b-btn></b-col>
         </b-row>
       </b-container>
     </b-modal>
-
-    <b-button class="mt-4" v-on:click="cancel">Cancel</b-button>
-    <b-button class="mt-4" v-on:click="save">Save Change</b-button>
     </div>
   </div>
 
@@ -152,9 +156,27 @@ export default {
   props: ['serverUri', 'hashedFormId'],
   data: function () {
     return {
-      formColData: {validations: {}},
+      formColData: {validations: {}, selectList: {}},
       formData: {},
-      config: {}
+      config: {},
+      optionFormColValidation: [
+        {value: '0', text: '無制限'},
+        {value: '1', text: '数値のみ'},
+        {value: '2', text: '英数字のみ'},
+        {value: '3', text: 'ひらがなのみ'},
+        {value: '4', text: 'カタカナのみ'},
+        {value: '5', text: 'メールアドレス'},
+        {value: '6', text: '郵便番号'}
+      ],
+      optionFormColType: [
+        {value: '1', text: 'テキスト'},
+        {value: '2', text: 'コンボボックス（単一選択）'},
+        {value: '3', text: 'チェックボックス（複数選択）'},
+        {value: '4', text: 'ラジオボタン（単一選択）'},
+        {value: '5', text: 'テキストエリア'},
+        {value: '6', text: '隠しテキスト'},
+        {value: '7', text: '表示テキスト（非入力項目）'}
+      ]
     }
   },
   created: function () {
@@ -170,6 +192,10 @@ export default {
     .then(response => {
       this.$data.formData = response.data.dataset
       console.log(this.$data.formData)
+    })
+    .catch(function (error) {
+      console.log(error.text)
+      this.$router.push({name: 'signin'})
     })
   },
   methods: {
@@ -191,6 +217,18 @@ export default {
     },
     endEditCol: function () {
       this.$refs.modalColedit.hide()
+    },
+    addColSelectList: function () {
+      var colSize = Object.keys(this.$data.formColData.selectList).length
+      var tmp = {
+        index: colSize + '',
+        displayText: '選択項目' + colSize,
+        value: colSize + '',
+        default: 'false',
+        viewStyle: 'display:inline',
+        editStyle: 'display:none'
+      }
+      this.$set(this.$data.formColData.selectList, colSize, tmp)
     }
   }
 }

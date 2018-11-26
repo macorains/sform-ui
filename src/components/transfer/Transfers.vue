@@ -33,6 +33,14 @@ export default {
     }
   },
   created: function () {
+    var token = localStorage.getItem('sformToken')
+    this.$data.config = {
+      headers: {
+        'x-Requested-With': '*',
+        'X-Auth-Token': token,
+        'Access-Control-Allow-Origin': this.$props.serverUri
+      }
+    }
     axios.get(this.$props.serverUri + 'transfertask/' + this.$props.hashedFormId, this.$data.config)
     .then(response => {
       this.$data.transferTask = response.data.dataset

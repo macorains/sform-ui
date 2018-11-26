@@ -49,6 +49,10 @@ export default {
     .then(response => {
       this.$data.formList = JSON.parse(response.data.dataset)
     })
+    .catch(error => {
+      console.log(error.text)
+      this.$router.push({path: 'signin'})
+    })
   },
   methods: {
     edit: function (hashedId) {
