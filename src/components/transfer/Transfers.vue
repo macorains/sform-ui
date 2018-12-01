@@ -11,25 +11,32 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(task, index) in transferTask" v-bind:key="task.id">
+        <tr v-for="(task, index) in transferTask" v-bind:key="task.id" v-on:click="edit(task.id, task.transfer_type_id)">
           <th scope="row">{{index+1}}</th>
           <td>{{task.name}}</td>
-          <td>{{task.transfer_type_id}}</td>
+          <td>{{transferType(task.transfer_type_id)}}</td>
           <td></td>
         </tr>
       </tbody>
     </table>
+    <salesforceTransferEdit ref="salesforceTransferEdit" v-bind:serverUri="serverUri" v-bind:hashedFormId="hashedFormId" v-bind:transferEditModalState="transferEditModalState"></salesforceTransferEdit>
   </div>
 </template>
 <script>
 import axios from 'axios'
+import SalesforceTransferEdit from './SalesforceTransferEdit.vue'
 
 export default {
   name: 'transfers',
   props: ['serverUri', 'hashedFormId'],
+  components: {
+    'salesforceTransferEdit': SalesforceTransferEdit
+  },
   data: function () {
     return {
-      transferTask: {}
+      transferTask: {},
+      transferList: [],
+      transferEditModalState: 0
     }
   },
   created: function () {
@@ -45,6 +52,23 @@ export default {
     .then(response => {
       this.$data.transferTask = response.data.dataset
     })
+    axios.get(this.$props.serverUri + 'transfer', this.$data.config)
+    .then(response => {
+      console.log(response.data)
+      this.$data.transferList = response.data
+    })
+  },
+  methods: {
+    edit: function (id, type) {
+      console.log('id: ' + id + '  type: ' + type)
+      // console.log(this.$refs.salesforceTransferEdit)
+      // this.$refs.salesforceTransferEdit.modalSalesforceTransferRuleSetting.show()
+      // this.parent.$refs.salesforceTransferEdit.show()
+      this.$data.transferEditModalState = 1
+    },
+    transferType: function (id) {
+      return this.$data.transferList.filter(transfer => transfer.type_id === id).map(transfer => transfer.name).shift()
+    }
   }
 }
 </script>

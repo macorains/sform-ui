@@ -9,6 +9,7 @@ import FormEdit from '@/components/FormEdit.vue'
 Vue.use(VueRouter)
 
 var router = new VueRouter({
+  mode: 'history',
   routes: [{
     path: '/',
     component: Hello
