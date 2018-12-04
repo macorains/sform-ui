@@ -32,7 +32,7 @@
           </b-form-group>
         </b-col>
       </b-form-row>
-      <b-row>
+      <b-row class="mt-3">
         <b-col>
           <!-- フォーム項目設定 -->
           <h3>フォーム項目</h3>
@@ -54,9 +54,18 @@
               </tr>
             </tbody>
           </table>
+          <div>
+            <b-btn class="mt-3" block @click="reorderColStart">並び替え</b-btn>
+          </div>
         </b-col>
       </b-row>
       <b-row>
+        <b-col>
+          <!-- フォーム項目並び替え -->
+          <formColEditOrder v-bind:formColData="formData.formCols" v-bind:formColEditOrderModalState="formColEditOrderModalState" @reorderColEnd="reorderColEnd"></formColEditOrder>
+        </b-col>
+      </b-row>
+      <b-row class="mt-5">
         <b-col>
           <!-- Transfer設定 -->
           <transfers v-bind:serverUri="serverUri" v-bind:hashedFormId="hashedFormId"></transfers>
@@ -146,12 +155,14 @@
 
 <script>
 import axios from 'axios'
+import FormColEditOrder from './FormColEditOrder.vue'
 import Transfers from './transfer/Transfers.vue'
 
 export default {
   name: 'formedit',
   components: {
-    'transfers': Transfers
+    'transfers': Transfers,
+    'formColEditOrder': FormColEditOrder
   },
   props: ['serverUri', 'hashedFormId'],
   data: function () {
@@ -159,6 +170,7 @@ export default {
       formColData: {validations: {}, selectList: {}},
       formData: {},
       config: {},
+      formColEditOrderModalState: 0,
       optionFormColValidation: [
         {value: '0', text: '無制限'},
         {value: '1', text: '数値のみ'},
@@ -191,7 +203,6 @@ export default {
     axios.get(this.$props.serverUri + 'form/' + this.$props.hashedFormId, this.$data.config)
     .then(response => {
       this.$data.formData = response.data.dataset
-      console.log(this.$data.formData)
     })
     .catch(function (error) {
       console.log(error.text)
@@ -229,6 +240,17 @@ export default {
         editStyle: 'display:none'
       }
       this.$set(this.$data.formColData.selectList, colSize, tmp)
+    },
+    reorderColStart: function () {
+      this.$data.formColEditOrderModalState = 1
+    },
+    reorderColEnd: function (formCols) {
+      this.$data.formColEditOrderModalState = 0
+      this.$data.formData.formCols = {}
+      for (var col in formCols) {
+        this.$data.formData.formCols[col] = formCols[col]
+        this.$data.formData.formCols[col].index = col
+      }
     }
   }
 }

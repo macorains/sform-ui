@@ -54,16 +54,11 @@ export default {
     })
     axios.get(this.$props.serverUri + 'transfer', this.$data.config)
     .then(response => {
-      console.log(response.data)
       this.$data.transferList = response.data
     })
   },
   methods: {
     edit: function (id, type) {
-      console.log('id: ' + id + '  type: ' + type)
-      // console.log(this.$refs.salesforceTransferEdit)
-      // this.$refs.salesforceTransferEdit.modalSalesforceTransferRuleSetting.show()
-      // this.parent.$refs.salesforceTransferEdit.show()
       this.$data.transferEditModalState = 1
     },
     transferType: function (id) {
