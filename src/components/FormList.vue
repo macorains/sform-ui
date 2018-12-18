@@ -33,16 +33,18 @@ export default {
   props: ['serverUri'],
   data: function () {
     return {
-      formList: {}
+      formList: {},
+      serverUriString: ''
     }
   },
   created: function () {
     var token = localStorage.getItem('sformToken')
+    this.$data.serverUriString = this.$props.serverUri
     let config = {
       headers: {
         'x-Requested-With': '*',
         'X-Auth-Token': token,
-        'Access-Control-Allow-Origin': this.$props.serverUri
+        'Access-Control-Allow-Origin': this.$data.serverUriString
       }
     }
     axios.get(this.$props.serverUri + 'form/list', config)

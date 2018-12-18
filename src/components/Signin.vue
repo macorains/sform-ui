@@ -53,6 +53,7 @@ export default {
       params.append('password', this.password)
       axios.post(this.$props.serverUri + 'signIn', params, config)
       .then(response => {
+        console.log(response)
         let token = response.headers['x-auth-token']
         localStorage.setItem('sformToken', token)
         this.$router.push({path: 'formlist', params: {'serverUri': this.$props.serverUri}})

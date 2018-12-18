@@ -47,7 +47,7 @@
             </thead>
             <tbody>
               <tr v-for="item in formData.formCols" v-bind:key="item.index" v-on:click="startEditCol(item.index)">
-                <th scope="row">{{item.index}}</th>
+                <th scope="row">{{Number(item.index)+1}}</th>
                 <td>{{item.name}}</td>
                 <td>{{item.colId}}</td>
                 <td>{{item.colType}}</td>
@@ -68,7 +68,7 @@
       <b-row class="mt-5">
         <b-col>
           <!-- Transfer設定 -->
-          <transfers v-bind:serverUri="serverUri" v-bind:hashedFormId="hashedFormId"></transfers>
+          <transfers v-bind:serverUri="serverUri" v-bind:hashedFormId="hashedFormId" v-bind:formCols="formData.formCols" @updateTransferTask="updateTransferTask"></transfers>
         </b-col>
       </b-row>
       <b-row>
@@ -169,6 +169,7 @@ export default {
     return {
       formColData: {validations: {}, selectList: {}},
       formData: {},
+      transferTask: {},
       config: {},
       formColEditOrderModalState: 0,
       optionFormColValidation: [
@@ -193,6 +194,10 @@ export default {
   },
   created: function () {
     var token = localStorage.getItem('sformToken')
+    if (!this.$props.hashedFormId) {
+      this.$router.push({path: '/formlist'})
+      return
+    }
     this.$data.config = {
       headers: {
         'x-Requested-With': '*',
@@ -206,7 +211,7 @@ export default {
     })
     .catch(function (error) {
       console.log(error.text)
-      this.$router.push({name: 'signin'})
+      this.$router.push({path: '/signin'})
     })
   },
   methods: {
@@ -251,6 +256,9 @@ export default {
         this.$data.formData.formCols[col] = formCols[col]
         this.$data.formData.formCols[col].index = col
       }
+    },
+    updateTransferTask: function (transferTask) {
+      this.$data.transferTask = transferTask
     }
   }
 }
