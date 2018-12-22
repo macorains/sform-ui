@@ -106,11 +106,15 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="item in formColData.selectList" v-bind:key="item.index">
-                  <th scope="row">{{item.index}}</th>
-                  <td>{{item.displayText}}</td>
-                  <td>{{item.value}}</td>
-                  <td></td>
+                <tr v-for="(item, index) in formColData.selectList" v-bind:key="item.index">
+                  <th scope="row">{{Number(index) + 1}}</th>
+                  <td><span v-show="!item.inEdit">{{item.displayText}}</span><b-form-input id="displayText" type="text" v-model="item.displayText" v-show="item.inEdit"/></td>
+                  <td><span v-show="!item.inEdit">{{item.value}}</span><b-form-input id="value" type="text" v-model="item.value" v-show="item.inEdit"/></td>
+                  <td>
+                    <b-btn @click="deleteColSelectList(item.index)" v-show="!item.inEdit">削除</b-btn>
+                    <b-btn @click="editColSelectList(item.index)" v-show="!item.inEdit">編集</b-btn>
+                    <b-btn @click="endEditColSelectList(item.index)" v-show="item.inEdit">編集終了</b-btn>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -245,6 +249,17 @@ export default {
         editStyle: 'display:none'
       }
       this.$set(this.$data.formColData.selectList, colSize, tmp)
+    },
+    deleteColSelectList: function (index) {
+      this.$delete(this.$data.formColData.selectList, index)
+    },
+    editColSelectList: function (index) {
+      for (var sel in this.$data.formColData.selectList) {
+        this.$set(this.$data.formColData.selectList[sel], 'inEdit', sel === index)
+      }
+    },
+    endEditColSelectList: function (index) {
+      this.$set(this.$data.formColData.selectList[index], 'inEdit', false)
     },
     reorderColStart: function () {
       this.$data.formColEditOrderModalState = 1
