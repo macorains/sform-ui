@@ -16,6 +16,7 @@
   "dependencies": {
     "bootstrap": "^4.0.0-beta.2",
     "bootstrap-vue": "latest",
+    "open-iconic": "^1.1.1",
     "popper.js": "^1.12.9",
     "vue": "^2.5.2",
     "vue-i18n": "^8.5.0",

@@ -111,9 +111,9 @@
                   <td><span v-show="!item.inEdit">{{item.displayText}}</span><b-form-input id="displayText" type="text" v-model="item.displayText" v-show="item.inEdit"/></td>
                   <td><span v-show="!item.inEdit">{{item.value}}</span><b-form-input id="value" type="text" v-model="item.value" v-show="item.inEdit"/></td>
                   <td>
-                    <b-btn @click="deleteColSelectList(item.index)" v-show="!item.inEdit">削除</b-btn>
-                    <b-btn @click="editColSelectList(item.index)" v-show="!item.inEdit">編集</b-btn>
-                    <b-btn @click="endEditColSelectList(item.index)" v-show="item.inEdit">編集終了</b-btn>
+                    <b-btn @click="deleteColSelectList(item.index)" size="sm" v-show="!item.inEdit">削除</b-btn>
+                    <b-btn @click="editColSelectList(item.index)" size="sm" v-show="!item.inEdit">編集</b-btn>
+                    <b-btn @click="endEditColSelectList(item.index)" size="sm" v-show="item.inEdit">編集終了</b-btn>
                   </td>
                 </tr>
               </tbody>
