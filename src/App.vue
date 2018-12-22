@@ -5,23 +5,17 @@
 
       <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 
-      <b-navbar-brand href="#">NavBar</b-navbar-brand>
+      <b-navbar-brand href="#">SForm</b-navbar-brand>
 
       <b-collapse is-nav id="nav_collapse">
 
         <b-navbar-nav>
-          <b-nav-item href="#">Link</b-nav-item>
-          <b-nav-item href="#" disabled>Disabled</b-nav-item>
+          <b-nav-item href="#" v-on:click="openFormList()">Form</b-nav-item>
+          <b-nav-item href="#" v-on:click="openAdmin()">Admin</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
-
-          <b-nav-form>
-            <b-form-input size="sm" class="mr-sm-2" type="text" placeholder="Search"/>
-            <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
-          </b-nav-form>
-
           <b-nav-item-dropdown text="Lang" right>
             <b-dropdown-item href="#">EN</b-dropdown-item>
             <b-dropdown-item href="#">ES</b-dropdown-item>
@@ -42,8 +36,6 @@
       </b-collapse>
     </b-navbar>
     
-    <router-link to="/">Hello</router-link>
-    <router-link to="/signin">Signin</router-link>
     <router-view :serverUri="serverUri" :hashedFormId="hashedFormId" @updateHashedFormId="updateHashedFormId"></router-view>
   </div>
 </template>
@@ -60,6 +52,12 @@ export default {
   methods: {
     updateHashedFormId: function (hashedFormId) {
       this.$data.hashedFormId = hashedFormId
+    },
+    openFormList: function () {
+      this.$router.push({path: 'formlist', params: {serverUri: this.$data.serverUri}})
+    },
+    openAdmin: function () {
+      this.$router.push({path: 'admin', params: {serverUri: this.$data.serverUri}})
     }
   }
 }

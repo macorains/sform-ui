@@ -5,6 +5,7 @@ import Hello from '@/components/Hello.vue'
 import Signin from '@/components/Signin.vue'
 import FormList from '@/components/FormList.vue'
 import FormEdit from '@/components/FormEdit.vue'
+import Admin from '@/components/admin/Admin.vue'
 
 Vue.use(VueRouter)
 
@@ -26,6 +27,11 @@ var router = new VueRouter({
     path: '/formedit',
     name: 'formedit',
     component: FormEdit
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: Admin
   }
   ]
 })

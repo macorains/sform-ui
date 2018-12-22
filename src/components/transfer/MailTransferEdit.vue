@@ -28,7 +28,7 @@
       <b-row class="mb-3">
         <b-col cols="3"></b-col>
         <b-col cols="5">
-          <b-form-select v-model="selectedFormColumnName" :options="formColumnList" size="sm" v-on:change="changeColumnName"/>
+          <b-form-select v-model="selectedFormColumnName" :options="formColumnList" size="sm"/>
         </b-col>
         <b-col cols="4">
           <b-form-input type="text" v-model="selectedFormColumnNameTag" size="sm" />
@@ -54,7 +54,6 @@ export default {
       },
       transferConfig: {},
       selectedFormColumnName: '',
-      selectedFormColumnNameTag: '',
       columnAttachList: []
     }
   },
@@ -83,9 +82,6 @@ export default {
     },
     updateModalState: function () {
       this.$emit('transferEditModalClose', this.$data.tmpTransferTask.transfer_type_id)
-    },
-    changeColumnName: function () {
-      this.$data.selectedFormColumnNameTag = '{%' + this.$data.selectedFormColumnName + '%}'
     }
   },
   watch: {
@@ -111,8 +107,14 @@ export default {
         }
       }
       return formCols
+    },
+    selectedFormColumnNameTag: function () {
+      if (this.$data.selectedFormColumnName !== '') {
+        return '{%' + this.$data.selectedFormColumnName + '%}'
+      } else {
+        return ''
+      }
     }
   }
-
 }
 </script>

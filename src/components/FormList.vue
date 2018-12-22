@@ -39,6 +39,9 @@ export default {
   },
   created: function () {
     var token = localStorage.getItem('sformToken')
+    if (!this.$props.serverUri) {
+      this.$router.push({path: 'signin'})
+    }
     this.$data.serverUriString = this.$props.serverUri
     let config = {
       headers: {
@@ -49,11 +52,18 @@ export default {
     }
     axios.get(this.$props.serverUri + 'form/list', config)
     .then(response => {
+      console.log(response)
       this.$data.formList = JSON.parse(response.data.dataset)
     })
     .catch(error => {
-      console.log(error.text)
-      this.$router.push({path: 'signin'})
+      if (error.response) {
+        var statusCode = error.response.status
+        if (statusCode === 401 || statusCode === 403) {
+          this.$router.push({path: 'signin'})
+        } else {
+          console.log(error.response)
+        }
+      }
     })
   },
   methods: {
