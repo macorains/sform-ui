@@ -79,8 +79,8 @@
       </b-row>
     </b-container>
 
-    <b-modal size="lg" ref="modalColedit" hide-footer title="フォーム項目編集">
-      <b-container class="text-left">
+    <b-modal size="lg" ref="modalColedit" title="フォーム項目編集">
+      <b-container class="text-left form-col-edit">
         <b-row class="mb-3">
           <b-col cols="4">項目名</b-col>
           <b-col><b-form-input id="formColName" type="text" v-model="formColData.name"></b-form-input></b-col>
@@ -111,7 +111,9 @@
                   <td><span v-show="!item.inEdit">{{item.displayText}}</span><b-form-input id="displayText" type="text" v-model="item.displayText" v-show="item.inEdit"/></td>
                   <td><span v-show="!item.inEdit">{{item.value}}</span><b-form-input id="value" type="text" v-model="item.value" v-show="item.inEdit"/></td>
                   <td>
-                    <b-btn @click="deleteColSelectList(item.index)" size="sm" v-show="!item.inEdit">削除</b-btn>
+                    <b-btn @click="deleteColSelectList(item.index)" size="sm" v-show="!item.inEdit">
+                      <span class="oi oi-trash" title="trash" aria-hidden="true"></span>削除
+                    </b-btn>
                     <b-btn @click="editColSelectList(item.index)" size="sm" v-show="!item.inEdit">編集</b-btn>
                     <b-btn @click="endEditColSelectList(item.index)" size="sm" v-show="item.inEdit">編集終了</b-btn>
                   </td>
@@ -147,10 +149,10 @@
           <b-col cols="4">必須項目</b-col>
           <b-col><b-form-checkbox id="formColRequired" v-model="formColData.required" value="true" unchecked-value="false"/></b-col>
         </b-row>
-        <b-row class="mb-3">
-          <b-col><b-btn class="mt-3" block @click="endEditCol">編集終了</b-btn></b-col>
-        </b-row>
       </b-container>
+      <div slot="modal-footer" class="w-100">
+        <b-col><b-btn class="mt-3" block @click="endEditCol">編集終了</b-btn></b-col>
+      </div>
     </b-modal>
     </div>
   </div>
@@ -159,6 +161,7 @@
 
 <script>
 import axios from 'axios'
+import 'open-iconic/font/css/open-iconic-bootstrap.css'
 import FormColEditOrder from './FormColEditOrder.vue'
 import Transfers from './transfer/Transfers.vue'
 
@@ -279,5 +282,8 @@ export default {
 }
 </script>
 <style scoped>
-
+  .form-col-edit {
+    height: 500px;
+    overflow-y: auto;
+  }
 </style>
