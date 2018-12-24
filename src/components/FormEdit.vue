@@ -1,7 +1,7 @@
 <template>
   <div class="form_edit">
     <div class="container">
-    <h1>FormEdit</h1>
+    <h1 class="mt-5 mb-5">{{$t('message.form_edit')}}</h1>
 
     <b-container class="text-left">
       <b-form-row>
@@ -43,14 +43,23 @@
                 <th scope="col">項目名</th>
                 <th scope="col">項目ID</th>
                 <th scope="col">型</th>
+                <th scope="col">操作</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in formData.formCols" v-bind:key="item.index" v-on:click="startEditCol(item.index)">
+              <tr v-for="item in formData.formCols" v-bind:key="item.index">
                 <th scope="row">{{Number(item.index)+1}}</th>
                 <td>{{item.name}}</td>
                 <td>{{item.colId}}</td>
-                <td>{{item.colType}}</td>
+                <td>{{colTypeName(item.coltype)}}</td>
+                <td>
+                  <b-btn @click="startEditCol(item.index)" size="sm">
+                      <span class="oi oi-pencil" title="pencil" aria-hidden="true"></span>編集
+                  </b-btn>
+                  <b-btn @click="deleteCol(item.index)" size="sm">
+                      <span class="oi oi-trash" title="trash" aria-hidden="true"></span>削除
+                  </b-btn>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -283,6 +292,9 @@ export default {
     endEditCol: function () {
       this.$refs.modalColedit.hide()
     },
+    deleteCol: function (index) {
+      this.$delete(this.$data.formData.formCols, index)
+    },
     addColSelectList: function () {
       var colSize = Object.keys(this.$data.formColData.selectList).length
       var tmp = {
@@ -319,8 +331,15 @@ export default {
     },
     updateTransferTask: function (transferTask) {
       this.$data.transferTask = transferTask
+    },
+    colTypeName: function (type) {
+      return this.$data.optionFormColType
+        .filter(op => Number(op.value) === Number(type))
+        .map(op => op.text)
+        .shift()
     }
   }
+
 }
 </script>
 <style scoped>

@@ -1,14 +1,14 @@
 <template>
   <div class="form_list">
     <div class="container">
-    <h1>FormList</h1>
+    <h1 class="mt-5 mb-5">{{$t("message.form_list")}}</h1>
     <table class="table table-striped">
       <thead>
         <tr>
-          <th scope="col">ID</th>
-          <th scope="col">フォーム名</th>
-          <th scope="col">タイトル</th>
-          <th scope="col">状態</th>
+          <th scope="col">{{$t("message.id")}}</th>
+          <th scope="col">{{$t("message.form_name")}}</th>
+          <th scope="col">{{$t("message.form_title")}}</th>
+          <th scope="col">{{$t("message.status")}}</th>
         </tr>
       </thead>
       <tbody>
@@ -20,7 +20,7 @@
         </tr>
       </tbody>
     </table>
-    <b-button class="mt-4"><span class="oi oi-plus" title="plus" aria-hidden="true"></span>Add Form</b-button>
+    <b-button class="mt-4" @click="add"><span class="oi oi-plus" title="plus" aria-hidden="true"></span>{{$t("message.add_form")}}</b-button>
     </div>
   </div>
 
@@ -28,13 +28,16 @@
 
 <script>
 import axios from 'axios'
+import 'open-iconic/font/css/open-iconic-bootstrap.css'
+
 export default {
   name: 'form_list',
   props: ['serverUri'],
   data: function () {
     return {
       formList: {},
-      serverUriString: ''
+      serverUriString: '',
+      checkedColumn: []
     }
   },
   created: function () {
@@ -70,6 +73,51 @@ export default {
     edit: function (hashedId) {
       this.$emit('updateHashedFormId', hashedId)
       this.$router.push({name: 'formedit', params: {hashedFormId: hashedId}})
+    },
+    add: function () {
+      var i = Object.keys(this.$data.formlist).length
+      var tmp = {
+        index: i + '',
+        id: '',
+        status: '0',
+        name: 'フォーム' + i,
+        title: 'フォーム' + i,
+        extLink1: false,
+        cancelUrl: '',
+        completeUrl: '',
+        inputHeader: '',
+        confirmHeader: '',
+        completeText: '',
+        closeText: '',
+        replymailFrom: '',
+        replymailSubject: '',
+        replymailText: '',
+        noticemailSend: '',
+        noticemailText: '',
+        formCols: {
+          0: {
+            index: '0',
+            name: 'メールアドレス',
+            colId: 'email',
+            coltype: '1',
+            default: '',
+            validations: {
+              inputType: '5',
+              minValue: '0',
+              maxValue: '0',
+              minLength: '0',
+              maxLength: '0',
+              required: true
+            }
+          }
+        }
+      }
+      var reqdata = {
+        objtype: 'Form',
+        action: 'create',
+        rcdata: {formDef: tmp, transferTasks: {}}
+      }
+      axios.post(this.$props.serverUri + 'form', reqdata, this.$data.config)
     }
   }
 }

@@ -11,10 +11,10 @@
 
         <b-navbar-nav>
           <b-nav-item href="#" v-on:click="openFormList()">
-            <span class="oi oi-spreadsheet" title="spreadsheet" aria-hidden="true"></span>Form
+            <span class="oi oi-spreadsheet" title="spreadsheet" aria-hidden="true"></span>{{$t("message.form")}}
           </b-nav-item>
           <b-nav-item href="#" v-on:click="openAdmin()">
-            <span class="oi oi-cog" title="cog" aria-hidden="true"></span>Admin
+            <span class="oi oi-cog" title="cog" aria-hidden="true"></span>{{$t("message.admin")}}
           </b-nav-item>
         </b-navbar-nav>
 
@@ -22,21 +22,19 @@
         <b-navbar-nav class="ml-auto">
           <b-nav-item-dropdown text="Lang" right>
             <b-dropdown-item href="#">EN</b-dropdown-item>
-            <b-dropdown-item href="#">ES</b-dropdown-item>
-            <b-dropdown-item href="#">RU</b-dropdown-item>
-            <b-dropdown-item href="#">FA</b-dropdown-item>
+            <b-dropdown-item href="#">JP</b-dropdown-item>
           </b-nav-item-dropdown>
 
           <b-nav-item-dropdown right>
             <!-- Using button-content slot -->
             <template slot="button-content">
-              <em><span class="oi oi-person" title="person" aria-hidden="true"></span>User</em>
+              <em><span class="oi oi-person" title="person" aria-hidden="true"></span>{{$t("message.user")}}</em>
             </template>
             <b-dropdown-item href="#">
-              <span class="oi oi-list" title="list" aria-hidden="true"></span>Profile
+              <span class="oi oi-list" title="list" aria-hidden="true"></span>{{$t("message.profile")}}
             </b-dropdown-item>
             <b-dropdown-item href="#">
-              <span class="oi oi-account-logout" title="account-logout" aria-hidden="true"></span>Signout
+              <span class="oi oi-account-logout" title="account-logout" aria-hidden="true"></span>{{$t("message.signout")}}
             </b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>

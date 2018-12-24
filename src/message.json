@@ -1,0 +1,58 @@
+{
+  "ja": {
+    "message": {
+      "action": "操作",
+      "add_column": "項目追加",
+      "add_form": "フォーム追加",
+      "admin": "管理",
+      "column_id": "項目ID",
+      "column_name": "項目名",
+      "delete": "削除",
+      "edit": "編集",
+      "form": "フォーム",
+      "form_column": "フォーム項目",
+      "form_edit": "フォーム編集",
+      "form_list": "フォーム一覧",
+      "form_name": "フォーム名",
+      "form_title": "タイトル",
+      "id": "ID",
+      "profile": "プロファイル",
+      "reorder": "並び替え",
+      "signout": "サインアウト",
+      "status": "ステータス",
+      "transfer_task_name": "転送タスク名",
+      "transfer_task": "転送タスク",
+      "transfer_type": "転送タイプ",
+      "type": "型",
+      "user": "ユーザー"
+    }
+  },
+  "en": {
+    "message": {
+      "aciton": "Action",
+      "add_column": "Add Column",
+      "add_form": "Add Form",
+      "admin": "Admin",
+      "column_id": "Column ID",
+      "column_name": "Column Name",
+      "delete": "Delete",
+      "edit": "Edit",
+      "form": "Form",
+      "form_column": "Form Column",
+      "form_edit": "Form Edit",
+      "form_list": "Form List",
+      "form_name": "Form Name",
+      "form_title": "Title",
+      "id": "ID",
+      "profile": "Profile",
+      "reorder": "Reorder",
+      "signout": "SignOut",
+      "status": "Status",
+      "transfer_task_name": "Transfer Task Name",
+      "transfer_task": "Transfer Task",
+      "transfer_type": "Transfer Type",
+      "type": "Type",
+      "user": "User"
+    }
+  }
+}
