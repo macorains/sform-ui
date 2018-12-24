@@ -4,10 +4,16 @@
       <h1>Admin</h1>
       <b-card no-body>
         <b-tabs pills card>
-          <b-tab title="User" active>
+          <b-tab active>
+            <template slot="title">
+              <span class="oi oi-person" title="person" aria-hidden="true"></span>User
+            </template>
             <userConfig v-bind:serverUri="serverUri"></userConfig>
           </b-tab>
-          <b-tab title="Transfer">
+          <b-tab>
+            <template slot="title">
+              <span class="oi oi-transfer" title="transfer" aria-hidden="true"></span>Transfer
+            </template>
             <transferConfig v-bind:serverUri="serverUri"></transferConfig>
           </b-tab>
         </b-tabs>

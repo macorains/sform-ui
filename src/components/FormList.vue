@@ -20,7 +20,7 @@
         </tr>
       </tbody>
     </table>
-    <b-button class="mt-4">Add Form</b-button>
+    <b-button class="mt-4"><span class="oi oi-plus" title="plus" aria-hidden="true"></span>Add Form</b-button>
     </div>
   </div>
 

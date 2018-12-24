@@ -10,8 +10,12 @@
       <b-collapse is-nav id="nav_collapse">
 
         <b-navbar-nav>
-          <b-nav-item href="#" v-on:click="openFormList()">Form</b-nav-item>
-          <b-nav-item href="#" v-on:click="openAdmin()">Admin</b-nav-item>
+          <b-nav-item href="#" v-on:click="openFormList()">
+            <span class="oi oi-spreadsheet" title="spreadsheet" aria-hidden="true"></span>Form
+          </b-nav-item>
+          <b-nav-item href="#" v-on:click="openAdmin()">
+            <span class="oi oi-cog" title="cog" aria-hidden="true"></span>Admin
+          </b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
@@ -26,10 +30,14 @@
           <b-nav-item-dropdown right>
             <!-- Using button-content slot -->
             <template slot="button-content">
-              <em>User</em>
+              <em><span class="oi oi-person" title="person" aria-hidden="true"></span>User</em>
             </template>
-            <b-dropdown-item href="#">Profile</b-dropdown-item>
-            <b-dropdown-item href="#">Signout</b-dropdown-item>
+            <b-dropdown-item href="#">
+              <span class="oi oi-list" title="list" aria-hidden="true"></span>Profile
+            </b-dropdown-item>
+            <b-dropdown-item href="#">
+              <span class="oi oi-account-logout" title="account-logout" aria-hidden="true"></span>Signout
+            </b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
 

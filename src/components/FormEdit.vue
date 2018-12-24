@@ -54,9 +54,18 @@
               </tr>
             </tbody>
           </table>
-          <div>
-            <b-btn class="mt-3" block @click="reorderColStart">並び替え</b-btn>
-          </div>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+            <b-btn class="mt-3" block @click="addFormCol">
+              <span class="oi oi-plus" title="plus" aria-hidden="true"></span>項目追加
+            </b-btn>
+        </b-col>
+        <b-col>
+            <b-btn class="mt-3" block @click="reorderColStart">
+              <span class="oi oi-random" title="random" aria-hidden="true"></span>並び替え
+            </b-btn>
         </b-col>
       </b-row>
       <b-row>
@@ -73,8 +82,12 @@
       </b-row>
       <b-row>
         <b-col>
-          <b-button class="mt-4" v-on:click="cancel">Cancel</b-button>
-          <b-button class="mt-4" v-on:click="save">Save Change</b-button>
+          <b-button class="mt-4" v-on:click="cancel">
+            <span class="oi oi-x" title="x" aria-hidden="true"></span>Cancel
+          </b-button>
+          <b-button class="mt-4" v-on:click="save">
+            <span class="oi oi-check" title="check" aria-hidden="true"></span>Save Change
+          </b-button>
         </b-col>
       </b-row>
     </b-container>
@@ -114,13 +127,19 @@
                     <b-btn @click="deleteColSelectList(item.index)" size="sm" v-show="!item.inEdit">
                       <span class="oi oi-trash" title="trash" aria-hidden="true"></span>削除
                     </b-btn>
-                    <b-btn @click="editColSelectList(item.index)" size="sm" v-show="!item.inEdit">編集</b-btn>
-                    <b-btn @click="endEditColSelectList(item.index)" size="sm" v-show="item.inEdit">編集終了</b-btn>
+                    <b-btn @click="editColSelectList(item.index)" size="sm" v-show="!item.inEdit">
+                      <span class="oi oi-x" title="x" aria-hidden="true"></span>編集
+                    </b-btn>
+                    <b-btn @click="endEditColSelectList(item.index)" size="sm" v-show="item.inEdit">
+                      <span class="oi oi-check" title="check" aria-hidden="true"></span>編集終了
+                    </b-btn>
                   </td>
                 </tr>
               </tbody>
             </table>
-            <b-btn class="mt-3" block @click="addColSelectList">追加</b-btn>
+            <b-btn class="mt-3" block @click="addColSelectList">
+              <span class="oi oi-plus" title="plus" aria-hidden="true"></span>追加
+            </b-btn>
           </b-col>
         </b-row>
         <b-row class="mb-3">
@@ -151,7 +170,11 @@
         </b-row>
       </b-container>
       <div slot="modal-footer" class="w-100">
-        <b-col><b-btn class="mt-3" block @click="endEditCol">編集終了</b-btn></b-col>
+        <b-col>
+          <b-btn class="mt-3" block @click="endEditCol">
+            <span class="oi oi-check" title="check" aria-hidden="true"></span>編集終了
+          </b-btn>
+        </b-col>
       </div>
     </b-modal>
     </div>
@@ -233,6 +256,25 @@ export default {
     },
     cancel: function () {
       this.$router.push({path: 'formlist', params: {'serverUri': this.$props.serverUri}})
+    },
+    addFormCol: function () {
+      var i = Object.keys(this.$data.formData.formCols).length
+      var tmp = {
+        index: i + '',
+        name: '項目' + i,
+        colId: 'col' + i,
+        coltype: '1',
+        default: '',
+        validations: {
+          inputType: '0',
+          minValue: '0',
+          maxValue: '0',
+          minLength: '0',
+          maxLength: '0'
+        },
+        selectList: {}
+      }
+      this.$set(this.$data.formData.formCols, i, tmp)
     },
     startEditCol: function (index) {
       this.$data.formColData = this.$data.formData.formCols[index]

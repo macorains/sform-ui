@@ -4,12 +4,16 @@
       <draggable element="ul" v-model="formCols" class="list-group">
         <li v-for="item in formCols" v-bind:key="item.index" class="list-group-item">{{item.name}}</li>
       </draggable>
-      <b-btn class="mt-3" block @click="closeFormColEditReorder">編集終了</b-btn>
+      <b-btn class="mt-3" block @click="closeFormColEditReorder">
+        <span class="oi oi-check" title="check" aria-hidden="true"></span>編集終了
+      </b-btn>
     </b-modal>
   </div>
 </template>
 <script>
 import Draggable from 'vuedraggable'
+import 'open-iconic/font/css/open-iconic-bootstrap.css'
+
 export default {
   name: 'form_col_edit_order',
   components: {
