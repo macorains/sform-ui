@@ -9,6 +9,7 @@
           <th scope="col">{{$t("message.form_name")}}</th>
           <th scope="col">{{$t("message.form_title")}}</th>
           <th scope="col">{{$t("message.status")}}</th>
+          <th scope="col">{{$t("message.action")}}</th>
         </tr>
       </thead>
       <tbody>
@@ -16,7 +17,15 @@
           <td scope="row">{{item.hashed_id}}</td>
           <td scope="row">{{item.name}}</td>
           <td scope="row">{{item.title}}</td>
-          <td scope="row">{{item.status}}</td>
+          <td scope="row">{{formStatus[item.status]}}</td>
+          <td scope="row">
+            <b-button size="sm" @click="edit">
+              <span class="oi oi-pencil" title="pencil" aria-hidden="true"></span>{{$t("message.edit")}}
+            </b-button>
+            <b-button size="sm" @click="deleteForm">
+              <span class="oi oi-trash" title="trash" aria-hidden="true"></span>{{$t("message.delete")}}
+            </b-button>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -37,7 +46,8 @@ export default {
     return {
       formList: {},
       serverUriString: '',
-      checkedColumn: []
+      checkedColumn: [],
+      formStatus: ['無効', '有効', '停止中']
     }
   },
   created: function () {
@@ -75,7 +85,7 @@ export default {
       this.$router.push({name: 'formedit', params: {hashedFormId: hashedId}})
     },
     add: function () {
-      var i = Object.keys(this.$data.formlist).length
+      var i = Object.keys(this.$data.formList).length
       var tmp = {
         index: i + '',
         id: '',
@@ -118,6 +128,9 @@ export default {
         rcdata: {formDef: tmp, transferTasks: {}}
       }
       axios.post(this.$props.serverUri + 'form', reqdata, this.$data.config)
+    },
+    deleteForm: function () {
+      return ''
     }
   }
 }

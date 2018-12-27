@@ -35,15 +35,15 @@
       <b-row class="mt-3">
         <b-col>
           <!-- フォーム項目設定 -->
-          <h3>フォーム項目</h3>
+          <h3>{{$t('message.form_column')}}</h3>
           <table class="table table-striped">
             <thead>
               <tr>
                 <th scope="col">No.</th>
-                <th scope="col">項目名</th>
-                <th scope="col">項目ID</th>
-                <th scope="col">型</th>
-                <th scope="col">操作</th>
+                <th scope="col">{{$t('message.column_name')}}</th>
+                <th scope="col">{{$t('message.column_id')}}</th>
+                <th scope="col">{{$t('message.type')}}</th>
+                <th scope="col">{{$t('message.action')}}</th>
               </tr>
             </thead>
             <tbody>
@@ -54,10 +54,10 @@
                 <td>{{colTypeName(item.coltype)}}</td>
                 <td>
                   <b-btn @click="startEditCol(item.index)" size="sm">
-                      <span class="oi oi-pencil" title="pencil" aria-hidden="true"></span>編集
+                      <span class="oi oi-pencil" title="pencil" aria-hidden="true"></span>{{$t('message.edit')}}
                   </b-btn>
                   <b-btn @click="deleteCol(item.index)" size="sm">
-                      <span class="oi oi-trash" title="trash" aria-hidden="true"></span>削除
+                      <span class="oi oi-trash" title="trash" aria-hidden="true"></span>{{$t('message.delete')}}
                   </b-btn>
                 </td>
               </tr>
@@ -68,12 +68,12 @@
       <b-row>
         <b-col>
             <b-btn class="mt-3" block @click="addFormCol">
-              <span class="oi oi-plus" title="plus" aria-hidden="true"></span>項目追加
+              <span class="oi oi-plus" title="plus" aria-hidden="true"></span>{{$t('message.add_column')}}
             </b-btn>
         </b-col>
         <b-col>
             <b-btn class="mt-3" block @click="reorderColStart">
-              <span class="oi oi-random" title="random" aria-hidden="true"></span>並び替え
+              <span class="oi oi-random" title="random" aria-hidden="true"></span>{{$t('message.reorder')}}
             </b-btn>
         </b-col>
       </b-row>
@@ -92,10 +92,10 @@
       <b-row>
         <b-col>
           <b-button class="mt-4" v-on:click="cancel">
-            <span class="oi oi-x" title="x" aria-hidden="true"></span>Cancel
+            <span class="oi oi-x" title="x" aria-hidden="true"></span>{{$t('message.cancel')}}
           </b-button>
           <b-button class="mt-4" v-on:click="save">
-            <span class="oi oi-check" title="check" aria-hidden="true"></span>Save Change
+            <span class="oi oi-check" title="check" aria-hidden="true"></span>{{$t('message.save_change')}}
           </b-button>
         </b-col>
       </b-row>
@@ -104,15 +104,15 @@
     <b-modal size="lg" ref="modalColedit" title="フォーム項目編集">
       <b-container class="text-left form-col-edit">
         <b-row class="mb-3">
-          <b-col cols="4">項目名</b-col>
+          <b-col cols="4">{{$t('message.column_name')}}</b-col>
           <b-col><b-form-input id="formColName" type="text" v-model="formColData.name"></b-form-input></b-col>
         </b-row>
         <b-row class="mb-3">
-          <b-col cols="4">項目ID</b-col>
+          <b-col cols="4">{{$t('message.column_id')}}</b-col>
           <b-col><b-form-input id="formColId" type="text" v-model="formColData.colId"></b-form-input></b-col>
         </b-row>
         <b-row class="mb-3">
-          <b-col cols="4">型</b-col>
+          <b-col cols="4">{{$t('message.type')}}</b-col>
           <b-col><b-form-select v-model="formColData.coltype" :options="optionFormColType" class="mb-3" /></b-col>
         </b-row>
         <b-row class="mb-3">
@@ -122,9 +122,9 @@
               <thead>
                 <tr>
                   <th scope="col">No.</th>
-                  <th scope="col">表示文字列</th>
-                  <th scope="col">値</th>
-                  <th scope="col">操作</th>
+                  <th scope="col">{{$t('message.label')}}</th>
+                  <th scope="col">{{$t('message.value')}}</th>
+                  <th scope="col">{{$t('message.action')}}</th>
                 </tr>
               </thead>
               <tbody>
@@ -134,47 +134,47 @@
                   <td><span v-show="!item.inEdit">{{item.value}}</span><b-form-input id="value" type="text" v-model="item.value" v-show="item.inEdit"/></td>
                   <td>
                     <b-btn @click="deleteColSelectList(item.index)" size="sm" v-show="!item.inEdit">
-                      <span class="oi oi-trash" title="trash" aria-hidden="true"></span>削除
+                      <span class="oi oi-trash" title="trash" aria-hidden="true"></span>{{$t('message.delete')}}
                     </b-btn>
                     <b-btn @click="editColSelectList(item.index)" size="sm" v-show="!item.inEdit">
-                      <span class="oi oi-x" title="x" aria-hidden="true"></span>編集
+                      <span class="oi oi-x" title="x" aria-hidden="true"></span>{{$t('message.edit')}}
                     </b-btn>
                     <b-btn @click="endEditColSelectList(item.index)" size="sm" v-show="item.inEdit">
-                      <span class="oi oi-check" title="check" aria-hidden="true"></span>編集終了
+                      <span class="oi oi-check" title="check" aria-hidden="true"></span>{{$t('message.ok')}}
                     </b-btn>
                   </td>
                 </tr>
               </tbody>
             </table>
             <b-btn class="mt-3" block @click="addColSelectList">
-              <span class="oi oi-plus" title="plus" aria-hidden="true"></span>追加
+              <span class="oi oi-plus" title="plus" aria-hidden="true"></span>{{$t('message.add')}}
             </b-btn>
           </b-col>
         </b-row>
         <b-row class="mb-3">
-          <b-col cols="4">初期値</b-col>
+          <b-col cols="4">{{$t('message.initial_value')}}</b-col>
           <b-col><b-form-input id="formColDefault" type="text" v-model="formColData.default"></b-form-input></b-col>
         </b-row>
         <b-row class="mb-3">
-          <b-col cols="4">バリデーション</b-col>
+          <b-col cols="4">{{$t('message.validation')}}</b-col>
           <b-col><b-form-select v-model="formColData.validations.inputType" :options="optionFormColValidation" class="mb-3" /></b-col>
         </b-row>
         <b-row class="mb-3">
-          <b-col cols="4">数値範囲</b-col>
+          <b-col cols="4">{{$t('message.number_range')}}</b-col>
           <b-col cols="2"><b-form-input id="formColValidationMinValue" type="text" v-model="formColData.validations.minValue"></b-form-input></b-col>
           <b-col cols="1">～</b-col>
           <b-col cols="2"><b-form-input id="formColValidationMaxValue" type="text" v-model="formColData.validations.maxValue"></b-form-input></b-col>
           <b-col cols="5"></b-col>
         </b-row>
         <b-row class="mb-3">
-          <b-col cols="4">文字数範囲</b-col>
+          <b-col cols="4">{{$t('message.string_length')}}</b-col>
           <b-col cols="2"><b-form-input id="formColValidationMinLength" type="text" v-model="formColData.validations.minLength"></b-form-input></b-col>
           <b-col cols="1">～</b-col>
           <b-col cols="2"><b-form-input id="formColValidationMaxLength" type="text" v-model="formColData.validations.maxLength"></b-form-input></b-col>
           <b-col cols="5"></b-col>
         </b-row>
         <b-row class="mb-3">
-          <b-col cols="4">必須項目</b-col>
+          <b-col cols="4">{{$t('message.required_item')}}</b-col>
           <b-col><b-form-checkbox id="formColRequired" v-model="formColData.required" value="true" unchecked-value="false"/></b-col>
         </b-row>
       </b-container>
@@ -248,9 +248,15 @@ export default {
     .then(response => {
       this.$data.formData = response.data.dataset
     })
-    .catch(function (error) {
-      console.log(error.text)
-      this.$router.push({path: '/signin'})
+    .catch(error => {
+      if (error.response) {
+        var statusCode = error.response.status
+        if (statusCode === 401 || statusCode === 403) {
+          this.$router.push({path: 'signin'})
+        } else {
+          console.log(error.response)
+        }
+      }
     })
   },
   methods: {
