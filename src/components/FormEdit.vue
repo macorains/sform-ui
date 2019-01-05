@@ -6,28 +6,28 @@
     <b-container class="text-left">
       <b-form-row>
         <b-col>
-          <b-form-group id="formNameGroup" label-for="formName" label="フォーム名">
+          <b-form-group id="formNameGroup" label-for="formName" :label="$t('message.form_name')">
             <b-form-input id="formName" type="text" v-model="formData.name"></b-form-input>
           </b-form-group>
-          <b-form-group id="formTitleGroup" label-for="formTitle" label="フォームタイトル">
+          <b-form-group id="formTitleGroup" label-for="formTitle" :label="$t('message.form_title')">
             <b-form-input id="formTitle" type="text" v-model="formData.title"></b-form-input>
           </b-form-group>
-          <b-form-group id="urlAfterCancelGroup" label-for="urlAfterCancel" label="キャンセル後遷移先URL">
+          <b-form-group id="urlAfterCancelGroup" label-for="urlAfterCancel" :label="$t('message.url_after_cancel')">
             <b-form-input id="urlAfterCancel" type="text" v-model="formData.cancelUrl"></b-form-input>
           </b-form-group>
-          <b-form-group id="urlAfterCompleteGroup" label-for="urlAfterComplete" label="完了後遷移先URL">
+          <b-form-group id="urlAfterCompleteGroup" label-for="urlAfterComplete" :label="$t('message.url_after_complete')">
             <b-form-input id="urlAfterComplete" type="text" v-model="formData.completeUrl"></b-form-input>
           </b-form-group>
-          <b-form-group id="formInputHeaderGroup" label-for="formInputHeader" label="フォーム入力画面メッセージ">
+          <b-form-group id="formInputHeaderGroup" label-for="formInputHeader" :label="$t('message.message_at_input')">
             <b-form-textarea id="formInputHeader" :rows=3 :max-rows=10 v-model="formData.inputHeader"></b-form-textarea>
           </b-form-group>
-          <b-form-group id="formConfirmHeaderGroup" label-for="formConfirmHeader" label="フォーム確認画面メッセージ">
+          <b-form-group id="formConfirmHeaderGroup" label-for="formConfirmHeader" :label="$t('message.message_at_confirm')">
             <b-form-textarea id="formConfirmHeader" :rows=3 :max-rows=10 v-model="formData.confirmHeader"></b-form-textarea>
           </b-form-group>
-          <b-form-group id="formCompleteTextGroup" label-for="formCompleteText" label="フォーム完了画面メッセージ">
+          <b-form-group id="formCompleteTextGroup" label-for="formCompleteText" :label="$t('message.message_at_complete')">
             <b-form-textarea id="formCompleteText" :rows=3 :max-rows=10 v-model="formData.completeText"></b-form-textarea>
           </b-form-group>
-          <b-form-group id="formStopTextGroup" label-for="formStopText" label="フォーム停止時メッセージ">
+          <b-form-group id="formStopTextGroup" label-for="formStopText" :label="$t('message.message_at_close')">
             <b-form-textarea id="formStopText" :rows=3 :max-rows=10 v-model="formData.closeText"></b-form-textarea>
           </b-form-group>
         </b-col>
@@ -101,7 +101,7 @@
       </b-row>
     </b-container>
 
-    <b-modal size="lg" ref="modalColedit" title="フォーム項目編集">
+    <b-modal size="lg" ref="modalColedit" :title="$t('message.edit_form_item')">
       <b-container class="text-left form-col-edit">
         <b-row class="mb-3">
           <b-col cols="4">{{$t('message.column_name')}}</b-col>
@@ -116,7 +116,7 @@
           <b-col><b-form-select v-model="formColData.coltype" :options="optionFormColType" class="mb-3" /></b-col>
         </b-row>
         <b-row class="mb-3">
-          <b-col cols="4">選択項目</b-col>
+          <b-col cols="4">{{$t('message.select_items')}}</b-col>
           <b-col>
             <table class="table table-striped">
               <thead>
@@ -181,7 +181,7 @@
       <div slot="modal-footer" class="w-100">
         <b-col>
           <b-btn class="mt-3" block @click="endEditCol">
-            <span class="oi oi-check" title="check" aria-hidden="true"></span>編集終了
+            <span class="oi oi-check" title="check" aria-hidden="true"></span>{{$t('message.end_edit')}}
           </b-btn>
         </b-col>
       </div>

@@ -13,7 +13,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in formList" v-bind:key="item.id" v-on:click="edit(item.hashed_id)">
+        <tr v-for="item in formList" v-bind:key="item.id">
           <td scope="row">{{item.hashed_id}}</td>
           <td scope="row">{{item.name}}</td>
           <td scope="row">{{item.title}}</td>
@@ -22,7 +22,7 @@
             <b-button size="sm" @click="edit">
               <span class="oi oi-pencil" title="pencil" aria-hidden="true"></span>{{$t("message.edit")}}
             </b-button>
-            <b-button size="sm" @click="deleteForm">
+            <b-button v-b-modal.modal_form_delete size="sm">
               <span class="oi oi-trash" title="trash" aria-hidden="true"></span>{{$t("message.delete")}}
             </b-button>
           </td>
@@ -31,6 +31,18 @@
     </table>
     <b-button class="mt-4" @click="add"><span class="oi oi-plus" title="plus" aria-hidden="true"></span>{{$t("message.add_form")}}</b-button>
     </div>
+    <b-modal 
+      id="modal_form_delete" 
+      :title="$t('message.confirm')" 
+      header-border-variant="light" 
+      footer-border-variant="light"
+      :ok-title="$t('message.ok')"
+      :cancel-title="$t('message.cancel')"
+      :hide-header-close="true"
+      centered>
+      <p>{{$t('message.confirm_form_delete')}}</p>
+    </b-modal>
+
   </div>
 
 </template>
@@ -127,7 +139,28 @@ export default {
         action: 'create',
         rcdata: {formDef: tmp, transferTasks: {}}
       }
-      axios.post(this.$props.serverUri + 'form', reqdata, this.$data.config)
+      var token = localStorage.getItem('sformToken')
+      let config = {
+        headers: {
+          'x-Requested-With': '*',
+          'X-Auth-Token': token,
+          'Access-Control-Allow-Origin': this.$data.serverUriString
+        }
+      }
+      axios.post(this.$props.serverUri + 'form', reqdata, config)
+      .then(response => {
+        this.$router.push({path: 'formlist', params: {serverUri: this.$data.serverUriString}})
+      })
+      .catch(error => {
+        if (error.response) {
+          var statusCode = error.response.status
+          if (statusCode === 401 || statusCode === 403) {
+            this.$router.push({path: 'signin'})
+          } else {
+            console.log(error.response)
+          }
+        }
+      })
     },
     deleteForm: function () {
       return ''

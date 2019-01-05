@@ -33,7 +33,7 @@
             <b-dropdown-item href="#">
               <span class="oi oi-list" title="list" aria-hidden="true"></span>{{$t("message.profile")}}
             </b-dropdown-item>
-            <b-dropdown-item href="#">
+            <b-dropdown-item href="#" @click="signout()">
               <span class="oi oi-account-logout" title="account-logout" aria-hidden="true"></span>{{$t("message.signout")}}
             </b-dropdown-item>
           </b-nav-item-dropdown>
@@ -64,6 +64,10 @@ export default {
     },
     openAdmin: function () {
       this.$router.push({path: 'admin', params: {serverUri: this.$data.serverUri}})
+    },
+    signout: function () {
+      localStorage.removeItem('sformToken')
+      this.$router.push({path: 'signin'})
     }
   }
 }

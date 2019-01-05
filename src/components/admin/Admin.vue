@@ -1,18 +1,18 @@
 <template>
   <div class="admin">
     <div class="container">
-      <h1>Admin</h1>
+      <h1 class="mt-5 mb-5">{{$t('message.admin')}}</h1>
       <b-card no-body>
         <b-tabs pills card>
           <b-tab active>
             <template slot="title">
-              <span class="oi oi-person" title="person" aria-hidden="true"></span>User
+              <span class="oi oi-person" title="person" aria-hidden="true"></span>{{$t('message.user')}}
             </template>
             <userConfig v-bind:serverUri="serverUri"></userConfig>
           </b-tab>
           <b-tab>
             <template slot="title">
-              <span class="oi oi-transfer" title="transfer" aria-hidden="true"></span>Transfer
+              <span class="oi oi-transfer" title="transfer" aria-hidden="true"></span>{{$t('message.transfer')}}
             </template>
             <transferConfig v-bind:serverUri="serverUri"></transferConfig>
           </b-tab>
