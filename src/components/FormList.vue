@@ -13,16 +13,16 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in formList" v-bind:key="item.id">
+        <tr v-for="(item, index) in formList" v-bind:key="item.id">
           <td scope="row">{{item.hashed_id}}</td>
           <td scope="row">{{item.name}}</td>
           <td scope="row">{{item.title}}</td>
           <td scope="row">{{formStatus[item.status]}}</td>
           <td scope="row">
-            <b-button size="sm" @click="edit">
+            <b-button size="sm" @click="edit(item.hashed_id)">
               <span class="oi oi-pencil" title="pencil" aria-hidden="true"></span>{{$t("message.edit")}}
             </b-button>
-            <b-button v-b-modal.modal_form_delete size="sm">
+            <b-button v-b-modal.modal_form_delete size="sm" @click="targetIndex = index">
               <span class="oi oi-trash" title="trash" aria-hidden="true"></span>{{$t("message.delete")}}
             </b-button>
           </td>
@@ -39,7 +39,8 @@
       :ok-title="$t('message.ok')"
       :cancel-title="$t('message.cancel')"
       :hide-header-close="true"
-      centered>
+      centered
+      @ok="deleteForm(targetIndex)">
       <p>{{$t('message.confirm_form_delete')}}</p>
     </b-modal>
 
@@ -59,7 +60,8 @@ export default {
       formList: {},
       serverUriString: '',
       checkedColumn: [],
-      formStatus: ['無効', '有効', '停止中']
+      formStatus: ['無効', '有効', '停止中'],
+      config: {}
     }
   },
   created: function () {
@@ -68,14 +70,14 @@ export default {
       this.$router.push({path: 'signin'})
     }
     this.$data.serverUriString = this.$props.serverUri
-    let config = {
+    this.$data.config = {
       headers: {
         'x-Requested-With': '*',
         'X-Auth-Token': token,
         'Access-Control-Allow-Origin': this.$data.serverUriString
       }
     }
-    axios.get(this.$props.serverUri + 'form/list', config)
+    axios.get(this.$props.serverUri + 'form/list', this.$data.config)
     .then(response => {
       console.log(response)
       this.$data.formList = JSON.parse(response.data.dataset)
@@ -139,15 +141,7 @@ export default {
         action: 'create',
         rcdata: {formDef: tmp, transferTasks: {}}
       }
-      var token = localStorage.getItem('sformToken')
-      let config = {
-        headers: {
-          'x-Requested-With': '*',
-          'X-Auth-Token': token,
-          'Access-Control-Allow-Origin': this.$data.serverUriString
-        }
-      }
-      axios.post(this.$props.serverUri + 'form', reqdata, config)
+      axios.post(this.$props.serverUri + 'form', reqdata, this.$data.config)
       .then(response => {
         this.$router.push({path: 'formlist', params: {serverUri: this.$data.serverUriString}})
       })
@@ -162,8 +156,9 @@ export default {
         }
       })
     },
-    deleteForm: function () {
-      return ''
+    deleteForm: function (index) {
+      var form = this.$data.formList[index]
+      axios.get(this.$props.serverUri + 'form/' + form.hashed_id, this.$data.config)
     }
   }
 }
