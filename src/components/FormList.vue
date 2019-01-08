@@ -1,6 +1,7 @@
 <template>
   <div class="form_list">
-    <div class="container">
+    <div v-show="loading" class="loader">Now loading...</div>
+    <div v-show="!loading" class="container">
     <h1 class="mt-5 mb-5">{{$t("message.form_list")}}</h1>
     <table class="table table-striped">
       <thead>
@@ -61,7 +62,8 @@ export default {
       serverUriString: '',
       checkedColumn: [],
       formStatus: ['無効', '有効', '停止中'],
-      config: {}
+      config: {},
+      loading: false
     }
   },
   created: function () {
@@ -77,9 +79,10 @@ export default {
         'Access-Control-Allow-Origin': this.$data.serverUriString
       }
     }
+    this.$data.loading = true
     axios.get(this.$props.serverUri + 'form/list', this.$data.config)
     .then(response => {
-      console.log(response)
+      this.$data.loading = false
       this.$data.formList = JSON.parse(response.data.dataset)
     })
     .catch(error => {
@@ -91,6 +94,7 @@ export default {
           console.log(error.response)
         }
       }
+      this.$data.loading = false
     })
   },
   methods: {
@@ -141,9 +145,14 @@ export default {
         action: 'create',
         rcdata: {formDef: tmp, transferTasks: {}}
       }
+      this.$data.loading = true
       axios.post(this.$props.serverUri + 'form', reqdata, this.$data.config)
       .then(response => {
-        this.$router.push({path: 'formlist', params: {serverUri: this.$data.serverUriString}})
+        this.$data.loading = false
+        var data = response.data.dataset
+        tmp.id = data.id
+        tmp.hashed_id = data.hashed_id
+        this.$set(this.$data.formList, i, tmp)
       })
       .catch(error => {
         if (error.response) {
@@ -154,11 +163,21 @@ export default {
             console.log(error.response)
           }
         }
+        this.$data.loading = false
       })
     },
     deleteForm: function (index) {
       var form = this.$data.formList[index]
-      axios.get(this.$props.serverUri + 'form/' + form.hashed_id, this.$data.config)
+      this.$data.loading = true
+      axios.delete(this.$props.serverUri + 'form/' + form.hashed_id, this.$data.config)
+      .then(response => {
+        this.$delete(this.$data.formList, index)
+        this.$data.loading = false
+      })
+      .catch(error => {
+        this.$data.loading = false
+        console.log(error.response)
+      })
     }
   }
 }
