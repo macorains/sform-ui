@@ -13,7 +13,7 @@
           <b-nav-item href="#" v-on:click="openFormList()">
             <span class="oi oi-spreadsheet" title="spreadsheet" aria-hidden="true"></span>{{$t("message.form")}}
           </b-nav-item>
-          <b-nav-item href="#" v-on:click="openAdmin()">
+          <b-nav-item href="#" v-on:click="openAdmin()" v-show="isAdmin">
             <span class="oi oi-cog" title="cog" aria-hidden="true"></span>{{$t("message.admin")}}
           </b-nav-item>
         </b-navbar-nav>
@@ -47,13 +47,34 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'app',
   data: function () {
     return {
       serverUri: 'http://localhost:9001/',
-      hashedFormId: ''
+      hashedFormId: '',
+      isAdmin: false
     }
+  },
+  created: function () {
+    var token = localStorage.getItem('sformToken')
+    var config = {
+      headers: {
+        'x-Requested-With': '*',
+        'X-Auth-Token': token,
+        'Access-Control-Allow-Origin': this.$data.serverUri
+      }
+    }
+    axios.get(this.$data.serverUri + 'user/isadmin', config)
+    .then(response => {
+      this.$data.isAdmin = true
+    })
+    .catch(error => {
+      console.log(error.response)
+      this.$data.isAdmin = false
+    })
   },
   methods: {
     updateHashedFormId: function (hashedFormId) {
