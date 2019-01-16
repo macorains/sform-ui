@@ -56,6 +56,7 @@ export default {
         console.log(response)
         let token = response.headers['x-auth-token']
         localStorage.setItem('sformToken', token)
+        this.$emit('updateIsAdmin', true)
         this.$router.push({path: 'formlist', params: {'serverUri': this.$props.serverUri}})
       })
     }

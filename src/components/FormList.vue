@@ -100,7 +100,7 @@ export default {
   methods: {
     edit: function (hashedId) {
       this.$emit('updateHashedFormId', hashedId)
-      this.$router.push({name: 'formedit', params: {hashedFormId: hashedId}})
+      this.$router.push({name: 'formedit', params: {hashedFormId: hashedId, serverUri: this.$props.serverUri}})
     },
     add: function () {
       var i = Object.keys(this.$data.formList).length

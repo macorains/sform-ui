@@ -64,6 +64,7 @@ export default {
         'Access-Control-Allow-Origin': this.$props.serverUri
       }
     }
+    console.log(this.$data.config)
     if (this.$props.hashedFormId) {
       axios.get(this.$props.serverUri + 'transfertask/list/' + this.$props.hashedFormId, this.$data.config)
       .then(response => {
