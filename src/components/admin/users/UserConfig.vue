@@ -16,7 +16,7 @@
             <td>{{user.lastName + ' ' + user.firstName}}</td>
             <td>{{user.email}}</td>
             <td>
-              <b-btn v-b-modal.modal_user_delete size="sm">
+              <b-btn v-b-modal.modal_user_delete size="sm" v-show="user.deletable">
                 <span class="oi oi-trash" title="trash" aria-hidden="true"></span>{{$t('message.delete')}}
               </b-btn>
               <b-btn @click="editUser(userlist.index)" size="sm">
