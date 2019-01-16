@@ -1,6 +1,6 @@
 <template>
   <div class="userConfigEdit">
-    <b-modal ref="modalUserConfigEdit" hide-footer title="ユーザー情報変更" @shown="modalInit">
+    <b-modal ref="modalUserConfigEdit" hide-footer title="ユーザー情報変更" @shown="modalInit" @hide="endEdit">
       <b-container class="text-left">
         <b-form-row>
           <b-col>
@@ -30,6 +30,9 @@ export default {
   methods: {
     modalInit: function () {
       return true
+    },
+    endEdit: function () {
+      this.$emit('endEditUser')
     }
   },
   watch: {

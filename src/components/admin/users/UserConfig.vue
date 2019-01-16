@@ -30,7 +30,7 @@
         </tbody>
       </table>
     </div>
-    <userConfigEdit :serverUri = "serverUri" :user = "selectedUser" :modalState = "modalState"></userConfigEdit>
+    <userConfigEdit :serverUri = "serverUri" :user = "selectedUser" :modalState = "modalState" @endEditUser="endEditUser"></userConfigEdit>
     <b-modal 
       id="modal_user_delete" 
       :title="$t('message.confirm')" 
@@ -107,6 +107,9 @@ export default {
     },
     deleteUser: function (index) {
       return index
+    },
+    endEditUser: function () {
+      this.$data.modalState = 0
     }
   }
 }
