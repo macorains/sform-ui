@@ -4,8 +4,20 @@
       <b-container class="text-left">
         <b-form-row>
           <b-col>
-            <b-form-group id="userNameGroup" label-for="userName" :label="$t('message.name')">
-              <b-form-input id="userName" type="text" v-model="userData.name"></b-form-input>
+            <b-form-group id="lastNameGroup" label-for="lastName" :label="$t('message.last_name')">
+              <b-form-input id="lastName" type="text" v-model="userData.lastName"></b-form-input>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group id="firstNameGroup" label-for="firstName" :label="$t('message.first_name')">
+              <b-form-input id="firstName" type="text" v-model="userData.firstName"></b-form-input>
+            </b-form-group>
+          </b-col>
+        </b-form-row>
+        <b-form-row>
+          <b-col>
+            <b-form-group id="emailGroup" label-for="email" :label="$t('message.email')">
+              <b-form-input id="email" type="text" v-model="userData.email"></b-form-input>
             </b-form-group>
           </b-col>
         </b-form-row>
@@ -26,9 +38,11 @@ export default {
     }
   },
   created: function () {
+    this.$set(this.$data, 'userData', this.$props.user)
   },
   methods: {
     modalInit: function () {
+      this.$set(this.$data, 'userData', this.$props.user)
       return true
     },
     endEdit: function () {

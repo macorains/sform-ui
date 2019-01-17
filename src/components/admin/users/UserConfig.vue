@@ -19,7 +19,7 @@
               <b-btn v-b-modal.modal_user_delete size="sm" v-show="user.deletable">
                 <span class="oi oi-trash" title="trash" aria-hidden="true"></span>{{$t('message.delete')}}
               </b-btn>
-              <b-btn @click="editUser(userlist.index)" size="sm">
+              <b-btn @click="editUser(index)" size="sm">
                 <span class="oi oi-x" title="x" aria-hidden="true"></span>{{$t('message.edit')}}
               </b-btn>
               <b-btn v-b-modal.modal_user_reset_password size="sm">
@@ -102,8 +102,8 @@ export default {
   },
   methods: {
     editUser: function (index) {
+      this.$set(this.$data, 'selectedUser', this.$data.userlist[index])
       this.$data.modalState = 1
-      return index
     },
     deleteUser: function (index) {
       return index
