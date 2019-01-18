@@ -1,6 +1,6 @@
 <template>
   <div class="userConfigEdit">
-    <b-modal ref="modalUserConfigEdit" hide-footer title="ユーザー情報変更" @shown="modalInit" @hide="endEdit">
+    <b-modal ref="modalUserConfigEdit" title="ユーザー情報変更" :hide-header-close="true" @shown="modalInit" @hide="endEdit">
       <b-container class="text-left">
         <b-form-row>
           <b-col>
@@ -22,6 +22,13 @@
           </b-col>
         </b-form-row>
       </b-container>
+      <div slot="modal-footer" class="w-100">
+        <b-col>
+          <b-btn class="mt-3" block @click="endEdit">
+            <span class="oi oi-check" title="check" aria-hidden="true"></span>{{$t('message.end_edit')}}
+          </b-btn>
+        </b-col>
+      </div>
     </b-modal>
   </div>
 </template>
@@ -38,7 +45,6 @@ export default {
     }
   },
   created: function () {
-    this.$set(this.$data, 'userData', this.$props.user)
   },
   methods: {
     modalInit: function () {

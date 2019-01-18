@@ -16,7 +16,7 @@
             <td>{{user.lastName + ' ' + user.firstName}}</td>
             <td>{{user.email}}</td>
             <td>
-              <b-btn v-b-modal.modal_user_delete size="sm" v-show="user.deletable">
+              <b-btn v-b-modal.modal_user_delete size="sm" v-show="user.deletable" @click="targetIndex = index">
                 <span class="oi oi-trash" title="trash" aria-hidden="true"></span>{{$t('message.delete')}}
               </b-btn>
               <b-btn @click="editUser(index)" size="sm">
@@ -29,6 +29,13 @@
           </tr>
         </tbody>
       </table>
+      <b-row>
+        <b-col>
+          <b-btn class="mt-4" @click="addUser">
+            <span class="oi oi-plus" title="plus" aria-hidden="true"></span>{{$t("message.add_user")}}
+          </b-btn>
+        </b-col>
+      </b-row>
     </div>
     <userConfigEdit :serverUri = "serverUri" :user = "selectedUser" :modalState = "modalState" @endEditUser="endEditUser"></userConfigEdit>
     <b-modal 
@@ -39,6 +46,7 @@
       :ok-title="$t('message.ok')"
       :cancel-title="$t('message.cancel')"
       :hide-header-close="true"
+      @ok="deleteUser(targetIndex)"
       centered>
       <p>{{$t('message.confirm_user_delete')}}</p>
     </b-modal>
@@ -72,7 +80,8 @@ export default {
       config: {},
       userlist: [],
       selectedUser: {},
-      modalState: 0
+      modalState: 0,
+      targerIndex: ''
     }
   },
   created: function () {
@@ -106,10 +115,25 @@ export default {
       this.$data.modalState = 1
     },
     deleteUser: function (index) {
-      return index
+      this.$delete(this.$data.userlist, index)
+      // ToDo 削除更新処理追加
     },
     endEditUser: function () {
+      // ToDo 保存処理追加
       this.$data.modalState = 0
+    },
+    addUser: function () {
+      var newIndex = Object.keys(this.$data.userlist).length
+      var tmp = {
+        'email': '',
+        'firstName': '',
+        'lastName': '',
+        'role': '',
+        'deletable': true
+      }
+      this.$set(this.$data.userlist, newIndex, tmp)
+      this.$set(this.$data, 'selectedUser', this.$data.userlist[newIndex])
+      this.$data.modalState = 1
     }
   }
 }
