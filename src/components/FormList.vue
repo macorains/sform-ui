@@ -24,7 +24,7 @@
               <span class="oi oi-pencil" title="pencil" aria-hidden="true"></span>{{$t("message.edit")}}
             </b-button>
             <b-button v-b-modal.modal_form_delete size="sm" @click="targetIndex = index">
-              <span class="oi oi-trash" title="trash" aria-hidden="true"></span>{{$t("message.delete")}}
+              <span class="oi oi-trash" title="trash" aria-hidden="true"></span>{{$t('message.delete')}}
             </b-button>
           </td>
         </tr>
@@ -76,11 +76,11 @@ export default {
       headers: {
         'x-Requested-With': '*',
         'X-Auth-Token': token,
-        'Access-Control-Allow-Origin': this.$data.serverUriString
+        'Access-Control-Allow-Origin': this.$props.serverUri
       }
     }
     this.$data.loading = true
-    axios.get(this.$props.serverUri + 'form/list', this.$data.config)
+    axios.get(this.$props.serverUri + '/form/list', this.$data.config)
     .then(response => {
       this.$data.loading = false
       this.$data.formList = JSON.parse(response.data.dataset)
@@ -146,7 +146,7 @@ export default {
         rcdata: {formDef: tmp, transferTasks: {}}
       }
       this.$data.loading = true
-      axios.post(this.$props.serverUri + 'form', reqdata, this.$data.config)
+      axios.post(this.$props.serverUri + '/form', reqdata, this.$data.config)
       .then(response => {
         this.$data.loading = false
         var data = response.data.dataset
@@ -169,7 +169,7 @@ export default {
     deleteForm: function (index) {
       var form = this.$data.formList[index]
       this.$data.loading = true
-      axios.delete(this.$props.serverUri + 'form/' + form.hashed_id, this.$data.config)
+      axios.delete(this.$props.serverUri + '/form/' + form.hashed_id, this.$data.config)
       .then(response => {
         this.$delete(this.$data.formList, index)
         this.$data.loading = false

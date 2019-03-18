@@ -77,7 +77,7 @@ export default {
         'Access-Control-Allow-Origin': this.$props.serverUri
       }
     }
-    axios.get(this.$props.serverUri + 'transfer/config/Salesforce', this.$data.config)
+    axios.get(this.$props.serverUri + '/transfer/config/Salesforce', this.$data.config)
     .then(response => {
       this.$set(this.$data, 'transferConfig', response.data.dataset)
       var salesforceObjectList = this.$data.transferConfig.sfObjectDefinition

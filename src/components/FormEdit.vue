@@ -6,6 +6,13 @@
     <b-container class="text-left">
       <b-form-row>
         <b-col>
+          <b-form-group id="formNameStatus" label-for="status" :label="$t('message.form_status')">
+            <b-form-radio-group id="status" v-model="formData.status" name="status">
+              <b-form-radio value="0">{{$t('message.form_status_invalid')}}</b-form-radio>
+              <b-form-radio value="1">{{$t('message.form_status_valid')}}</b-form-radio>
+              <b-form-radio value="2">{{$t('message.form_status_suspend')}}</b-form-radio>
+            </b-form-radio-group>
+          </b-form-group>
           <b-form-group id="formNameGroup" label-for="formName" :label="$t('message.form_name')">
             <b-form-input id="formName" type="text" v-model="formData.name"></b-form-input>
           </b-form-group>
@@ -244,7 +251,7 @@ export default {
         'Access-Control-Allow-Origin': this.$props.serverUri
       }
     }
-    axios.get(this.$props.serverUri + 'form/' + this.$props.hashedFormId, this.$data.config)
+    axios.get(this.$props.serverUri + '/form/' + this.$props.hashedFormId, this.$data.config)
     .then(response => {
       this.$data.formData = response.data.dataset
     })
@@ -266,7 +273,7 @@ export default {
         action: 'create',
         rcdata: {formDef: this.$data.formData, transferTasks: this.$data.transferTask}
       }
-      axios.post(this.$props.serverUri + 'form', reqdata, this.$data.config)
+      axios.post(this.$props.serverUri + '/form', reqdata, this.$data.config)
       this.$router.push({path: 'formlist', params: {'serverUri': this.$props.serverUri}})
     },
     cancel: function () {

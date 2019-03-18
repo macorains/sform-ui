@@ -93,7 +93,7 @@ export default {
         'Access-Control-Allow-Origin': this.$props.serverUri
       }
     }
-    axios.get(this.$props.serverUri + 'user', this.$data.config)
+    axios.get(this.$props.serverUri + '/user', this.$data.config)
     .then(response => {
       console.log(response.data)
       this.$data.userlist = response.data.dataset

@@ -66,11 +66,11 @@ export default {
     }
     console.log(this.$data.config)
     if (this.$props.hashedFormId) {
-      axios.get(this.$props.serverUri + 'transfertask/list/' + this.$props.hashedFormId, this.$data.config)
+      axios.get(this.$props.serverUri + '/transfertask/list/' + this.$props.hashedFormId, this.$data.config)
       .then(response => {
         this.$data.transferTask = response.data.dataset
       })
-      axios.get(this.$props.serverUri + 'transfer', this.$data.config)
+      axios.get(this.$props.serverUri + '/transfer', this.$data.config)
       .then(response => {
         this.$data.transferList = response.data
       })

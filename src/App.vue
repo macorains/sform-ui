@@ -53,7 +53,7 @@ export default {
   name: 'app',
   data: function () {
     return {
-      serverUri: 'http://localhost:9001/',
+      serverUri: 'http://localhost:9001',
       hashedFormId: '',
       isAdmin: false
     }
@@ -67,7 +67,7 @@ export default {
         'Access-Control-Allow-Origin': this.$data.serverUri
       }
     }
-    axios.get(this.$data.serverUri + 'user/isadmin', config)
+    axios.get(this.$data.serverUri + '/user/isadmin', config)
     .then(response => {
       this.$data.isAdmin = true
     })
