@@ -66,7 +66,7 @@ export default {
         'Access-Control-Allow-Origin': this.$props.serverUri
       }
     }
-    axios.get(this.$props.serverUri + 'transfer/config/Mail', this.$data.config)
+    axios.get(this.$props.serverUri + '/transfer/config/Mail', this.$data.config)
     .then(response => {
       this.$set(this.$data, 'transferConfig', response.data.dataset)
       this.$set(this.$data, 'tmpTransferTask', this.$props.transferTask)
