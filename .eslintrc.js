@@ -10,11 +10,9 @@ module.exports = {
     browser: true,
   },
   // https://github.com/standard/standard/blob/master/docs/RULES-en.md
-  extends: 'standard',
+  extends: ['standard', 'plugin:vue/recommended'],
   // required to lint *.vue files
-  plugins: [
-    'html'
-  ],
+  plugins: ['import', 'vue'],
   // add your custom rules here
   'rules': {
     // allow paren-less arrow functions
