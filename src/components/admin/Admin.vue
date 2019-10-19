@@ -18,7 +18,7 @@
               />
               {{ $t('message.user') }}
             </template>
-            <userConfig :serverUri="serverUri" />
+            <userConfig :server-uri="serverUri" />
           </b-tab>
           <b-tab>
             <template slot="title">
@@ -29,7 +29,7 @@
               />
               {{ $t('message.transfer') }}
             </template>
-            <transferConfig :serverUri="serverUri" />
+            <transferConfig :server-uri="serverUri" />
           </b-tab>
         </b-tabs>
       </b-card>
@@ -42,12 +42,17 @@ import UserConfig from './users/UserConfig.vue'
 import TransferConfig from './transfers/TransferConfig.vue'
 
 export default {
-  name: 'admin',
+  name: 'Admin',
   components: {
     userConfig: UserConfig,
     transferConfig: TransferConfig
   },
-  props: ['serverUri']
+  props: {
+    'serverUri': {
+      type: String,
+      default: ''
+    }
+  }
 }
 
 </script>

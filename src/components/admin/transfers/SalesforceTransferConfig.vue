@@ -122,8 +122,13 @@
 import axios from 'axios'
 
 export default {
-  name: 'salesforceTransferConfig',
-  props: ['serverUri'],
+  name: 'SalesforceTransferConfig',
+  props: {
+    'serverUri': {
+      type: String,
+      default: ''
+    }
+  },
   data: function () {
     return {
       tmpTransferConfig: {}

@@ -113,8 +113,13 @@ import axios from 'axios'
 import 'open-iconic/font/css/open-iconic-bootstrap.css'
 
 export default {
-  name: 'form_list',
-  props: ['serverUri'],
+  name: 'FormList',
+  props: {
+    'serverUri': {
+      type: String,
+      default: ''
+    }
+  },
   data: function () {
     return {
       formList: {},

@@ -60,8 +60,13 @@
 <script>
 import axios from 'axios'
 export default {
-  name: 'signin',
-  props: ['serverUri'],
+  name: 'Signin',
+  props: {
+    'serverUri': {
+      type: String,
+      default: ''
+    }
+  },
   data: function () {
     return {
       email: '',

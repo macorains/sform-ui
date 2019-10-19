@@ -39,11 +39,20 @@ import Draggable from 'vuedraggable'
 import 'open-iconic/font/css/open-iconic-bootstrap.css'
 
 export default {
-  name: 'form_col_edit_order',
+  name: 'FormColEditOrder',
   components: {
     'draggable': Draggable
   },
-  props: ['formColData', 'formColEditOrderModalState'],
+  props: {
+    'formColData': {
+      type: String,
+      default: ''
+    },
+    'formColEditOrderModalState': {
+      type: Number,
+      default: 0
+    }
+  },
   data: function () {
     return {
       formCols: [],

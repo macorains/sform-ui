@@ -153,8 +153,13 @@
 import axios from 'axios'
 
 export default {
-  name: 'mailTransferConfig',
-  props: ['serverUri'],
+  name: 'MailTransferConfig',
+  props: {
+    'serverUri': {
+      type: String,
+      default: ''
+    }
+  },
   data: function () {
     return {
       transferConfig: {},

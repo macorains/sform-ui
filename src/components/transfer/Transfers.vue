@@ -35,18 +35,18 @@
     </table>
     <salesforceTransferEdit
       ref="salesforceTransferEdit"
-      :serverUri="serverUri"
-      :transferEditModalState="transferEditModalState"
-      :transferTask="transferTask[selectedTransferTask]"
-      :formCols="formCols"
+      :server-uri="serverUri"
+      :transfer-edit-modal-state="transferEditModalState"
+      :transfer-task="transferTask[selectedTransferTask]"
+      :form-cols="formCols"
       @transferEditModalClose="transferEditModalClose"
     />
     <mailTransferEdit
       ref="mailTransferEdit"
-      :serverUri="serverUri"
-      :transferEditModalState="transferEditModalState"
-      :transferTask="transferTask[selectedTransferTask]"
-      :formCols="formCols"
+      :server-uri="serverUri"
+      :transfer-edit-modal-state="transferEditModalState"
+      :transfer-task="transferTask[selectedTransferTask]"
+      :form-cols="formCols"
       @transferEditModalClose="transferEditModalClose"
     />
   </div>
@@ -57,7 +57,7 @@ import SalesforceTransferEdit from './SalesforceTransferEdit.vue'
 import MailTransferEdit from './MailTransferEdit.vue'
 
 export default {
-  name: 'transfers',
+  name: 'Transfers',
   components: {
     'salesforceTransferEdit': SalesforceTransferEdit,
     'mailTransferEdit': MailTransferEdit

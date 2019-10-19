@@ -95,8 +95,8 @@
       </b-collapse>
     </b-navbar>
     <router-view
-      :serverUri="serverUri"
-      :hashedFormId="hashedFormId"
+      :server-uri="serverUri"
+      :hashed-form-id="hashedFormId"
       @updateHashedFormId="updateHashedFormId"
       @updateIsAdmin="updateIsAdmin"
     />
@@ -107,7 +107,7 @@
 import axios from 'axios'
 
 export default {
-  name: 'app',
+  name: 'App',
   data: function () {
     return {
       serverUri: 'http://localhost:9001',

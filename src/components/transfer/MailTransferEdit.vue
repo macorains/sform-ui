@@ -100,8 +100,25 @@
 import axios from 'axios'
 
 export default {
-  name: 'mail-transfer-edit',
-  props: ['serverUri', 'transferTask', 'transferEditModalState', 'formCols'],
+  name: 'MailTransferEdit',
+  props: {
+    'serverUri': {
+      type: String,
+      default: ''
+    },
+    'transferTask': {
+      type: Object,
+      default: () => ({})
+    },
+    'transferEditModalState': {
+      type: Array,
+      default: () => ([])
+    },
+    'formCols': {
+      type: Object,
+      default: () => ({})
+    }
+  },
   data: function () {
     return {
       config: {},

@@ -227,8 +227,8 @@
           <b-col>
             <!-- フォーム項目並び替え -->
             <formColEditOrder
-              :formColData="formData.formCols"
-              :formColEditOrderModalState="formColEditOrderModalState"
+              :form-col-data="formData.formCols"
+              :form-col-edit-order-modal-state="formColEditOrderModalState"
               @reorderColEnd="reorderColEnd"
             />
           </b-col>
@@ -237,9 +237,9 @@
           <b-col>
             <!-- Transfer設定 -->
             <transfers
-              :serverUri="serverUri"
-              :hashedFormId="hashedFormId"
-              :formCols="formData.formCols"
+              :server-uri="serverUri"
+              :hashed-form-id="hashedFormId"
+              :form-cols="formData.formCols"
               @updateTransferTask="updateTransferTask"
             />
           </b-col>
@@ -535,12 +535,21 @@ import FormColEditOrder from './FormColEditOrder.vue'
 import Transfers from './transfer/Transfers.vue'
 
 export default {
-  name: 'formedit',
+  name: 'FormEdit',
   components: {
     'transfers': Transfers,
     'formColEditOrder': FormColEditOrder
   },
-  props: ['serverUri', 'hashedFormId'],
+  props: {
+    'serverUri': {
+      type: String,
+      default: ''
+    },
+    'hashedFormId': {
+      type: String,
+      default: ''
+    }
+  },
   data: function () {
     return {
       formColData: {validations: {}, selectList: {}},

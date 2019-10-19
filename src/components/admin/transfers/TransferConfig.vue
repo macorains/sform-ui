@@ -11,10 +11,10 @@
             title="Salesforce"
             active
           >
-            <salesforceTransferConfig :serverUri="serverUri" />
+            <salesforceTransferConfig :server-uri="serverUri" />
           </b-tab>
           <b-tab title="Mail">
-            <mail-transfer-config :serverUri="serverUri" />
+            <mail-transfer-config :server-uri="serverUri" />
           </b-tab>
         </b-tabs>
       </b-card>
@@ -27,12 +27,17 @@ import SalesforceTransferConfig from './SalesforceTransferConfig.vue'
 import MailTransferConfig from './MailTransferConfig.vue'
 
 export default {
-  name: 'transferConfig',
+  name: 'TransferConfig',
   components: {
     salesforceTransferConfig: SalesforceTransferConfig,
     mailTransferConfig: MailTransferConfig
   },
-  props: ['serverUri']
+  props: {
+    'serverUri': {
+      type: String,
+      default: ''
+    }
+  }
 }
 </script>
 

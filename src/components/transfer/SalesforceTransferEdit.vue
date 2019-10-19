@@ -98,8 +98,25 @@
 import axios from 'axios'
 
 export default {
-  name: 'salesforce-transfer-edit',
-  props: ['serverUri', 'transferTask', 'transferEditModalState', 'formCols'],
+  name: 'SalesforceTransferEdit',
+  props: {
+    'serverUri': {
+      type: String,
+      default: ''
+    },
+    'transferTask': {
+      type: Object,
+      default: () => ({})
+    },
+    'transferEditModalState': {
+      type: Array,
+      default: () => ([])
+    },
+    'formCols': {
+      type: Object,
+      default: () => ({})
+    }
+  },
   data: function () {
     return {
       config: {},

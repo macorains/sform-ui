@@ -1,5 +1,5 @@
 <template>
-  <div class="userConfigEdit">
+  <div class="user-config-edit">
     <b-modal
       ref="modalUserConfigEdit"
       title="ユーザー情報変更"
@@ -94,8 +94,21 @@
 // import axios from 'axios'
 
 export default {
-  name: 'user-config-edit',
-  props: ['serverUri', 'user', 'modalState'],
+  name: 'UserConfigEdit',
+  props: {
+    'serverUri': {
+      type: String,
+      default: ''
+    },
+    'user': {
+      type: Object,
+      default: () => ({})
+    },
+    'modalState': {
+      type: Number,
+      default: 0
+    }
+  },
   data: function () {
     return {
       config: {},

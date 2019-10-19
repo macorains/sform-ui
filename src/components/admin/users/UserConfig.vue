@@ -75,9 +75,9 @@
       </b-row>
     </div>
     <userConfigEdit
-      :serverUri="serverUri"
+      :server-uri="serverUri"
       :user="selectedUser"
-      :modalState="modalState"
+      :modal-state="modalState"
       @endEditUser="endEditUser"
     />
     <b-modal
@@ -113,11 +113,16 @@ import axios from 'axios'
 import UserConfigEdit from './UserConfigEdit.vue'
 
 export default {
-  name: 'user-config',
+  name: 'UserConfig',
   components: {
     UserConfigEdit: UserConfigEdit
   },
-  props: ['serverUri'],
+  props: {
+    'serverUri': {
+      type: String,
+      default: ''
+    }
+  },
   data: function () {
     return {
       config: {},
