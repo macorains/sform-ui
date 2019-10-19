@@ -19,30 +19,36 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(task, index) in transferTask" v-bind:key="task.id" v-on:click="edit(index, task.transfer_type_id)">
+        <tr
+          v-for="(task, index) in transferTask"
+          :key="task.id"
+          @click="edit(index, task.transfer_type_id)"
+        >
           <th scope="row">
-            {{index+1}}
+            {{ index+1 }}
           </th>
-          <td>{{task.name}}</td>
-          <td>{{transferType(task.transfer_type_id)}}</td>
-          <td></td>
+          <td>{{ task.name }}</td>
+          <td>{{ transferType(task.transfer_type_id) }}</td>
+          <td />
         </tr>
       </tbody>
     </table>
-    <salesforceTransferEdit ref="salesforceTransferEdit"
-        v-bind:serverUri="serverUri"
-        v-bind:transferEditModalState="transferEditModalState"
-        v-bind:transferTask="transferTask[selectedTransferTask]"
-        v-bind:formCols="formCols"
-        @transferEditModalClose = "transferEditModalClose">
-    </salesforceTransferEdit>
-    <mailTransferEdit ref="mailTransferEdit"
-        v-bind:serverUri="serverUri"
-        v-bind:transferEditModalState="transferEditModalState"
-        v-bind:transferTask="transferTask[selectedTransferTask]"
-        v-bind:formCols="formCols"
-        @transferEditModalClose = "transferEditModalClose">
-    </mailTransferEdit>
+    <salesforceTransferEdit
+      ref="salesforceTransferEdit"
+      :serverUri="serverUri"
+      :transferEditModalState="transferEditModalState"
+      :transferTask="transferTask[selectedTransferTask]"
+      :formCols="formCols"
+      @transferEditModalClose="transferEditModalClose"
+    />
+    <mailTransferEdit
+      ref="mailTransferEdit"
+      :serverUri="serverUri"
+      :transferEditModalState="transferEditModalState"
+      :transferTask="transferTask[selectedTransferTask]"
+      :formCols="formCols"
+      @transferEditModalClose="transferEditModalClose"
+    />
   </div>
 </template>
 <script>
@@ -52,10 +58,23 @@ import MailTransferEdit from './MailTransferEdit.vue'
 
 export default {
   name: 'transfers',
-  props: ['serverUri', 'hashedFormId', 'formCols'],
   components: {
     'salesforceTransferEdit': SalesforceTransferEdit,
     'mailTransferEdit': MailTransferEdit
+  },
+  props: {
+    'serverUri': {
+      type: String,
+      default: ''
+    },
+    'hashedFormId': {
+      type: String,
+      default: ''
+    },
+    'formCols': {
+      type: String,
+      default: ''
+    }
   },
   data: function () {
     return {
@@ -63,6 +82,11 @@ export default {
       transferList: [],
       transferEditModalState: [],
       selectedTransferTask: 0
+    }
+  },
+  watch: {
+    transferTask: function () {
+      this.$emit('updateTransferTask', this.$data.transferTask)
     }
   },
   created: function () {
@@ -96,11 +120,6 @@ export default {
     },
     transferEditModalClose: function (id) {
       this.$data.transferEditModalState[id] = 0
-    }
-  },
-  watch: {
-    transferTask: function () {
-      this.$emit('updateTransferTask', this.$data.transferTask)
     }
   }
 }

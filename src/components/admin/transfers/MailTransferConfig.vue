@@ -1,58 +1,147 @@
 <template>
   <div class="mailTransferConfig">
     <div class="container">
-      <b-card :header="$t('message.sender_mail_addresses')" class="text-left">
+      <b-card
+        :header="$t('message.sender_mail_addresses')"
+        class="text-left"
+      >
         <b-row>
-          <b-col cols="1">{{$t('message.number')}}</b-col>
-          <b-col cols="4">{{$t('message.name')}}</b-col>
-          <b-col>{{$t('message.email_address')}}</b-col>
+          <b-col cols="1">
+            {{ $t('message.number') }}
+          </b-col>
+          <b-col cols="4">
+            {{ $t('message.name') }}
+          </b-col>
+          <b-col>
+            {{ $t('message.email_address') }}
+          </b-col>
         </b-row>
-        <b-row class="mt-1" v-for="(data, index) in transferConfig.addressList" v-bind:key="index">
-          <b-col cols="1">{{ index + 1 }}</b-col>
-          <b-col cols="4">{{ data.name }}</b-col>
-          <b-col>{{data.address}}</b-col>
+        <b-row
+          v-for="(data, index) in transferConfig.addressList"
+          :key="index"
+          class="mt-1"
+        >
+          <b-col cols="1">
+            {{ index + 1 }}
+          </b-col>
+          <b-col cols="4">
+            {{ data.name }}
+          </b-col>
+          <b-col>
+            {{ data.address }}
+          </b-col>
         </b-row>
       </b-card>
-      <b-btn class="mt-3" block v-b-modal.modal_mail_transfer_config_edit>
-        <span class="oi oi-pencil" title="pencil" aria-hidden="true"></span>{{$t('message.edit')}}
+      <b-btn
+        v-b-modal.modal_mail_transfer_config_edit
+        class="mt-3"
+        block
+      >
+        <span
+          class="oi oi-pencil"
+          title="pencil"
+          aria-hidden="true"
+        />
+        {{ $t('message.edit') }}
       </b-btn>
     </div>
     <b-modal
-        ref="modalMailTransferConfigEdit"
-        id="modal_mail_transfer_config_edit"
-        :title="$t('message.mail_transfer_setting')"
-        size="lg"
-        :hide-header-close="true"
-        :hide-footer="true"
-        @shown="modalInit">
+      id="modal_mail_transfer_config_edit"
+      ref="modalMailTransferConfigEdit"
+      :title="$t('message.mail_transfer_setting')"
+      size="lg"
+      :hide-header-close="true"
+      :hide-footer="true"
+      @shown="modalInit"
+    >
       <b-container class="text-left">
         <b-card :header="$t('message.sender_mail_addresses')">
           <b-row>
-            <b-col cols="1">{{$t('message.number')}}</b-col>
-            <b-col cols="4">{{$t('message.name')}}</b-col>
-            <b-col>{{$t('message.email_address')}}</b-col>
-            <b-col></b-col>
+            <b-col cols="1">
+              {{ $t('message.number') }}
+            </b-col>
+            <b-col cols="4">
+              {{ $t('message.name') }}
+            </b-col>
+            <b-col>
+              {{ $t('message.email_address') }}
+            </b-col>
+            <b-col />
           </b-row>
-          <b-form-row class="mt-1" v-for="(data, index) in tmpTransferConfig.addressList" v-bind:key="index">
-            <b-col cols="1">{{ index + 1 }}</b-col>
-            <b-col cols="4"><b-form-input size="sm" v-model="data.name"/></b-col>
-            <b-col><b-form-input size="sm" v-model="data.address"/></b-col>
-            <b-col cols="1" class="text-right">
-              <b-btn size="sm" @click="deleteAddress(index)">
-                <span class="oi oi-trash" title="trash" aria-hidden="true"></span>{{$t('message.delete')}}
+          <b-form-row
+            v-for="(data, index) in tmpTransferConfig.addressList"
+            :key="index"
+            class="mt-1"
+          >
+            <b-col cols="1">
+              {{ index + 1 }}
+            </b-col>
+            <b-col cols="4">
+              <b-form-input
+                v-model="data.name"
+                size="sm"
+              />
+            </b-col>
+            <b-col>
+              <b-form-input
+                v-model="data.address"
+                size="sm"
+              />
+            </b-col>
+            <b-col
+              cols="1"
+              class="text-right"
+            >
+              <b-btn
+                size="sm"
+                @click="deleteAddress(index)"
+              >
+                <span
+                  class="oi oi-trash"
+                  title="trash"
+                  aria-hidden="true"
+                />
+                {{ $t('message.delete') }}
               </b-btn>
             </b-col>
           </b-form-row>
           <b-form-row class="mt-3">
-            <b-col cols="12" class="text-center">
-              <b-btn size="sm" @click="addAddress"><span class="oi oi-plus" title="plus" aria-hidden="true"></span>追加</b-btn>
+            <b-col
+              cols="12"
+              class="text-center"
+            >
+              <b-btn
+                size="sm"
+                @click="addAddress"
+              >
+                <span
+                  class="oi oi-plus"
+                  title="plus"
+                  aria-hidden="true"
+                />
+                追加
+              </b-btn>
             </b-col>
           </b-form-row>
         </b-card>
         <b-form-row class="mt-5 text-right">
           <b-col>
-            <b-btn @click="endEdit"><span class="oi oi-x" title="cancel" aria-hidden="true"></span>キャンセル</b-btn>
-            <b-btn @click="save"><span class="oi oi-plus" title="plus" aria-hidden="true"></span>保存</b-btn>
+            <b-btn @click="endEdit">
+              <span
+                class="oi oi-x"
+                title="cancel"
+                aria-hidden="true"
+              />
+              キャンセル
+            </b-btn>
+            <b-btn @click="save">
+              <span
+                class="oi oi-plus"
+                title="plus"
+                aria-hidden="true"
+              />
+              保存
+            </b-btn>
           </b-col>
         </b-form-row>
       </b-container>

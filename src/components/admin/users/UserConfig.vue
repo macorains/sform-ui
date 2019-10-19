@@ -5,25 +5,54 @@
         <thead>
           <tr>
             <th>No.</th>
-            <th>{{$t('message.name')}}</th>
-            <th>{{$t('message.email')}}</th>
-            <th>{{$t('message.action')}}</th>
+            <th>{{ $t('message.name') }}</th>
+            <th>{{ $t('message.email') }}</th>
+            <th>{{ $t('message.action') }}</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(user,index) in userlist" v-bind:key="index">
-            <td>{{index+1}}</td>
-            <td>{{user.lastName + ' ' + user.firstName}}</td>
-            <td>{{user.email}}</td>
+          <tr
+            v-for="(user,index) in userlist"
+            :key="index"
+          >
+            <td>{{ index+1 }}</td>
+            <td>{{ user.lastName + ' ' + user.firstName }}</td>
+            <td>{{ user.email }}</td>
             <td>
-              <b-btn v-b-modal.modal_user_delete size="sm" v-show="user.deletable" @click="targetIndex = index">
-                <span class="oi oi-trash" title="trash" aria-hidden="true"></span>{{$t('message.delete')}}
+              <b-btn
+                v-show="user.deletable"
+                v-b-modal.modal_user_delete
+                size="sm"
+                @click="targetIndex = index"
+              >
+                <span
+                  class="oi oi-trash"
+                  title="trash"
+                  aria-hidden="true"
+                />
+                {{ $t('message.delete') }}
               </b-btn>
-              <b-btn @click="editUser(index)" size="sm">
-                <span class="oi oi-x" title="x" aria-hidden="true"></span>{{$t('message.edit')}}
+              <b-btn
+                size="sm"
+                @click="editUser(index)"
+              >
+                <span
+                  class="oi oi-x"
+                  title="x"
+                  aria-hidden="true"
+                />
+                {{ $t('message.edit') }}
               </b-btn>
-              <b-btn v-b-modal.modal_user_reset_password size="sm">
-                <span class="oi oi-reload" title="reload" aria-hidden="true"></span>{{$t('message.reset_password')}}
+              <b-btn
+                v-b-modal.modal_user_reset_password
+                size="sm"
+              >
+                <span
+                  class="oi oi-reload"
+                  title="reload"
+                  aria-hidden="true"
+                />
+                {{ $t('message.reset_password') }}
               </b-btn>
             </td>
           </tr>
@@ -31,13 +60,26 @@
       </table>
       <b-row>
         <b-col>
-          <b-btn class="mt-4" @click="addUser">
-            <span class="oi oi-plus" title="plus" aria-hidden="true"></span>{{$t("message.add_user")}}
+          <b-btn
+            class="mt-4"
+            @click="addUser"
+          >
+            <span
+              class="oi oi-plus"
+              title="plus"
+              aria-hidden="true"
+            />
+            {{ $t("message.add_user") }}
           </b-btn>
         </b-col>
       </b-row>
     </div>
-    <userConfigEdit :serverUri = "serverUri" :user = "selectedUser" :modalState = "modalState" @endEditUser="endEditUser"></userConfigEdit>
+    <userConfigEdit
+      :serverUri="serverUri"
+      :user="selectedUser"
+      :modalState="modalState"
+      @endEditUser="endEditUser"
+    />
     <b-modal
       id="modal_user_delete"
       :title="$t('message.confirm')"
@@ -46,9 +88,10 @@
       :ok-title="$t('message.ok')"
       :cancel-title="$t('message.cancel')"
       :hide-header-close="true"
+      centered
       @ok="deleteUser(targetIndex)"
-      centered>
-      <p>{{$t('message.confirm_user_delete')}}</p>
+    >
+      <p>{{ $t('message.confirm_user_delete') }}</p>
     </b-modal>
     <b-modal
       id="modal_user_reset_password"
@@ -59,7 +102,7 @@
       :cancel-title="$t('message.cancel')"
       :hide-header-close="true"
       centered
-      >
+    >
       <p>{{ $t('message.confirm_reset_password') }}</p>
     </b-modal>
   </div>

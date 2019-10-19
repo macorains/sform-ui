@@ -2,12 +2,19 @@
   <div class="transferConfig">
     <div class="container">
       <b-card no-body>
-        <b-tabs pills card vertical>
-          <b-tab title="Salesforce" active>
-            <salesforceTransferConfig v-bind:serverUri="serverUri"></salesforceTransferConfig>
+        <b-tabs
+          pills
+          card
+          vertical
+        >
+          <b-tab
+            title="Salesforce"
+            active
+          >
+            <salesforceTransferConfig :serverUri="serverUri" />
           </b-tab>
           <b-tab title="Mail">
-            <mail-transfer-config v-bind:serverUri="serverUri"></mail-transfer-config>
+            <mail-transfer-config :serverUri="serverUri" />
           </b-tab>
         </b-tabs>
       </b-card>
@@ -21,11 +28,11 @@ import MailTransferConfig from './MailTransferConfig.vue'
 
 export default {
   name: 'transferConfig',
-  props: ['serverUri'],
   components: {
     salesforceTransferConfig: SalesforceTransferConfig,
     mailTransferConfig: MailTransferConfig
-  }
+  },
+  props: ['serverUri']
 }
 </script>
 

@@ -1,39 +1,89 @@
 <template>
   <div class="userConfigEdit">
-    <b-modal ref="modalUserConfigEdit" title="ユーザー情報変更" :hide-header-close="true" @shown="modalInit" @hide="endEdit">
+    <b-modal
+      ref="modalUserConfigEdit"
+      title="ユーザー情報変更"
+      :hide-header-close="true"
+      @shown="modalInit"
+      @hide="endEdit"
+    >
       <b-container class="text-left">
         <b-form-row>
           <b-col>
-            <b-form-group id="lastNameGroup" label-for="lastName" :label="$t('message.last_name')">
-              <b-form-input id="lastName" type="text" v-model="userData.lastName"></b-form-input>
+            <b-form-group
+              id="lastNameGroup"
+              label-for="lastName"
+              :label="$t('message.last_name')"
+            >
+              <b-form-input
+                id="lastName"
+                v-model="userData.lastName"
+                type="text"
+              />
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group id="firstNameGroup" label-for="firstName" :label="$t('message.first_name')">
-              <b-form-input id="firstName" type="text" v-model="userData.firstName"></b-form-input>
+            <b-form-group
+              id="firstNameGroup"
+              label-for="firstName"
+              :label="$t('message.first_name')"
+            >
+              <b-form-input
+                id="firstName"
+                v-model="userData.firstName"
+                type="text"
+              />
             </b-form-group>
           </b-col>
         </b-form-row>
         <b-form-row>
           <b-col>
-            <b-form-group id="emailGroup" label-for="email" :label="$t('message.email')">
-              <b-form-input id="email" type="text" v-model="userData.email"></b-form-input>
+            <b-form-group
+              id="emailGroup"
+              label-for="email"
+              :label="$t('message.email')"
+            >
+              <b-form-input
+                id="email"
+                v-model="userData.email"
+                type="text"
+              />
             </b-form-group>
           </b-col>
         </b-form-row>
         <b-form-row>
           <b-col>
-            <b-form-group id="roleGroup" label-for="role" :label="$t('message.role')">
-              <b-form-radio-group id="role" v-model="userData.role" :options="roleOptions" name="role">
-              </b-form-radio-group>
+            <b-form-group
+              id="roleGroup"
+              label-for="role"
+              :label="$t('message.role')"
+            >
+              <b-form-radio-group
+                id="role"
+                v-model="userData.role"
+                :options="roleOptions"
+                name="role"
+              />
             </b-form-group>
           </b-col>
         </b-form-row>
       </b-container>
-      <div slot="modal-footer" class="w-100">
+      <div
+        slot="modal-footer"
+        class="w-100"
+      >
         <b-col>
-          <b-btn class="mt-3" block @click="endEdit">
-            <span class="oi oi-check" title="check" aria-hidden="true"></span>{{$t('message.end_edit')}}
+          <b-btn
+            class="mt-3"
+            block
+            @click="endEdit"
+          >
+            <span
+              class="oi oi-check"
+              title="check"
+              aria-hidden="true"
+            />
+            {{ $t('message.end_edit') }}
           </b-btn>
         </b-col>
       </div>
@@ -56,6 +106,11 @@ export default {
       ]
     }
   },
+  watch: {
+    modalState: function () {
+      this.$props.modalState === 0 ? this.$refs.modalUserConfigEdit.hide() : this.$refs.modalUserConfigEdit.show()
+    }
+  },
   created: function () {
   },
   methods: {
@@ -65,11 +120,6 @@ export default {
     },
     endEdit: function () {
       this.$emit('endEditUser')
-    }
-  },
-  watch: {
-    modalState: function () {
-      this.$props.modalState === 0 ? this.$refs.modalUserConfigEdit.hide() : this.$refs.modalUserConfigEdit.show()
     }
   }
 }

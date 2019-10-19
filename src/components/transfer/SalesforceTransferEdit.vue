@@ -1,41 +1,86 @@
 <template>
   <div class="salesforce-transfer-edit">
-    <b-modal size="lg" ref="modalSalesforceTransferRuleSetting" hide-footer title="SalesforceTransfer設定" @show="updateColumnAttachList" @hide="updateModalState">
+    <b-modal
+      ref="modalSalesforceTransferRuleSetting"
+      size="lg"
+      hide-footer
+      title="SalesforceTransfer設定"
+      @show="updateColumnAttachList"
+      @hide="updateModalState"
+    >
       <b-container class="text-left">
         <b-row class="mb-3">
-          <b-col cols="3">転送タスク名</b-col>
-          <b-col><b-form-input id="transferTask.name" type="text" v-model="tmpTransferTask.name"></b-form-input></b-col>
-        </b-row>
-        <b-row class="mb-3">
-          <b-col cols="3">転送先Salesforce<br>オブジェクト</b-col>
+          <b-col cols="3">
+            転送タスク名
+          </b-col>
           <b-col>
-            <b-form-select v-model="selectedSalesforceObject" :options="salesforceObjectList" class="mb-3" />
+            <b-form-input
+              id="transferTask.name"
+              v-model="tmpTransferTask.name"
+              type="text"
+            />
           </b-col>
         </b-row>
         <b-row class="mb-3">
-          <b-col cols="3">項目割付</b-col>
+          <b-col cols="3">
+            転送先Salesforce
+            <br>
+            オブジェクト
+          </b-col>
+          <b-col>
+            <b-form-select
+              v-model="selectedSalesforceObject"
+              :options="salesforceObjectList"
+              class="mb-3"
+            />
+          </b-col>
+        </b-row>
+        <b-row class="mb-3">
+          <b-col cols="3">
+            項目割付
+          </b-col>
           <b-col id="attach_list">
-            <table class="table table-striped" >
+            <table class="table table-striped">
               <thead>
                 <tr>
-                  <th scope="col">Salesforce項目</th>
-                  <th scope="col">型</th>
-                  <th scope="col">フォーム項目</th>
+                  <th scope="col">
+                    Salesforce項目
+                  </th>
+                  <th scope="col">
+                    型
+                  </th>
+                  <th scope="col">
+                    フォーム項目
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(item, index) in columnAttachList" v-bind:key="index">
-                  <td>{{item.salesforceObjectColumnLabel}}</td>
-                  <td>{{item.salesforceObjectColumnType}}</td>
-                  <td><b-form-select v-model="item.formColumnName" :options="formColumnList" size="sm"/></td>
+                <tr
+                  v-for="(item, index) in columnAttachList"
+                  :key="index"
+                >
+                  <td>{{ item.salesforceObjectColumnLabel }}</td>
+                  <td>{{ item.salesforceObjectColumnType }}</td>
+                  <td>
+                    <b-form-select
+                      v-model="item.formColumnName"
+                      :options="formColumnList"
+                      size="sm"
+                    />
+                  </td>
                 </tr>
               </tbody>
             </table>
           </b-col>
         </b-row>
       </b-container>
-      <b-btn class="mt-3" block @click="updateTransferTask">編集終了</b-btn>
-
+      <b-btn
+        class="mt-3"
+        block
+        @click="updateTransferTask"
+      >
+        編集終了
+      </b-btn>
     </b-modal>
   </div>
 </template>
@@ -66,6 +111,35 @@ export default {
       transferConfig: {},
       salesforceObjectList: [],
       columnAttachList: []
+    }
+  },
+  computed: {
+    formColumnList: function () {
+      var formCols = []
+      if (typeof this.$props.formCols === 'object') {
+        for (var col in this.$props.formCols) {
+          col = { value: this.$props.formCols[col].colId, text: this.$props.formCols[col].name }
+          formCols.push(col)
+        }
+      }
+      return formCols
+    }
+  },
+  watch: {
+    transferEditModalState: function () {
+      var modalState = this.$props.transferEditModalState[this.$data.transferConfig.id]
+      if (modalState === 0 || typeof modalState === 'undefined') {
+        this.$refs.modalSalesforceTransferRuleSetting.hide()
+      } else {
+        this.$refs.modalSalesforceTransferRuleSetting.show()
+      }
+    },
+    transferTask: function () {
+      this.$set(this.$data, 'tmpTransferTask', this.$props.transferTask)
+      this.$set(this.$data, 'selectedSalesforceObject', this.$props.transferTask.config.sfObject)
+    },
+    selectedSalesforceObject: function () {
+      this.updateColumnAttachList()
     }
   },
   created: function () {
@@ -132,35 +206,6 @@ export default {
     },
     updateModalState: function () {
       this.$emit('transferEditModalClose', this.$data.tmpTransferTask.transfer_type_id)
-    }
-  },
-  computed: {
-    formColumnList: function () {
-      var formCols = []
-      if (typeof this.$props.formCols === 'object') {
-        for (var col in this.$props.formCols) {
-          col = { value: this.$props.formCols[col].colId, text: this.$props.formCols[col].name }
-          formCols.push(col)
-        }
-      }
-      return formCols
-    }
-  },
-  watch: {
-    transferEditModalState: function () {
-      var modalState = this.$props.transferEditModalState[this.$data.transferConfig.id]
-      if (modalState === 0 || typeof modalState === 'undefined') {
-        this.$refs.modalSalesforceTransferRuleSetting.hide()
-      } else {
-        this.$refs.modalSalesforceTransferRuleSetting.show()
-      }
-    },
-    transferTask: function () {
-      this.$set(this.$data, 'tmpTransferTask', this.$props.transferTask)
-      this.$set(this.$data, 'selectedSalesforceObject', this.$props.transferTask.config.sfObject)
-    },
-    selectedSalesforceObject: function () {
-      this.updateColumnAttachList()
     }
   }
 }

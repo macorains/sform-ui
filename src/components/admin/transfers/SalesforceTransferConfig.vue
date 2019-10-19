@@ -3,49 +3,93 @@
     <div class="container">
       <b-container class="text-left">
         <b-row class="mb-3">
-          <b-col cols="3">ユーザー名</b-col>
-          <b-col></b-col>
+          <b-col cols="3">
+            ユーザー名
+          </b-col>
+          <b-col />
         </b-row>
         <b-row class="mb-3">
-          <b-col cols="3">パスワード</b-col>
-          <b-col>********</b-col>
+          <b-col cols="3">
+            パスワード
+          </b-col>
+          <b-col>
+            ********
+          </b-col>
         </b-row>
         <b-row class="mb-3">
-          <b-col cols="3">セキュリティトークン</b-col>
-          <b-col>********</b-col>
+          <b-col cols="3">
+            セキュリティトークン
+          </b-col>
+          <b-col>
+            ********
+          </b-col>
         </b-row>
       </b-container>
-      <b-btn class="mt-3" block v-b-modal.modal_salesforce_transfer_config_edit>
-        <span class="oi oi-pencil" title="pencil" aria-hidden="true"></span>{{$t("message.edit")}}
+      <b-btn
+        v-b-modal.modal_salesforce_transfer_config_edit
+        class="mt-3"
+        block
+      >
+        <span
+          class="oi oi-pencil"
+          title="pencil"
+          aria-hidden="true"
+        />
+        {{ $t("message.edit") }}
       </b-btn>
     </div>
     <b-modal
-        ref="modalSalesforceTransferConfigEdit"
-        id="modal_salesforce_transfer_config_edit"
-        title="Salesforce設定"
-        :hide-header-close="true"
-        :hide-footer="true"
-        @shown="modalInit"
-        @hide="endEdit">
+      id="modal_salesforce_transfer_config_edit"
+      ref="modalSalesforceTransferConfigEdit"
+      title="Salesforce設定"
+      :hide-header-close="true"
+      :hide-footer="true"
+      @shown="modalInit"
+      @hide="endEdit"
+    >
       <b-container class="text-left">
         <b-form-row>
           <b-col>
-            <b-form-group id="userGroup" label-for="user" :label="$t('message.username')">
-              <b-form-input id="user" type="text" v-model="tmpTransferConfig.user"></b-form-input>
+            <b-form-group
+              id="userGroup"
+              label-for="user"
+              :label="$t('message.username')"
+            >
+              <b-form-input
+                id="user"
+                v-model="tmpTransferConfig.user"
+                type="text"
+              />
             </b-form-group>
           </b-col>
         </b-form-row>
         <b-form-row>
           <b-col>
-            <b-form-group id="passwordGroup" label-for="password" :label="$t('message.password')">
-              <b-form-input id="password" type="text" v-model="tmpTransferConfig.password"></b-form-input>
+            <b-form-group
+              id="passwordGroup"
+              label-for="password"
+              :label="$t('message.password')"
+            >
+              <b-form-input
+                id="password"
+                v-model="tmpTransferConfig.password"
+                type="text"
+              />
             </b-form-group>
           </b-col>
         </b-form-row>
         <b-form-row>
           <b-col>
-            <b-form-group id="securityTokenGroup" label-for="security_token" :label="$t('message.security_token')">
-              <b-form-input id="security_token" type="text" v-model="tmpTransferConfig.securityToken"></b-form-input>
+            <b-form-group
+              id="securityTokenGroup"
+              label-for="security_token"
+              :label="$t('message.security_token')"
+            >
+              <b-form-input
+                id="security_token"
+                v-model="tmpTransferConfig.securityToken"
+                type="text"
+              />
             </b-form-group>
           </b-col>
         </b-form-row>
@@ -55,14 +99,16 @@
               <span
                 class="oi oi-x"
                 title="cancel"
-                aria-hidden="true" />
+                aria-hidden="true"
+              />
               キャンセル
             </b-btn>
             <b-btn @click="save">
               <span
                 class="oi oi-plus"
                 title="plus"
-                aria-hidden="true" />
+                aria-hidden="true"
+              />
               保存
             </b-btn>
           </b-col>
