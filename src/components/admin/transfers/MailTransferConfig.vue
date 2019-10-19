@@ -12,15 +12,15 @@
           <b-col cols="4">{{ data.name }}</b-col>
           <b-col>{{data.address}}</b-col>
         </b-row>
-      </b-card>  
+      </b-card>
       <b-btn class="mt-3" block v-b-modal.modal_mail_transfer_config_edit>
         <span class="oi oi-pencil" title="pencil" aria-hidden="true"></span>{{$t('message.edit')}}
       </b-btn>
     </div>
-    <b-modal 
-        ref="modalMailTransferConfigEdit" 
-        id="modal_mail_transfer_config_edit" 
-        :title="$t('message.mail_transfer_setting')" 
+    <b-modal
+        ref="modalMailTransferConfigEdit"
+        id="modal_mail_transfer_config_edit"
+        :title="$t('message.mail_transfer_setting')"
         size="lg"
         :hide-header-close="true"
         :hide-footer="true"
@@ -82,9 +82,9 @@ export default {
       }
     }
     axios.get(this.$props.serverUri + '/transfer/config/Mail', this.$data.config)
-    .then(response => {
-      this.$set(this.$data, 'transferConfig', response.data.dataset)
-    })
+      .then(response => {
+        this.$set(this.$data, 'transferConfig', response.data.dataset)
+      })
   },
   methods: {
     modalInit: function () {
@@ -118,12 +118,12 @@ export default {
         }
       }
       axios.post(this.$props.serverUri + '/transfer/config', reqdata, this.$data.config)
-      .then(response => {
-        console.log(response)
-        this.$data.transferConfig = JSON.parse(JSON.stringify(this.$data.tmpTransferConfig))
-      }).catch(error => {
-        console.log(error)
-      })
+        .then(response => {
+          console.log(response)
+          this.$data.transferConfig = JSON.parse(JSON.stringify(this.$data.tmpTransferConfig))
+        }).catch(error => {
+          console.log(error)
+        })
       this.endEdit()
     }
   },

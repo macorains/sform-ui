@@ -19,13 +19,13 @@
         <span class="oi oi-pencil" title="pencil" aria-hidden="true"></span>{{$t("message.edit")}}
       </b-btn>
     </div>
-    <b-modal 
-        ref="modalSalesforceTransferConfigEdit" 
-        id="modal_salesforce_transfer_config_edit" 
-        title="Salesforce設定" 
+    <b-modal
+        ref="modalSalesforceTransferConfigEdit"
+        id="modal_salesforce_transfer_config_edit"
+        title="Salesforce設定"
         :hide-header-close="true"
         :hide-footer="true"
-        @shown="modalInit" 
+        @shown="modalInit"
         @hide="endEdit">
       <b-container class="text-left">
         <b-form-row>
@@ -51,13 +51,24 @@
         </b-form-row>
         <b-form-row class="mt-5 text-right">
           <b-col>
-            <b-btn @click="endEdit"><span class="oi oi-x" title="cancel" aria-hidden="true"></span>キャンセル</b-btn>
-            <b-btn @click="save"><span class="oi oi-plus" title="plus" aria-hidden="true"></span>保存</b-btn>
+            <b-btn @click="endEdit">
+              <span
+                class="oi oi-x"
+                title="cancel"
+                aria-hidden="true" />
+              キャンセル
+            </b-btn>
+            <b-btn @click="save">
+              <span
+                class="oi oi-plus"
+                title="plus"
+                aria-hidden="true" />
+              保存
+            </b-btn>
           </b-col>
         </b-form-row>
       </b-container>
     </b-modal>
-
   </div>
 </template>
 
@@ -82,9 +93,9 @@ export default {
       }
     }
     axios.get(this.$props.serverUri + '/transfer/config/Salesforce', this.$data.config)
-    .then(response => {
-      this.$set(this.$data, 'tmpTransferConfig', response.data.dataset)
-    })
+      .then(response => {
+        this.$set(this.$data, 'tmpTransferConfig', response.data.dataset)
+      })
   },
   methods: {
     modalInit: function () {
@@ -101,11 +112,11 @@ export default {
         }
       }
       axios.post(this.$props.serverUri + '/transfer/config', reqdata, this.$data.config)
-      .then(response => {
-        console.log(response)
-      }).catch(error => {
-        console.log(error)
-      })
+        .then(response => {
+          console.log(response)
+        }).catch(error => {
+          console.log(error)
+        })
       this.endEdit()
     }
   }

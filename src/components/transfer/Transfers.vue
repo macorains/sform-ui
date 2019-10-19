@@ -4,31 +4,41 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th scope="col">No.</th>
-          <th scope="col">転送名</th>
-          <th scope="col">転送タイプ</th>
-          <th scope="col">操作</th>
+          <th scope="col">
+            No.
+          </th>
+          <th scope="col">
+            転送名
+          </th>
+          <th scope="col">
+            転送タイプ
+          </th>
+          <th scope="col">
+            操作
+          </th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(task, index) in transferTask" v-bind:key="task.id" v-on:click="edit(index, task.transfer_type_id)">
-          <th scope="row">{{index+1}}</th>
+          <th scope="row">
+            {{index+1}}
+          </th>
           <td>{{task.name}}</td>
           <td>{{transferType(task.transfer_type_id)}}</td>
           <td></td>
         </tr>
       </tbody>
     </table>
-    <salesforceTransferEdit ref="salesforceTransferEdit" 
-        v-bind:serverUri="serverUri" 
-        v-bind:transferEditModalState="transferEditModalState" 
+    <salesforceTransferEdit ref="salesforceTransferEdit"
+        v-bind:serverUri="serverUri"
+        v-bind:transferEditModalState="transferEditModalState"
         v-bind:transferTask="transferTask[selectedTransferTask]"
         v-bind:formCols="formCols"
         @transferEditModalClose = "transferEditModalClose">
     </salesforceTransferEdit>
-    <mailTransferEdit ref="mailTransferEdit" 
-        v-bind:serverUri="serverUri" 
-        v-bind:transferEditModalState="transferEditModalState" 
+    <mailTransferEdit ref="mailTransferEdit"
+        v-bind:serverUri="serverUri"
+        v-bind:transferEditModalState="transferEditModalState"
         v-bind:transferTask="transferTask[selectedTransferTask]"
         v-bind:formCols="formCols"
         @transferEditModalClose = "transferEditModalClose">
@@ -67,13 +77,13 @@ export default {
     console.log(this.$data.config)
     if (this.$props.hashedFormId) {
       axios.get(this.$props.serverUri + '/transfertask/list/' + this.$props.hashedFormId, this.$data.config)
-      .then(response => {
-        this.$data.transferTask = response.data.dataset
-      })
+        .then(response => {
+          this.$data.transferTask = response.data.dataset
+        })
       axios.get(this.$props.serverUri + '/transfer', this.$data.config)
-      .then(response => {
-        this.$data.transferList = response.data
-      })
+        .then(response => {
+          this.$data.transferList = response.data
+        })
     }
   },
   methods: {

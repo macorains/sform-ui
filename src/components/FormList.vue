@@ -32,10 +32,10 @@
     </table>
     <b-button class="mt-4" @click="add"><span class="oi oi-plus" title="plus" aria-hidden="true"></span>{{$t("message.add_form")}}</b-button>
     </div>
-    <b-modal 
-      id="modal_form_delete" 
-      :title="$t('message.confirm')" 
-      header-border-variant="light" 
+    <b-modal
+      id="modal_form_delete"
+      :title="$t('message.confirm')"
+      header-border-variant="light"
       footer-border-variant="light"
       :ok-title="$t('message.ok')"
       :cancel-title="$t('message.cancel')"
@@ -81,21 +81,21 @@ export default {
     }
     this.$data.loading = true
     axios.get(this.$props.serverUri + '/form/list', this.$data.config)
-    .then(response => {
-      this.$data.loading = false
-      this.$data.formList = JSON.parse(response.data.dataset)
-    })
-    .catch(error => {
-      if (error.response) {
-        var statusCode = error.response.status
-        if (statusCode === 401 || statusCode === 403) {
-          this.$router.push({path: 'signin'})
-        } else {
-          console.log(error.response)
+      .then(response => {
+        this.$data.loading = false
+        this.$data.formList = JSON.parse(response.data.dataset)
+      })
+      .catch(error => {
+        if (error.response) {
+          var statusCode = error.response.status
+          if (statusCode === 401 || statusCode === 403) {
+            this.$router.push({path: 'signin'})
+          } else {
+            console.log(error.response)
+          }
         }
-      }
-      this.$data.loading = false
-    })
+        this.$data.loading = false
+      })
   },
   methods: {
     edit: function (hashedId) {
@@ -147,42 +147,41 @@ export default {
       }
       this.$data.loading = true
       axios.post(this.$props.serverUri + '/form', reqdata, this.$data.config)
-      .then(response => {
-        this.$data.loading = false
-        var data = response.data.dataset
-        tmp.id = data.id
-        tmp.hashed_id = data.hashed_id
-        this.$set(this.$data.formList, i, tmp)
-      })
-      .catch(error => {
-        if (error.response) {
-          var statusCode = error.response.status
-          if (statusCode === 401 || statusCode === 403) {
-            this.$router.push({path: 'signin'})
-          } else {
-            console.log(error.response)
+        .then(response => {
+          this.$data.loading = false
+          var data = response.data.dataset
+          tmp.id = data.id
+          tmp.hashed_id = data.hashed_id
+          this.$set(this.$data.formList, i, tmp)
+        })
+        .catch(error => {
+          if (error.response) {
+            var statusCode = error.response.status
+            if (statusCode === 401 || statusCode === 403) {
+              this.$router.push({path: 'signin'})
+            } else {
+              console.log(error.response)
+            }
           }
-        }
-        this.$data.loading = false
-      })
+          this.$data.loading = false
+        })
     },
     deleteForm: function (index) {
       var form = this.$data.formList[index]
       this.$data.loading = true
       axios.delete(this.$props.serverUri + '/form/' + form.hashed_id, this.$data.config)
-      .then(response => {
-        this.$delete(this.$data.formList, index)
-        this.$data.loading = false
-      })
-      .catch(error => {
-        this.$data.loading = false
-        console.log(error.response)
-      })
+        .then(response => {
+          this.$delete(this.$data.formList, index)
+          this.$data.loading = false
+        })
+        .catch(error => {
+          this.$data.loading = false
+          console.log(error.response)
+        })
     }
   }
 }
 </script>
-
 
 <style scoped>
 

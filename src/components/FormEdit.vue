@@ -252,19 +252,19 @@ export default {
       }
     }
     axios.get(this.$props.serverUri + '/form/' + this.$props.hashedFormId, this.$data.config)
-    .then(response => {
-      this.$data.formData = response.data.dataset
-    })
-    .catch(error => {
-      if (error.response) {
-        var statusCode = error.response.status
-        if (statusCode === 401 || statusCode === 403) {
-          this.$router.push({path: 'signin'})
-        } else {
-          console.log(error.response)
+      .then(response => {
+        this.$data.formData = response.data.dataset
+      })
+      .catch(error => {
+        if (error.response) {
+          var statusCode = error.response.status
+          if (statusCode === 401 || statusCode === 403) {
+            this.$router.push({path: 'signin'})
+          } else {
+            console.log(error.response)
+          }
         }
-      }
-    })
+      })
   },
   methods: {
     save: function () {

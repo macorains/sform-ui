@@ -15,7 +15,9 @@
                 <b-form-group id="passwordGroup" label-for="password" label="パスワード">
                   <b-form-input id="password" type="password" v-model="password"></b-form-input>
                 </b-form-group>
-                <b-button class="mt-4" v-on:click="send">Signin</b-button>
+                <b-button class="mt-4" v-on:click="send">
+                  Signin
+                </b-button>
               </b-form>
             </p>
           </b-card>
@@ -51,18 +53,17 @@ export default {
       params.append('group', this.group)
       params.append('password', this.password)
       axios.post(this.$props.serverUri + '/signIn', params, config)
-      .then(response => {
-        console.log(response)
-        let token = response.headers['x-auth-token']
-        localStorage.setItem('sformToken', token)
-        this.$emit('updateIsAdmin', true)
-        this.$router.push({path: 'formlist', params: {'serverUri': this.$props.serverUri}})
-      })
+        .then(response => {
+          console.log(response)
+          let token = response.headers['x-auth-token']
+          localStorage.setItem('sformToken', token)
+          this.$emit('updateIsAdmin', true)
+          this.$router.push({path: 'formlist', params: {'serverUri': this.$props.serverUri}})
+        })
     }
   }
 }
 </script>
-
 
 <style scoped>
 

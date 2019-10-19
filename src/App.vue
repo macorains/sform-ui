@@ -41,7 +41,7 @@
 
       </b-collapse>
     </b-navbar>
-    
+
     <router-view :serverUri="serverUri" :hashedFormId="hashedFormId" @updateHashedFormId="updateHashedFormId" @updateIsAdmin="updateIsAdmin"></router-view>
   </div>
 </template>
@@ -68,13 +68,13 @@ export default {
       }
     }
     axios.get(this.$data.serverUri + '/user/isadmin', config)
-    .then(response => {
-      this.$data.isAdmin = true
-    })
-    .catch(error => {
-      console.log(error.response)
-      this.$data.isAdmin = false
-    })
+      .then(response => {
+        this.$data.isAdmin = true
+      })
+      .catch(error => {
+        console.log(error.response)
+        this.$data.isAdmin = false
+      })
   },
   methods: {
     updateHashedFormId: function (hashedFormId) {

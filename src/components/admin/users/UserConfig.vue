@@ -38,10 +38,10 @@
       </b-row>
     </div>
     <userConfigEdit :serverUri = "serverUri" :user = "selectedUser" :modalState = "modalState" @endEditUser="endEditUser"></userConfigEdit>
-    <b-modal 
-      id="modal_user_delete" 
-      :title="$t('message.confirm')" 
-      header-border-variant="light" 
+    <b-modal
+      id="modal_user_delete"
+      :title="$t('message.confirm')"
+      header-border-variant="light"
       footer-border-variant="light"
       :ok-title="$t('message.ok')"
       :cancel-title="$t('message.cancel')"
@@ -50,19 +50,19 @@
       centered>
       <p>{{$t('message.confirm_user_delete')}}</p>
     </b-modal>
-    <b-modal 
-      id="modal_user_reset_password" 
-      :title="$t('message.confirm')" 
-      header-border-variant="light" 
+    <b-modal
+      id="modal_user_reset_password"
+      :title="$t('message.confirm')"
+      header-border-variant="light"
       footer-border-variant="light"
       :ok-title="$t('message.ok')"
       :cancel-title="$t('message.cancel')"
       :hide-header-close="true"
-      centered>
-      <p>{{$t('message.confirm_reset_password')}}</p>
+      centered
+      >
+      <p>{{ $t('message.confirm_reset_password') }}</p>
     </b-modal>
   </div>
-
 </template>
 
 <script>
@@ -94,20 +94,20 @@ export default {
       }
     }
     axios.get(this.$props.serverUri + '/user', this.$data.config)
-    .then(response => {
-      console.log(response.data)
-      this.$data.userlist = response.data.dataset
-    })
-    .catch(error => {
-      if (error.response) {
-        var statusCode = error.response.status
-        if (statusCode === 401 || statusCode === 403) {
-          this.$router.push({path: 'signin'})
-        } else {
-          console.log(error.response)
+      .then(response => {
+        console.log(response.data)
+        this.$data.userlist = response.data.dataset
+      })
+      .catch(error => {
+        if (error.response) {
+          var statusCode = error.response.status
+          if (statusCode === 401 || statusCode === 403) {
+            this.$router.push({path: 'signin'})
+          } else {
+            console.log(error.response)
+          }
         }
-      }
-    })
+      })
   },
   methods: {
     editUser: function (index) {

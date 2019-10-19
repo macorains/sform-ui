@@ -45,8 +45,8 @@
 }
 #attach_list table {
   display: block;
-	height: calc(100vh - 360px);
-	overflow-y:auto;
+  height: calc(100vh - 360px);
+  overflow-y:auto;
 }
 </style>
 <script>
@@ -78,19 +78,19 @@ export default {
       }
     }
     axios.get(this.$props.serverUri + '/transfer/config/Salesforce', this.$data.config)
-    .then(response => {
-      this.$set(this.$data, 'transferConfig', response.data.dataset)
-      var salesforceObjectList = this.$data.transferConfig.sfObjectDefinition
-        .filter(m => m.createable)
-        .filter(m => m.searchLayoutable)
-        .map(m => { return { value: m.name, text: m.label } })
-      this.$set(this.$data, 'salesforceObjectList', salesforceObjectList)
-      this.$set(this.$data, 'tmpTransferTask', this.$props.transferTask)
-    })
-    .catch(function (error) {
-      console.log(error.text)
-      this.$router.push({path: '/signin'})
-    })
+      .then(response => {
+        this.$set(this.$data, 'transferConfig', response.data.dataset)
+        var salesforceObjectList = this.$data.transferConfig.sfObjectDefinition
+          .filter(m => m.createable)
+          .filter(m => m.searchLayoutable)
+          .map(m => { return { value: m.name, text: m.label } })
+        this.$set(this.$data, 'salesforceObjectList', salesforceObjectList)
+        this.$set(this.$data, 'tmpTransferTask', this.$props.transferTask)
+      })
+      .catch(function (error) {
+        console.log(error.text)
+        this.$router.push({path: '/signin'})
+      })
   },
   methods: {
     updateColumnAttachList: function () {
@@ -98,27 +98,27 @@ export default {
       var columnAttachList = []
       if (typeof this.$data.transferConfig.sfObjectDefinition === 'object') {
         var salesforceObjectDef = this.$data.transferConfig.sfObjectDefinition
-        .filter(m => m.name === this.$data.selectedSalesforceObject)
-        .shift()
+          .filter(m => m.name === this.$data.selectedSalesforceObject)
+          .shift()
         if (salesforceObjectDef !== undefined && salesforceObjectDef.fields !== undefined && typeof salesforceObjectDef.fields === 'object') {
           columnAttachList = salesforceObjectDef.fields
-          .filter(field => field.updateable)
-          .filter(field => field.type !== 'reference')
-          .map(field => {
-            var formColumnName = ''
-            for (let def of this.$props.transferTask.config.columnConvertDefinition) {
-              if (def.sfCol === field.name) {
-                formColumnName = def.sformCol
+            .filter(field => field.updateable)
+            .filter(field => field.type !== 'reference')
+            .map(field => {
+              var formColumnName = ''
+              for (let def of this.$props.transferTask.config.columnConvertDefinition) {
+                if (def.sfCol === field.name) {
+                  formColumnName = def.sformCol
+                }
               }
-            }
-            return {
-              salesforceObjectColumnLabel: field.label,
-              salesforceObjectColumnName: field.name,
-              salesforceObjectColumnType: field.type,
-              formColumnLabel: '',
-              formColumnName: formColumnName
-            }
-          })
+              return {
+                salesforceObjectColumnLabel: field.label,
+                salesforceObjectColumnName: field.name,
+                salesforceObjectColumnType: field.type,
+                formColumnLabel: '',
+                formColumnName: formColumnName
+              }
+            })
         }
       }
       this.$set(this.$data, 'columnAttachList', columnAttachList)
@@ -126,12 +126,24 @@ export default {
     updateTransferTask: function () {
       this.$data.tmpTransferTask.config.columnConvertDefinition =
           this.$data.columnAttachList
-          .filter(def => def.salesforceObjectColumnName !== '' && def.formColumnName !== '')
-          .map(def => { return {sfCol: def.salesforceObjectColumnName, sformCol: def.formColumnName} })
+            .filter(def => def.salesforceObjectColumnName !== '' && def.formColumnName !== '')
+            .map(def => { return {sfCol: def.salesforceObjectColumnName, sformCol: def.formColumnName} })
       this.$refs.modalSalesforceTransferRuleSetting.hide()
     },
     updateModalState: function () {
       this.$emit('transferEditModalClose', this.$data.tmpTransferTask.transfer_type_id)
+    }
+  },
+  computed: {
+    formColumnList: function () {
+      var formCols = []
+      if (typeof this.$props.formCols === 'object') {
+        for (var col in this.$props.formCols) {
+          col = { value: this.$props.formCols[col].colId, text: this.$props.formCols[col].name }
+          formCols.push(col)
+        }
+      }
+      return formCols
     }
   },
   watch: {
@@ -149,18 +161,6 @@ export default {
     },
     selectedSalesforceObject: function () {
       this.updateColumnAttachList()
-    }
-  },
-  computed: {
-    formColumnList: function () {
-      var formCols = []
-      if (typeof this.$props.formCols === 'object') {
-        for (var col in this.$props.formCols) {
-          col = { value: this.$props.formCols[col].colId, text: this.$props.formCols[col].name }
-          formCols.push(col)
-        }
-      }
-      return formCols
     }
   }
 }
