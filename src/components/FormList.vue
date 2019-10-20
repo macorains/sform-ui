@@ -1,52 +1,111 @@
 <template>
   <div class="form_list">
-    <div v-show="loading" class="loader">Now loading...</div>
-    <div v-show="!loading" class="container">
-    <h1 class="mt-5 mb-5">{{$t("message.form_list")}}</h1>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th scope="col">{{$t("message.id")}}</th>
-          <th scope="col">{{$t("message.form_name")}}</th>
-          <th scope="col">{{$t("message.form_title")}}</th>
-          <th scope="col">{{$t("message.status")}}</th>
-          <th scope="col">{{$t("message.action")}}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, index) in formList" v-bind:key="item.id">
-          <td scope="row">{{item.hashed_id}}</td>
-          <td scope="row">{{item.name}}</td>
-          <td scope="row">{{item.title}}</td>
-          <td scope="row">{{formStatus[item.status]}}</td>
-          <td scope="row">
-            <b-button size="sm" @click="edit(item.hashed_id)">
-              <span class="oi oi-pencil" title="pencil" aria-hidden="true"></span>{{$t("message.edit")}}
-            </b-button>
-            <b-button v-b-modal.modal_form_delete size="sm" @click="targetIndex = index">
-              <span class="oi oi-trash" title="trash" aria-hidden="true"></span>{{$t('message.delete')}}
-            </b-button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <b-button class="mt-4" @click="add"><span class="oi oi-plus" title="plus" aria-hidden="true"></span>{{$t("message.add_form")}}</b-button>
+    <div
+      v-show="loading"
+      class="loader"
+    >
+      Now loading...
     </div>
-    <b-modal 
-      id="modal_form_delete" 
-      :title="$t('message.confirm')" 
-      header-border-variant="light" 
+    <div
+      v-show="!loading"
+      class="container"
+    >
+      <h1 class="mt-5 mb-5">
+        {{ $t("message.form_list") }}
+      </h1>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">
+              {{ $t("message.id") }}
+            </th>
+            <th scope="col">
+              {{ $t("message.form_name") }}
+            </th>
+            <th scope="col">
+              {{ $t("message.form_title") }}
+            </th>
+            <th scope="col">
+              {{ $t("message.status") }}
+            </th>
+            <th scope="col">
+              {{ $t("message.action") }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="(item, index) in formList"
+            :key="item.id"
+          >
+            <td scope="row">
+              {{ item.hashed_id }}
+            </td>
+            <td scope="row">
+              {{ item.name }}
+            </td>
+            <td scope="row">
+              {{ item.title }}
+            </td>
+            <td scope="row">
+              {{ formStatus[item.status] }}
+            </td>
+            <td scope="row">
+              <b-button
+                size="sm"
+                @click="edit(item.hashed_id)"
+              >
+                <span
+                  class="oi oi-pencil"
+                  title="pencil"
+                  aria-hidden="true"
+                />
+                {{ $t("message.edit") }}
+              </b-button>
+              <b-button
+                v-b-modal.modal_form_delete
+                size="sm"
+                @click="targetIndex = index"
+              >
+                <span
+                  class="oi oi-trash"
+                  title="trash"
+                  aria-hidden="true"
+                />
+                {{ $t('message.delete') }}
+              </b-button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <b-button
+        class="mt-4"
+        @click="add"
+      >
+        <span
+          class="oi oi-plus"
+          title="plus"
+          aria-hidden="true"
+        />
+        {{ $t("message.add_form") }}
+      </b-button>
+    </div>
+    <b-modal
+      id="modal_form_delete"
+      :title="$t('message.confirm')"
+      header-border-variant="light"
       footer-border-variant="light"
       :ok-title="$t('message.ok')"
       :cancel-title="$t('message.cancel')"
       :hide-header-close="true"
       centered
-      @ok="deleteForm(targetIndex)">
-      <p>{{$t('message.confirm_form_delete')}}</p>
+      @ok="deleteForm(targetIndex)"
+    >
+      <p>
+        {{ $t('message.confirm_form_delete') }}
+      </p>
     </b-modal>
-
   </div>
-
 </template>
 
 <script>
@@ -54,8 +113,13 @@ import axios from 'axios'
 import 'open-iconic/font/css/open-iconic-bootstrap.css'
 
 export default {
-  name: 'form_list',
-  props: ['serverUri'],
+  name: 'FormList',
+  props: {
+    'serverUri': {
+      type: String,
+      default: ''
+    }
+  },
   data: function () {
     return {
       formList: {},
@@ -81,21 +145,21 @@ export default {
     }
     this.$data.loading = true
     axios.get(this.$props.serverUri + '/form/list', this.$data.config)
-    .then(response => {
-      this.$data.loading = false
-      this.$data.formList = JSON.parse(response.data.dataset)
-    })
-    .catch(error => {
-      if (error.response) {
-        var statusCode = error.response.status
-        if (statusCode === 401 || statusCode === 403) {
-          this.$router.push({path: 'signin'})
-        } else {
-          console.log(error.response)
+      .then(response => {
+        this.$data.loading = false
+        this.$data.formList = JSON.parse(response.data.dataset)
+      })
+      .catch(error => {
+        if (error.response) {
+          var statusCode = error.response.status
+          if (statusCode === 401 || statusCode === 403) {
+            this.$router.push({path: 'signin'})
+          } else {
+            console.log(error.response)
+          }
         }
-      }
-      this.$data.loading = false
-    })
+        this.$data.loading = false
+      })
   },
   methods: {
     edit: function (hashedId) {
@@ -147,42 +211,41 @@ export default {
       }
       this.$data.loading = true
       axios.post(this.$props.serverUri + '/form', reqdata, this.$data.config)
-      .then(response => {
-        this.$data.loading = false
-        var data = response.data.dataset
-        tmp.id = data.id
-        tmp.hashed_id = data.hashed_id
-        this.$set(this.$data.formList, i, tmp)
-      })
-      .catch(error => {
-        if (error.response) {
-          var statusCode = error.response.status
-          if (statusCode === 401 || statusCode === 403) {
-            this.$router.push({path: 'signin'})
-          } else {
-            console.log(error.response)
+        .then(response => {
+          this.$data.loading = false
+          var data = response.data.dataset
+          tmp.id = data.id
+          tmp.hashed_id = data.hashed_id
+          this.$set(this.$data.formList, i, tmp)
+        })
+        .catch(error => {
+          if (error.response) {
+            var statusCode = error.response.status
+            if (statusCode === 401 || statusCode === 403) {
+              this.$router.push({path: 'signin'})
+            } else {
+              console.log(error.response)
+            }
           }
-        }
-        this.$data.loading = false
-      })
+          this.$data.loading = false
+        })
     },
     deleteForm: function (index) {
       var form = this.$data.formList[index]
       this.$data.loading = true
       axios.delete(this.$props.serverUri + '/form/' + form.hashed_id, this.$data.config)
-      .then(response => {
-        this.$delete(this.$data.formList, index)
-        this.$data.loading = false
-      })
-      .catch(error => {
-        this.$data.loading = false
-        console.log(error.response)
-      })
+        .then(response => {
+          this.$delete(this.$data.formList, index)
+          this.$data.loading = false
+        })
+        .catch(error => {
+          this.$data.loading = false
+          console.log(error.response)
+        })
     }
   }
 }
 </script>
-
 
 <style scoped>
 

@@ -3,19 +3,51 @@
     <b-container>
       <b-row>
         <b-col>
-          <b-card class="text-left mt-5" title="Signin">
+          <b-card
+            class="text-left mt-5"
+            title="Signin"
+          >
             <p class="card-text pt-4">
               <b-form>
-                <b-form-group id="emailGroup" label-for="email" label="メールアドレス">
-                  <b-form-input id="email" type="email" v-model="email"></b-form-input>
+                <b-form-group
+                  id="emailGroup"
+                  label-for="email"
+                  label="メールアドレス"
+                >
+                  <b-form-input
+                    id="email"
+                    v-model="email"
+                    type="email"
+                  />
                 </b-form-group>
-                <b-form-group id="groupGroup" label-for="group" label="グループ名">
-                  <b-form-input id="group" type="text" v-model="group"></b-form-input>
+                <b-form-group
+                  id="groupGroup"
+                  label-for="group"
+                  label="グループ名"
+                >
+                  <b-form-input
+                    id="group"
+                    v-model="group"
+                    type="text"
+                  />
                 </b-form-group>
-                <b-form-group id="passwordGroup" label-for="password" label="パスワード">
-                  <b-form-input id="password" type="password" v-model="password"></b-form-input>
+                <b-form-group
+                  id="passwordGroup"
+                  label-for="password"
+                  label="パスワード"
+                >
+                  <b-form-input
+                    id="password"
+                    v-model="password"
+                    type="password"
+                  />
                 </b-form-group>
-                <b-button class="mt-4" v-on:click="send">Signin</b-button>
+                <b-button
+                  class="mt-4"
+                  @click="send"
+                >
+                  Signin
+                </b-button>
               </b-form>
             </p>
           </b-card>
@@ -23,14 +55,18 @@
       </b-row>
     </b-container>
   </div>
-
 </template>
 
 <script>
 import axios from 'axios'
 export default {
-  name: 'signin',
-  props: ['serverUri'],
+  name: 'Signin',
+  props: {
+    'serverUri': {
+      type: String,
+      default: ''
+    }
+  },
   data: function () {
     return {
       email: '',
@@ -52,19 +88,17 @@ export default {
       params.append('group', this.group)
       params.append('password', this.password)
       axios.post(this.$props.serverUri + '/signIn', params, config)
-      .then(response => {
-        console.log(response)
-        let token = response.headers['x-auth-token']
-        localStorage.setItem('sformToken', token)
-        this.$emit('updateIsAdmin', true)
-        this.$router.push({path: 'formlist', params: {'serverUri': this.$props.serverUri}})
-      })
+        .then(response => {
+          console.log(response)
+          let token = response.headers['x-auth-token']
+          localStorage.setItem('sformToken', token)
+          this.$emit('updateIsAdmin', true)
+          this.$router.push({path: 'formlist', params: {'serverUri': this.$props.serverUri}})
+        })
     }
   }
 }
-
 </script>
-
 
 <style scoped>
 

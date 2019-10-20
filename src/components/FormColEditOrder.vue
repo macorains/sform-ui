@@ -1,11 +1,35 @@
 <template>
   <div class="form_col_edit_order">
-    <b-modal ref="modalColReorder" hide-footer title="フォーム項目順序変更" @shown="modalInit">
-      <draggable element="ul" v-model="formCols" class="list-group">
-        <li v-for="item in formCols" v-bind:key="item.index" class="list-group-item">{{item.name}}</li>
+    <b-modal
+      ref="modalColReorder"
+      hide-footer
+      title="フォーム項目順序変更"
+      @shown="modalInit"
+    >
+      <draggable
+        v-model="formCols"
+        element="ul"
+        class="list-group"
+      >
+        <li
+          v-for="item in formCols"
+          :key="item.index"
+          class="list-group-item"
+        >
+          {{ item.name }}
+        </li>
       </draggable>
-      <b-btn class="mt-3" block @click="closeFormColEditReorder">
-        <span class="oi oi-check" title="check" aria-hidden="true"></span>編集終了
+      <b-btn
+        class="mt-3"
+        block
+        @click="closeFormColEditReorder"
+      >
+        <span
+          class="oi oi-check"
+          title="check"
+          aria-hidden="true"
+        />
+        編集終了
       </b-btn>
     </b-modal>
   </div>
@@ -15,15 +39,29 @@ import Draggable from 'vuedraggable'
 import 'open-iconic/font/css/open-iconic-bootstrap.css'
 
 export default {
-  name: 'form_col_edit_order',
+  name: 'FormColEditOrder',
   components: {
     'draggable': Draggable
   },
-  props: ['formColData', 'formColEditOrderModalState'],
+  props: {
+    'formColData': {
+      type: String,
+      default: ''
+    },
+    'formColEditOrderModalState': {
+      type: Number,
+      default: 0
+    }
+  },
   data: function () {
     return {
       formCols: [],
       inColEdit: false
+    }
+  },
+  watch: {
+    formColEditOrderModalState: function () {
+      this.$props.formColEditOrderModalState === 0 ? this.$refs.modalColReorder.hide() : this.$refs.modalColReorder.show()
     }
   },
   methods: {
@@ -36,12 +74,6 @@ export default {
         this.$data.formCols.splice(col, 0, this.$props.formColData[col])
       }
     }
-  },
-  watch: {
-    formColEditOrderModalState: function () {
-      this.$props.formColEditOrderModalState === 0 ? this.$refs.modalColReorder.hide() : this.$refs.modalColReorder.show()
-    }
   }
 }
 </script>
-    

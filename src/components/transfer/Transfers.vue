@@ -4,35 +4,51 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th scope="col">No.</th>
-          <th scope="col">転送名</th>
-          <th scope="col">転送タイプ</th>
-          <th scope="col">操作</th>
+          <th scope="col">
+            No.
+          </th>
+          <th scope="col">
+            転送名
+          </th>
+          <th scope="col">
+            転送タイプ
+          </th>
+          <th scope="col">
+            操作
+          </th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(task, index) in transferTask" v-bind:key="task.id" v-on:click="edit(index, task.transfer_type_id)">
-          <th scope="row">{{index+1}}</th>
-          <td>{{task.name}}</td>
-          <td>{{transferType(task.transfer_type_id)}}</td>
-          <td></td>
+        <tr
+          v-for="(task, index) in transferTask"
+          :key="task.id"
+          @click="edit(index, task.transfer_type_id)"
+        >
+          <th scope="row">
+            {{ index+1 }}
+          </th>
+          <td>{{ task.name }}</td>
+          <td>{{ transferType(task.transfer_type_id) }}</td>
+          <td />
         </tr>
       </tbody>
     </table>
-    <salesforceTransferEdit ref="salesforceTransferEdit" 
-        v-bind:serverUri="serverUri" 
-        v-bind:transferEditModalState="transferEditModalState" 
-        v-bind:transferTask="transferTask[selectedTransferTask]"
-        v-bind:formCols="formCols"
-        @transferEditModalClose = "transferEditModalClose">
-    </salesforceTransferEdit>
-    <mailTransferEdit ref="mailTransferEdit" 
-        v-bind:serverUri="serverUri" 
-        v-bind:transferEditModalState="transferEditModalState" 
-        v-bind:transferTask="transferTask[selectedTransferTask]"
-        v-bind:formCols="formCols"
-        @transferEditModalClose = "transferEditModalClose">
-    </mailTransferEdit>
+    <salesforceTransferEdit
+      ref="salesforceTransferEdit"
+      :server-uri="serverUri"
+      :transfer-edit-modal-state="transferEditModalState"
+      :transfer-task="transferTask[selectedTransferTask]"
+      :form-cols="formCols"
+      @transferEditModalClose="transferEditModalClose"
+    />
+    <mailTransferEdit
+      ref="mailTransferEdit"
+      :server-uri="serverUri"
+      :transfer-edit-modal-state="transferEditModalState"
+      :transfer-task="transferTask[selectedTransferTask]"
+      :form-cols="formCols"
+      @transferEditModalClose="transferEditModalClose"
+    />
   </div>
 </template>
 <script>
@@ -41,11 +57,24 @@ import SalesforceTransferEdit from './SalesforceTransferEdit.vue'
 import MailTransferEdit from './MailTransferEdit.vue'
 
 export default {
-  name: 'transfers',
-  props: ['serverUri', 'hashedFormId', 'formCols'],
+  name: 'Transfers',
   components: {
     'salesforceTransferEdit': SalesforceTransferEdit,
     'mailTransferEdit': MailTransferEdit
+  },
+  props: {
+    'serverUri': {
+      type: String,
+      default: ''
+    },
+    'hashedFormId': {
+      type: String,
+      default: ''
+    },
+    'formCols': {
+      type: String,
+      default: ''
+    }
   },
   data: function () {
     return {
@@ -53,6 +82,11 @@ export default {
       transferList: [],
       transferEditModalState: [],
       selectedTransferTask: 0
+    }
+  },
+  watch: {
+    transferTask: function () {
+      this.$emit('updateTransferTask', this.$data.transferTask)
     }
   },
   created: function () {
@@ -67,13 +101,13 @@ export default {
     console.log(this.$data.config)
     if (this.$props.hashedFormId) {
       axios.get(this.$props.serverUri + '/transfertask/list/' + this.$props.hashedFormId, this.$data.config)
-      .then(response => {
-        this.$data.transferTask = response.data.dataset
-      })
+        .then(response => {
+          this.$data.transferTask = response.data.dataset
+        })
       axios.get(this.$props.serverUri + '/transfer', this.$data.config)
-      .then(response => {
-        this.$data.transferList = response.data
-      })
+        .then(response => {
+          this.$data.transferList = response.data
+        })
     }
   },
   methods: {
@@ -86,11 +120,6 @@ export default {
     },
     transferEditModalClose: function (id) {
       this.$data.transferEditModalState[id] = 0
-    }
-  },
-  watch: {
-    transferTask: function () {
-      this.$emit('updateTransferTask', this.$data.transferTask)
     }
   }
 }
