@@ -105,6 +105,16 @@
         {{ $t('message.confirm_form_delete') }}
       </p>
     </b-modal>
+    <b-modal
+      id="modal_form_add_complete"
+      v-model="modalFormAddComplete"
+      :title="$t('message.confirm')"
+      ok-only
+    >
+      <p>
+        {{ $t('message.add_form_complete') }} {{ addedFormName }}
+      </p>
+    </b-modal>
   </div>
 </template>
 
@@ -127,7 +137,9 @@ export default {
       checkedColumn: [],
       formStatus: ['無効', '有効', '停止中'],
       config: {},
-      loading: false
+      loading: false,
+      modalFormAddComplete: false,
+      addedFormName: ''
     }
   },
   created: function () {
@@ -168,12 +180,13 @@ export default {
     },
     add: function () {
       var i = Object.keys(this.$data.formList).length
+      this.$data.addedFormName = 'フォーム' + i
       var tmp = {
         index: i + '',
         id: '',
         status: '0',
-        name: 'フォーム' + i,
-        title: 'フォーム' + i,
+        name: this.$data.addedFormName,
+        title: this.$data.addedFormName,
         extLink1: false,
         cancelUrl: '',
         completeUrl: '',
@@ -216,6 +229,7 @@ export default {
           var data = response.data.dataset
           tmp.id = data.id
           tmp.hashed_id = data.hashed_id
+          this.$data.modalFormAddComplete = true
           this.$set(this.$data.formList, i, tmp)
         })
         .catch(error => {
