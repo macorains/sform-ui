@@ -124,7 +124,6 @@ export default {
     return {
       serverUri: 'http://localhost:9001',
       hashedFormId: '',
-      isHelpOpen: false,
       isAdmin: false
     }
   },
@@ -169,7 +168,7 @@ export default {
     },
     isMenuValid: function () {
       var res = true
-      if (this.$route.path === '/signin') {
+      if (this.$route.path === '/signin' || this.$route.path === '/help') {
         res = false
       }
       return res
