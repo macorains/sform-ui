@@ -39,6 +39,18 @@
             />
             {{ $t("message.admin") }}
           </b-nav-item>
+          <b-nav-item
+            v-show="isMenuValid()"
+            href="#"
+            @click="openOnlineHelp()"
+          >
+            <span
+              class="oi oi-question-mark"
+              title="question-mark"
+              aria-hidden="true"
+            />
+            {{ $t("message.help") }}
+          </b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
@@ -112,6 +124,7 @@ export default {
     return {
       serverUri: 'http://localhost:9001',
       hashedFormId: '',
+      isHelpOpen: false,
       isAdmin: false
     }
   },
@@ -145,6 +158,10 @@ export default {
     },
     openAdmin: function () {
       this.$router.push({path: 'admin', params: {serverUri: this.$data.serverUri}})
+    },
+    openOnlineHelp: function () {
+      let routeData = this.$router.resolve({name: 'help'})
+      window.open(routeData.href, '_blank')
     },
     signout: function () {
       localStorage.removeItem('sformToken')
