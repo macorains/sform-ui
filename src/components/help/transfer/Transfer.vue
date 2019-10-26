@@ -1,5 +1,5 @@
 <template>
-  <div class="help">
+  <div class="help-sub">
     <div class="container">
       <h2>
         転送
