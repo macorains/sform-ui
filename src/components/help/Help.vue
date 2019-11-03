@@ -7,7 +7,7 @@
       <b-container class="text-left">
         <help-about />
         <help-form />
-        <help-transfer />
+        <help-transfer-task />
       </b-container>
     </div>
   </div>
@@ -15,13 +15,13 @@
 <script>
 import AboutSform from './AboutSform.vue'
 import Form from './form/Form.vue'
-import Transfer from './transfer/Transfer.vue'
+import TransferTask from './transfer/TransferTask.vue'
 export default {
   name: 'Help',
   components: {
     'helpAbout': AboutSform,
     'helpForm': Form,
-    'helpTransfer': Transfer
+    'helpTransferTask': TransferTask
   }
 }
 </script>

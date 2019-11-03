@@ -31,6 +31,6 @@
 </template>
 <script>
 export default {
-  name: 'Transfer'
+  name: 'TransferTask'
 }
 </script>
