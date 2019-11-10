@@ -33,6 +33,32 @@
         </tr>
       </tbody>
     </table>
+    <b-container class="text-right">
+      <b-row class="text-right">
+        <b-col cols="7"/>
+        <b-col cols="3" class="text-right">
+          <b-form-select
+            v-model="selectedTransferType"
+            :options="optionTransferType"
+            class="mb-3"
+          />
+        </b-col>
+        <b-col cols="2">
+          <b-btn
+            block
+            size="sm"
+            @click="alert('aaa')"
+          >
+            <span
+              class="oi oi-plus"
+              title="plus"
+              aria-hidden="true"
+            />
+            {{ $t('message.add') }}
+          </b-btn>
+        </b-col>
+      </b-row>
+    </b-container>
     <salesforceTransferEdit
       ref="salesforceTransferEdit"
       :server-uri="serverUri"
@@ -81,7 +107,9 @@ export default {
       transferTask: {},
       transferList: [],
       transferEditModalState: [],
-      selectedTransferTask: 0
+      selectedTransferTask: 0,
+      selectedTransferType: 0,
+      optionTransferType: []
     }
   },
   watch: {
@@ -107,6 +135,7 @@ export default {
       axios.get(this.$props.serverUri + '/transfer', this.$data.config)
         .then(response => {
           this.$data.transferList = response.data
+          this.$data.optionTransferType = this.$data.transferList.map(tr => ({value: tr.type_id, text: tr.name}))
         })
     }
   },

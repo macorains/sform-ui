@@ -244,7 +244,7 @@
             />
           </b-col>
         </b-row>
-        <b-row>
+        <b-row class="mt-3 border-top">
           <b-col>
             <b-button
               class="mt-4"
