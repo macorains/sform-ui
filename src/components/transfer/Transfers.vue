@@ -35,8 +35,11 @@
     </table>
     <b-container class="text-right">
       <b-row class="text-right">
-        <b-col cols="7"/>
-        <b-col cols="3" class="text-right">
+        <b-col cols="7" />
+        <b-col
+          cols="3"
+          class="text-right"
+        >
           <b-form-select
             v-model="selectedTransferType"
             :options="optionTransferType"
@@ -98,8 +101,8 @@ export default {
       default: ''
     },
     'formCols': {
-      type: String,
-      default: ''
+      type: Object,
+      default: () => ({})
     }
   },
   data: function () {

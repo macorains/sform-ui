@@ -126,6 +126,15 @@ export default {
         name: '',
         config: {}
       },
+      defaultTransferTask: {
+        name: '',
+        config: {
+          mailSubject: '',
+          mailFrom: '',
+          mailTo: '',
+          mailBody: ''
+        }
+      },
       transferConfig: {},
       selectedFormColumnName: '',
       columnAttachList: []
@@ -175,6 +184,9 @@ export default {
     axios.get(this.$props.serverUri + '/transfer/config/Mail', this.$data.config)
       .then(response => {
         this.$set(this.$data, 'transferConfig', response.data.dataset)
+        if (!Object.keys(this.$props.transferTask).length) {
+          Object.assign(this.$props.transferTask, this.$data.defaultTransferTask)
+        }
         this.$set(this.$data, 'tmpTransferTask', this.$props.transferTask)
       })
       .catch(function (error) {
