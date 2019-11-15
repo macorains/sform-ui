@@ -50,7 +50,7 @@
           <b-btn
             block
             size="sm"
-            @click="alert('aaa')"
+            @click="transferEditModalOpen"
           >
             <span
               class="oi oi-plus"
@@ -152,6 +152,9 @@ export default {
     },
     transferEditModalClose: function (id) {
       this.$data.transferEditModalState[id] = 0
+    },
+    transferEditModalOpen: function () {
+      this.$set(this.$data.transferEditModalState, this.$data.selectedTransferType, 1)
     }
   }
 }
