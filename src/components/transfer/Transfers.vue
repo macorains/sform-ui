@@ -50,7 +50,7 @@
           <b-btn
             block
             size="sm"
-            @click="transferEditModalOpen"
+            @click="newEdit(selectedTransferType)"
           >
             <span
               class="oi oi-plus"
@@ -69,6 +69,7 @@
       :transfer-task="transferTask[selectedTransferTask]"
       :form-cols="formCols"
       @transferEditModalClose="transferEditModalClose"
+      @setDefault="setDefault"
     />
     <mailTransferEdit
       ref="mailTransferEdit"
@@ -77,6 +78,7 @@
       :transfer-task="transferTask[selectedTransferTask]"
       :form-cols="formCols"
       @transferEditModalClose="transferEditModalClose"
+      @setDefault="setDefault"
     />
   </div>
 </template>
@@ -129,7 +131,6 @@ export default {
         'Access-Control-Allow-Origin': this.$props.serverUri
       }
     }
-    console.log(this.$data.config)
     if (this.$props.hashedFormId) {
       axios.get(this.$props.serverUri + '/transfertask/list/' + this.$props.hashedFormId, this.$data.config)
         .then(response => {
@@ -146,6 +147,14 @@ export default {
     edit: function (index, type) {
       this.selectedTransferTask = index
       this.$set(this.$data.transferEditModalState, type, 1)
+    },
+    newEdit: function (type) {
+      var len = this.$data.transferTask.length
+      this.$set(this.$data.transferTask, len, {})
+      this.edit(len, type)
+    },
+    setDefault: function (data) {
+      this.$set(this.$data.transferTask, this.$data.selectedTransferTask, data)
     },
     transferType: function (id) {
       return this.$data.transferList.filter(transfer => transfer.type_id === id).map(transfer => transfer.name).shift()

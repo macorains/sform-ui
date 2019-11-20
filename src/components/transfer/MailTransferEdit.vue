@@ -127,7 +127,7 @@ export default {
         config: {}
       },
       defaultTransferTask: {
-        name: '',
+        name: 'MailTransfer Task',
         config: {
           mailSubject: '',
           mailFrom: '',
@@ -165,6 +165,9 @@ export default {
       if (modalState === 0 || typeof modalState === 'undefined') {
         this.$refs.modalMailTransferRuleSetting.hide()
       } else {
+        if (!Object.keys(this.$props.transferTask).length) {
+          this.$emit('setDefault', this.$data.defaultTransferTask)
+        }
         this.$refs.modalMailTransferRuleSetting.show()
       }
     },
@@ -178,7 +181,8 @@ export default {
       headers: {
         'x-Requested-With': '*',
         'X-Auth-Token': token,
-        'Access-Control-Allow-Origin': this.$props.serverUri
+        'Access-Control-Allow-Origin': this.$props.serverUri,
+        'timeout': 3000
       }
     }
     axios.get(this.$props.serverUri + '/transfer/config/Mail', this.$data.config)
@@ -190,7 +194,7 @@ export default {
         this.$set(this.$data, 'tmpTransferTask', this.$props.transferTask)
       })
       .catch(function (error) {
-        console.log(error.text)
+        console.error(error)
         this.$router.push({path: '/signin'})
       })
   },

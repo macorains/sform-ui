@@ -112,7 +112,8 @@ export default {
     return {
       serverUri: 'http://localhost:9001',
       hashedFormId: '',
-      isAdmin: false
+      isAdmin: false,
+      axiosTimeout: 3000
     }
   },
   created: function () {

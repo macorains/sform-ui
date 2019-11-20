@@ -163,12 +163,14 @@ export default {
         this.$data.formList = JSON.parse(response.data.dataset)
       })
       .catch(error => {
+        console.error(error)
         if (error.response) {
+          console.error(error.response)
           var statusCode = error.response.status
           if (statusCode === 401 || statusCode === 403) {
             this.$router.push({path: 'signin'})
           } else {
-            console.log(error.response)
+            console.error(error.response)
           }
         }
         this.$data.loading = false

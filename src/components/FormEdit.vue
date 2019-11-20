@@ -587,7 +587,8 @@ export default {
       headers: {
         'x-Requested-With': '*',
         'X-Auth-Token': token,
-        'Access-Control-Allow-Origin': this.$props.serverUri
+        'Access-Control-Allow-Origin': this.$props.serverUri,
+        'timeout': 3000
       }
     }
     axios.get(this.$props.serverUri + '/form/' + this.$props.hashedFormId, this.$data.config)
