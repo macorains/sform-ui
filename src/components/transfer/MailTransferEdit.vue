@@ -127,13 +127,19 @@ export default {
         config: {}
       },
       defaultTransferTask: {
-        name: 'MailTransfer Task',
         config: {
           mailSubject: '',
           mailFrom: '',
           mailTo: '',
           mailBody: ''
-        }
+        },
+        created: '',
+        del_flg: 0,
+        id: '',
+        modified: '',
+        name: 'MailTransfer Task',
+        status: 0,
+        transfer_type_id: 2
       },
       transferConfig: {},
       selectedFormColumnName: '',
