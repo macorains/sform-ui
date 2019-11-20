@@ -124,6 +124,19 @@ export default {
         name: '',
         config: {}
       },
+      defaultTransferTask: {
+        config: {
+          sfObject: '',
+          columnConvertDefinition: {}
+        },
+        created: '',
+        del_flg: 0,
+        id: null,
+        modified: '',
+        name: 'SalesforceTask',
+        status: 0,
+        transfer_type_id: 1
+      },
       selectedSalesforceObject: '',
       transferConfig: {},
       salesforceObjectList: [],
@@ -148,6 +161,10 @@ export default {
       if (modalState === 0 || typeof modalState === 'undefined') {
         this.$refs.modalSalesforceTransferRuleSetting.hide()
       } else {
+        if (!Object.keys(this.$props.transferTask).length) {
+          this.$emit('setDefault', this.$data.defaultTransferTask)
+        }
+        this.$set(this.$data, 'tmpTransferTask', this.$props.transferTask)
         this.$refs.modalSalesforceTransferRuleSetting.show()
       }
     },
@@ -179,7 +196,7 @@ export default {
         this.$set(this.$data, 'tmpTransferTask', this.$props.transferTask)
       })
       .catch(function (error) {
-        console.log(error.text)
+        console.error(error.text)
         this.$router.push({path: '/signin'})
       })
   },

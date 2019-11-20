@@ -126,6 +126,21 @@ export default {
         name: '',
         config: {}
       },
+      defaultTransferTask: {
+        config: {
+          mailSubject: '',
+          mailFrom: '',
+          mailTo: '',
+          mailBody: ''
+        },
+        created: '',
+        del_flg: 0,
+        id: '',
+        modified: '',
+        name: 'MailTransfer Task',
+        status: 0,
+        transfer_type_id: 2
+      },
       transferConfig: {},
       selectedFormColumnName: '',
       columnAttachList: []
@@ -156,6 +171,9 @@ export default {
       if (modalState === 0 || typeof modalState === 'undefined') {
         this.$refs.modalMailTransferRuleSetting.hide()
       } else {
+        if (!Object.keys(this.$props.transferTask).length) {
+          this.$emit('setDefault', this.$data.defaultTransferTask)
+        }
         this.$refs.modalMailTransferRuleSetting.show()
       }
     },
@@ -169,16 +187,20 @@ export default {
       headers: {
         'x-Requested-With': '*',
         'X-Auth-Token': token,
-        'Access-Control-Allow-Origin': this.$props.serverUri
+        'Access-Control-Allow-Origin': this.$props.serverUri,
+        'timeout': 3000
       }
     }
     axios.get(this.$props.serverUri + '/transfer/config/Mail', this.$data.config)
       .then(response => {
         this.$set(this.$data, 'transferConfig', response.data.dataset)
+        if (!Object.keys(this.$props.transferTask).length) {
+          Object.assign(this.$props.transferTask, this.$data.defaultTransferTask)
+        }
         this.$set(this.$data, 'tmpTransferTask', this.$props.transferTask)
       })
       .catch(function (error) {
-        console.log(error.text)
+        console.error(error)
         this.$router.push({path: '/signin'})
       })
   },

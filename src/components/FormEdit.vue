@@ -244,7 +244,7 @@
             />
           </b-col>
         </b-row>
-        <b-row>
+        <b-row class="mt-3 border-top">
           <b-col>
             <b-button
               class="mt-4"
@@ -587,7 +587,8 @@ export default {
       headers: {
         'x-Requested-With': '*',
         'X-Auth-Token': token,
-        'Access-Control-Allow-Origin': this.$props.serverUri
+        'Access-Control-Allow-Origin': this.$props.serverUri,
+        'timeout': 3000
       }
     }
     axios.get(this.$props.serverUri + '/form/' + this.$props.hashedFormId, this.$data.config)

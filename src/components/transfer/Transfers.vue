@@ -33,6 +33,35 @@
         </tr>
       </tbody>
     </table>
+    <b-container class="text-right">
+      <b-row class="text-right">
+        <b-col cols="7" />
+        <b-col
+          cols="3"
+          class="text-right"
+        >
+          <b-form-select
+            v-model="selectedTransferType"
+            :options="optionTransferType"
+            class="mb-3"
+          />
+        </b-col>
+        <b-col cols="2">
+          <b-btn
+            block
+            size="sm"
+            @click="newEdit(selectedTransferType)"
+          >
+            <span
+              class="oi oi-plus"
+              title="plus"
+              aria-hidden="true"
+            />
+            {{ $t('message.add') }}
+          </b-btn>
+        </b-col>
+      </b-row>
+    </b-container>
     <salesforceTransferEdit
       ref="salesforceTransferEdit"
       :server-uri="serverUri"
@@ -40,6 +69,7 @@
       :transfer-task="transferTask[selectedTransferTask]"
       :form-cols="formCols"
       @transferEditModalClose="transferEditModalClose"
+      @setDefault="setDefault"
     />
     <mailTransferEdit
       ref="mailTransferEdit"
@@ -48,6 +78,7 @@
       :transfer-task="transferTask[selectedTransferTask]"
       :form-cols="formCols"
       @transferEditModalClose="transferEditModalClose"
+      @setDefault="setDefault"
     />
   </div>
 </template>
@@ -72,8 +103,8 @@ export default {
       default: ''
     },
     'formCols': {
-      type: String,
-      default: ''
+      type: Object,
+      default: () => ({})
     }
   },
   data: function () {
@@ -81,7 +112,9 @@ export default {
       transferTask: {},
       transferList: [],
       transferEditModalState: [],
-      selectedTransferTask: 0
+      selectedTransferTask: 0,
+      selectedTransferType: 0,
+      optionTransferType: []
     }
   },
   watch: {
@@ -98,7 +131,6 @@ export default {
         'Access-Control-Allow-Origin': this.$props.serverUri
       }
     }
-    console.log(this.$data.config)
     if (this.$props.hashedFormId) {
       axios.get(this.$props.serverUri + '/transfertask/list/' + this.$props.hashedFormId, this.$data.config)
         .then(response => {
@@ -107,6 +139,7 @@ export default {
       axios.get(this.$props.serverUri + '/transfer', this.$data.config)
         .then(response => {
           this.$data.transferList = response.data
+          this.$data.optionTransferType = this.$data.transferList.map(tr => ({value: tr.type_id, text: tr.name}))
         })
     }
   },
@@ -115,11 +148,22 @@ export default {
       this.selectedTransferTask = index
       this.$set(this.$data.transferEditModalState, type, 1)
     },
+    newEdit: function (type) {
+      var len = this.$data.transferTask.length
+      this.$set(this.$data.transferTask, len, {})
+      this.edit(len, type)
+    },
+    setDefault: function (data) {
+      this.$set(this.$data.transferTask, this.$data.selectedTransferTask, data)
+    },
     transferType: function (id) {
       return this.$data.transferList.filter(transfer => transfer.type_id === id).map(transfer => transfer.name).shift()
     },
     transferEditModalClose: function (id) {
       this.$data.transferEditModalState[id] = 0
+    },
+    transferEditModalOpen: function () {
+      this.$set(this.$data.transferEditModalState, this.$data.selectedTransferType, 1)
     }
   }
 }
