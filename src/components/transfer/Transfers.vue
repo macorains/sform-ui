@@ -64,6 +64,7 @@
     </b-container>
     <salesforceTransferEdit
       ref="salesforceTransferEdit"
+      :hashed-form-id="hashedFormId"
       :server-uri="serverUri"
       :transfer-edit-modal-state="transferEditModalState"
       :transfer-task="transferTask[selectedTransferTask]"
@@ -73,6 +74,7 @@
     />
     <mailTransferEdit
       ref="mailTransferEdit"
+      :hashed-form-id="hashedFormId"
       :server-uri="serverUri"
       :transfer-edit-modal-state="transferEditModalState"
       :transfer-task="transferTask[selectedTransferTask]"

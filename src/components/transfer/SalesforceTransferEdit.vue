@@ -100,6 +100,10 @@ import axios from 'axios'
 export default {
   name: 'SalesforceTransferEdit',
   props: {
+    'hashedFormId': {
+      type: String,
+      default: ''
+    },
     'serverUri': {
       type: String,
       default: ''
@@ -126,12 +130,13 @@ export default {
       },
       defaultTransferTask: {
         config: {
+          formId: this.$props.hashedFormId,
           sfObject: '',
           columnConvertDefinition: {}
         },
         created: '',
         del_flg: 0,
-        id: null,
+        id: 0,
         modified: '',
         name: 'SalesforceTask',
         status: 0,

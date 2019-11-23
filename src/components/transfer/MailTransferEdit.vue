@@ -102,6 +102,10 @@ import axios from 'axios'
 export default {
   name: 'MailTransferEdit',
   props: {
+    'hashedFormId': {
+      type: String,
+      default: ''
+    },
     'serverUri': {
       type: String,
       default: ''
@@ -128,6 +132,7 @@ export default {
       },
       defaultTransferTask: {
         config: {
+          formId: this.$props.hashedFormId,
           mailSubject: '',
           mailFrom: '',
           mailTo: '',
@@ -135,7 +140,7 @@ export default {
         },
         created: '',
         del_flg: 0,
-        id: '',
+        id: 0,
         modified: '',
         name: 'MailTransfer Task',
         status: 0,
