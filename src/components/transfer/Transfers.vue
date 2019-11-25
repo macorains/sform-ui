@@ -22,14 +22,38 @@
         <tr
           v-for="(task, index) in transferTask"
           :key="task.id"
-          @click="edit(index, task.transfer_type_id)"
         >
           <th scope="row">
             {{ index+1 }}
           </th>
           <td>{{ task.name }}</td>
           <td>{{ transferType(task.transfer_type_id) }}</td>
-          <td />
+          <td>
+            <b-btn
+              block
+              size="sm"
+              @click="edit(index, task.transfer_type_id)"
+            >
+              <span
+                class="oi oi-pencil"
+                title="pencil"
+                aria-hidden="true"
+              />
+              {{ $t('message.edit') }}
+            </b-btn>
+            <b-btn
+              block
+              size="sm"
+              @click="edit(index, task.transfer_type_id)"
+            >
+              <span
+                class="oi oi-trash"
+                title="trash"
+                aria-hidden="true"
+              />
+              {{ $t('message.delete') }}
+            </b-btn>
+          </td>
         </tr>
       </tbody>
     </table>
