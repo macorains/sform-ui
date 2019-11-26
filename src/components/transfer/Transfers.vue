@@ -30,7 +30,6 @@
           <td>{{ transferType(task.transfer_type_id) }}</td>
           <td>
             <b-btn
-              block
               size="sm"
               @click="edit(index, task.transfer_type_id)"
             >
@@ -42,7 +41,6 @@
               {{ $t('message.edit') }}
             </b-btn>
             <b-btn
-              block
               size="sm"
               @click="edit(index, task.transfer_type_id)"
             >
