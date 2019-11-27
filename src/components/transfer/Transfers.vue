@@ -42,7 +42,7 @@
             </b-btn>
             <b-btn
               size="sm"
-              @click="edit(index, task.transfer_type_id)"
+              @click="transferDeleteModalOpen()"
             >
               <span
                 class="oi oi-trash"
@@ -104,18 +104,25 @@
       @transferEditModalClose="transferEditModalClose"
       @setDefault="setDefault"
     />
+    <transferTaskDeleteModal
+      ref="transferTaskDeleteModal"
+      :transfer-task-delete-modal-state="transferTaskDeleteModalState"
+      @transferDeleteModalClose="transferDeleteModalClose"
+    />
   </div>
 </template>
 <script>
 import axios from 'axios'
 import SalesforceTransferEdit from './SalesforceTransferEdit.vue'
 import MailTransferEdit from './MailTransferEdit.vue'
+import TransferTaskDeleteModal from './TransferTaskDeleteModal.vue'
 
 export default {
   name: 'Transfers',
   components: {
     'salesforceTransferEdit': SalesforceTransferEdit,
-    'mailTransferEdit': MailTransferEdit
+    'mailTransferEdit': MailTransferEdit,
+    'transferTaskDeleteModal': TransferTaskDeleteModal
   },
   props: {
     'serverUri': {
@@ -136,6 +143,7 @@ export default {
       transferTask: {},
       transferList: [],
       transferEditModalState: [],
+      transferTaskDeleteModalState: 0,
       selectedTransferTask: 0,
       selectedTransferType: 0,
       optionTransferType: []
@@ -188,6 +196,12 @@ export default {
     },
     transferEditModalOpen: function () {
       this.$set(this.$data.transferEditModalState, this.$data.selectedTransferType, 1)
+    },
+    transferDeleteModalOpen: function () {
+      this.$data.transferTaskDeleteModalState = 1
+    },
+    transferDeleteModalClose: function () {
+      this.$data.transferTaskDeleteModalState = 0
     }
   }
 }
