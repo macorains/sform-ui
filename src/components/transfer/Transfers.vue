@@ -20,7 +20,7 @@
       </thead>
       <tbody>
         <tr
-          v-for="(task, index) in transferTask"
+          v-for="(task, index) in filteredTransferTaskList"
           :key="task.id"
         >
           <th scope="row">
@@ -140,13 +140,18 @@ export default {
   },
   data: function () {
     return {
-      transferTask: {},
+      transferTask: [],
       transferList: [],
       transferEditModalState: [],
       transferTaskDeleteModalState: 0,
       selectedTransferTask: 0,
       selectedTransferType: 0,
       optionTransferType: []
+    }
+  },
+  computed: {
+    filteredTransferTaskList: function () {
+      return this.$data.transferTask.filter(task => task.del_flg === 0)
     }
   },
   watch: {
