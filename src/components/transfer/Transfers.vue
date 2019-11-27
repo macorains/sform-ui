@@ -106,8 +106,10 @@
     />
     <transferTaskDeleteModal
       ref="transferTaskDeleteModal"
+      :index="selectedTransferTask"
       :transfer-task-delete-modal-state="transferTaskDeleteModalState"
       @transferDeleteModalClose="transferDeleteModalClose"
+      @transferDelete="transferDelete"
     />
   </div>
 </template>
@@ -207,6 +209,9 @@ export default {
     },
     transferDeleteModalClose: function () {
       this.$data.transferTaskDeleteModalState = 0
+    },
+    transferDelete: function (index) {
+      this.$set(this.$data.transferTask[index], 'del_flg', 1)
     }
   }
 }

@@ -16,6 +16,10 @@
 export default {
   name: 'TransferTaskDeleteModal',
   props: {
+    index: {
+      type: Number,
+      default: 0
+    },
     transferTaskDeleteModalState: {
       type: Number,
       default: 0
@@ -33,7 +37,7 @@ export default {
   },
   methods: {
     deleteTransferTask: function () {
-      // ToDo 転送タスク削除処理
+      this.$emit('transferDelete', this.$props.index)
       this.closeTransferTaskDeleteModal()
     },
     closeTransferTaskDeleteModal: function () {
