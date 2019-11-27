@@ -1,8 +1,8 @@
 <template>
   <b-modal
     ref="tranferTaskDeleteModal"
-    size="sm"
     v-model="modalState"
+    size="sm"
     :title="$t('message.confirm')"
     @ok="deleteTransferTask"
     @hidden="closeTransferTaskDeleteModal"
