@@ -20,16 +20,38 @@
       </thead>
       <tbody>
         <tr
-          v-for="(task, index) in transferTask"
+          v-for="(task, index) in filteredTransferTaskList"
           :key="task.id"
-          @click="edit(index, task.transfer_type_id)"
         >
           <th scope="row">
             {{ index+1 }}
           </th>
           <td>{{ task.name }}</td>
           <td>{{ transferType(task.transfer_type_id) }}</td>
-          <td />
+          <td>
+            <b-btn
+              size="sm"
+              @click="edit(index, task.transfer_type_id)"
+            >
+              <span
+                class="oi oi-pencil"
+                title="pencil"
+                aria-hidden="true"
+              />
+              {{ $t('message.edit') }}
+            </b-btn>
+            <b-btn
+              size="sm"
+              @click="transferDeleteModalOpen(index)"
+            >
+              <span
+                class="oi oi-trash"
+                title="trash"
+                aria-hidden="true"
+              />
+              {{ $t('message.delete') }}
+            </b-btn>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -82,18 +104,27 @@
       @transferEditModalClose="transferEditModalClose"
       @setDefault="setDefault"
     />
+    <transferTaskDeleteModal
+      ref="transferTaskDeleteModal"
+      :index="selectedTransferTask"
+      :transfer-task-delete-modal-state="transferTaskDeleteModalState"
+      @transferDeleteModalClose="transferDeleteModalClose"
+      @transferDelete="transferDelete"
+    />
   </div>
 </template>
 <script>
 import axios from 'axios'
 import SalesforceTransferEdit from './SalesforceTransferEdit.vue'
 import MailTransferEdit from './MailTransferEdit.vue'
+import TransferTaskDeleteModal from './TransferTaskDeleteModal.vue'
 
 export default {
   name: 'Transfers',
   components: {
     'salesforceTransferEdit': SalesforceTransferEdit,
-    'mailTransferEdit': MailTransferEdit
+    'mailTransferEdit': MailTransferEdit,
+    'transferTaskDeleteModal': TransferTaskDeleteModal
   },
   props: {
     'serverUri': {
@@ -111,12 +142,18 @@ export default {
   },
   data: function () {
     return {
-      transferTask: {},
+      transferTask: [],
       transferList: [],
       transferEditModalState: [],
+      transferTaskDeleteModalState: 0,
       selectedTransferTask: 0,
       selectedTransferType: 0,
       optionTransferType: []
+    }
+  },
+  computed: {
+    filteredTransferTaskList: function () {
+      return this.$data.transferTask.filter(task => task.del_flg === 0)
     }
   },
   watch: {
@@ -166,6 +203,16 @@ export default {
     },
     transferEditModalOpen: function () {
       this.$set(this.$data.transferEditModalState, this.$data.selectedTransferType, 1)
+    },
+    transferDeleteModalOpen: function (index) {
+      this.selectedTransferTask = index
+      this.$data.transferTaskDeleteModalState = 1
+    },
+    transferDeleteModalClose: function () {
+      this.$data.transferTaskDeleteModalState = 0
+    },
+    transferDelete: function (index) {
+      this.$set(this.$data.transferTask[index], 'del_flg', 1)
     }
   }
 }
