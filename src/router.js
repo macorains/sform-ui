@@ -6,6 +6,7 @@ import Signin from '@/components/Signin.vue'
 import FormList from '@/components/FormList.vue'
 import FormEdit from '@/components/FormEdit.vue'
 import Admin from '@/components/admin/Admin.vue'
+import Help from '@/components/help/Help.vue'
 
 Vue.use(VueRouter)
 
@@ -32,6 +33,11 @@ var router = new VueRouter({
     path: '/admin',
     name: 'admin',
     component: Admin
+  },
+  {
+    path: '/help',
+    name: 'help',
+    component: Help
   }
   ]
 })
