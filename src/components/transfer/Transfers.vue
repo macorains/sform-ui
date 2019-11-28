@@ -42,7 +42,7 @@
             </b-btn>
             <b-btn
               size="sm"
-              @click="transferDeleteModalOpen()"
+              @click="transferDeleteModalOpen(index)"
             >
               <span
                 class="oi oi-trash"
@@ -204,7 +204,8 @@ export default {
     transferEditModalOpen: function () {
       this.$set(this.$data.transferEditModalState, this.$data.selectedTransferType, 1)
     },
-    transferDeleteModalOpen: function () {
+    transferDeleteModalOpen: function (index) {
+      this.selectedTransferTask = index
       this.$data.transferTaskDeleteModalState = 1
     },
     transferDeleteModalClose: function () {

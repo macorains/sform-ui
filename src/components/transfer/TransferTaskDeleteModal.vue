@@ -27,12 +27,12 @@ export default {
   },
   data: function () {
     return {
-      modalState: 0
+      modalState: false
     }
   },
   watch: {
     transferTaskDeleteModalState: function () {
-      this.$props.transferTaskDeleteModalState === 0 ? this.$refs.tranferTaskDeleteModal.hide() : this.$refs.tranferTaskDeleteModal.show()
+      this.$data.modalState = this.$props.transferTaskDeleteModalState === 1
     }
   },
   methods: {
