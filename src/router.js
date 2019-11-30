@@ -7,6 +7,7 @@ import FormList from '@/components/FormList.vue'
 import FormEdit from '@/components/FormEdit.vue'
 import Admin from '@/components/admin/Admin.vue'
 import Help from '@/components/help/Help.vue'
+import DataView from '@/components/dataview/DataView.vue'
 
 Vue.use(VueRouter)
 
@@ -38,6 +39,11 @@ var router = new VueRouter({
     path: '/help',
     name: 'help',
     component: Help
+  },
+  {
+    path: '/dataview/dataview',
+    name: 'dataview',
+    component: DataView
   }
   ]
 })

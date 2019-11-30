@@ -63,6 +63,17 @@
                 {{ $t("message.edit") }}
               </b-button>
               <b-button
+                size="sm"
+                @click="dataView(item.hashed_id)"
+              >
+                <span
+                  class="oi oi-pencil"
+                  title="pencil"
+                  aria-hidden="true"
+                />
+                {{ $t("message.data_view") }}
+              </b-button>
+              <b-button
                 v-b-modal.modal_form_delete
                 size="sm"
                 @click="targetIndex = index"
@@ -259,6 +270,10 @@ export default {
           this.$data.loading = false
           console.log(error.response)
         })
+    },
+    dataView: function (hashedId) {
+      this.$emit('updateHashedFormId', hashedId)
+      this.$router.push({name: 'dataview', params: {hashedFormId: hashedId, serverUri: this.$props.serverUri}})
     }
   }
 }
