@@ -4,7 +4,11 @@
       <h3>
         フォーム編集画面
       </h3>
-      <img src="sample.png" width="800" height="600">
+      <img
+        src="sample.png"
+        width="800"
+        height="600"
+      >
       <dl>
         <dt>ステータス</dt>
         <dd>

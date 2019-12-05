@@ -15,11 +15,35 @@
           :fields="dataheader"
         />
       </div>
+      <div>
+        <b-btn
+          block
+          size="sm"
+          @click="back"
+        >
+          <span
+            class="oi oi-arrow-circle-left"
+            title="arrow-circle-left"
+            aria-hidden="true"
+          />
+          {{ $t('message.back') }}
+        </b-btn>
+      </div>
     </div>
   </div>
 </template>
 <script>
 export default {
+  props: {
+    'serverUri': {
+      type: String,
+      default: ''
+    },
+    'hashedFormId': {
+      type: String,
+      default: ''
+    }
+  },
   data: function () {
     return {
       dataheader: [
@@ -39,6 +63,11 @@ export default {
         {'col0': 'テスト株式会社9', 'col1': '試験監督9', 'col2': 'mmm9@macolabo.net'},
         {'col0': 'テスト株式会社10', 'col1': '試験監督10', 'col2': 'mmm10@macolabo.net'}
       ]
+    }
+  },
+  methods: {
+    back: function () {
+      this.$router.push({path: 'formlist', params: {'serverUri': this.$props.serverUri}})
     }
   }
 }

@@ -67,8 +67,8 @@
                 @click="dataView(item.hashed_id)"
               >
                 <span
-                  class="oi oi-pencil"
-                  title="pencil"
+                  class="oi oi-list"
+                  title="list"
                   aria-hidden="true"
                 />
                 {{ $t("message.data_view") }}
