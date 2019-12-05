@@ -41,7 +41,7 @@ var router = new VueRouter({
     component: Help
   },
   {
-    path: '/dataview/dataview',
+    path: '/dataview',
     name: 'dataview',
     component: DataView
   }
