@@ -12,7 +12,7 @@
           small
           head-variant="light"
           :items="formdata"
-          :fields="dataheader"
+          :fields="headerLabel"
         />
       </div>
       <div>
@@ -33,6 +33,7 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
   props: {
     'serverUri': {
@@ -46,24 +47,30 @@ export default {
   },
   data: function () {
     return {
-      dataheader: [
-        'col0',
-        'col1',
-        'col2'
-      ],
-      formdata: [
-        {'col0': 'テスト株式会社1', 'col1': '試験監督1', 'col2': 'mmm1@macolabo.net'},
-        {'col0': 'テスト株式会社2', 'col1': '試験監督2', 'col2': 'mmm2@macolabo.net'},
-        {'col0': 'テスト株式会社3', 'col1': '試験監督3', 'col2': 'mmm3@macolabo.net'},
-        {'col0': 'テスト株式会社4', 'col1': '試験監督4', 'col2': 'mmm4@macolabo.net'},
-        {'col0': 'テスト株式会社5', 'col1': '試験監督5', 'col2': 'mmm5@macolabo.net'},
-        {'col0': 'テスト株式会社6', 'col1': '試験監督6', 'col2': 'mmm6@macolabo.net'},
-        {'col0': 'テスト株式会社7', 'col1': '試験監督7', 'col2': 'mmm7@macolabo.net'},
-        {'col0': 'テスト株式会社8', 'col1': '試験監督8', 'col2': 'mmm8@macolabo.net'},
-        {'col0': 'テスト株式会社9', 'col1': '試験監督9', 'col2': 'mmm9@macolabo.net'},
-        {'col0': 'テスト株式会社10', 'col1': '試験監督10', 'col2': 'mmm10@macolabo.net'}
-      ]
+      tmpdata: {},
+      formdata: [],
+      headerLabel: []
     }
+  },
+  created: function () {
+    var token = localStorage.getItem('sformToken')
+    this.$data.config = {
+      headers: {
+        'x-Requested-With': '*',
+        'X-Auth-Token': token,
+        'Access-Control-Allow-Origin': this.$props.serverUri
+      }
+    }
+    axios.get(this.$props.serverUri + '/formpost/' + this.$props.hashedFormId, this.$data.config)
+      .then(response => {
+        this.$data.formdata = response.data.rows
+        this.$data.headerdata = response.data.cols
+        var res = []
+        for (let k in this.$data.headerdata) {
+          res.push({key: this.$data.headerdata[k].colId, label: this.$data.headerdata[k].name})
+        }
+        this.$data.headerLabel = res
+      })
   },
   methods: {
     back: function () {
