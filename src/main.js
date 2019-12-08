@@ -5,9 +5,12 @@ import VueI18n from 'vue-i18n'
 import BootstrapVue from 'bootstrap-vue'
 import App from './App'
 import router from './router.js'
+import Axios from './axios'
+
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+Vue.prototype.$http = Axios
 Vue.use(BootstrapVue)
 Vue.config.productionTip = false
 

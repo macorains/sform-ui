@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 export default {
   name: 'Signin',
   props: {
@@ -83,11 +83,13 @@ export default {
           'Access-Control-Allow-Origin': this.$props.serverUri
         }
       }
+      console.log(this.$http)
       var params = new URLSearchParams()
       params.append('email', this.email)
       params.append('group', this.group)
       params.append('password', this.password)
-      axios.post(this.$props.serverUri + '/signIn', params, config)
+      // axios.post(this.$props.serverUri + '/signIn', params, config)
+      this.$http.post(this.$props.serverUri + '/signIn', params, config)
         .then(response => {
           console.log(response)
           let token = response.headers['x-auth-token']
