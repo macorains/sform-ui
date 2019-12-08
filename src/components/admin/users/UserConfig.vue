@@ -109,7 +109,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import UserConfigEdit from './UserConfigEdit.vue'
 
 export default {
@@ -141,20 +140,10 @@ export default {
         'Access-Control-Allow-Origin': this.$props.serverUri
       }
     }
-    axios.get(this.$props.serverUri + '/user', this.$data.config)
+    this.$http.get(this.$props.serverUri + '/user', this.$data.config)
       .then(response => {
         console.log(response.data)
         this.$data.userlist = response.data.dataset
-      })
-      .catch(error => {
-        if (error.response) {
-          var statusCode = error.response.status
-          if (statusCode === 401 || statusCode === 403) {
-            this.$router.push({path: 'signin'})
-          } else {
-            console.log(error.response)
-          }
-        }
       })
   },
   methods: {

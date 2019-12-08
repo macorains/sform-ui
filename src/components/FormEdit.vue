@@ -529,7 +529,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import 'open-iconic/font/css/open-iconic-bootstrap.css'
 import FormColEditOrder from './FormColEditOrder.vue'
 import Transfers from './transfer/Transfers.vue'
@@ -591,19 +590,9 @@ export default {
         'timeout': 3000
       }
     }
-    axios.get(this.$props.serverUri + '/form/' + this.$props.hashedFormId, this.$data.config)
+    this.$http.get(this.$props.serverUri + '/form/' + this.$props.hashedFormId, this.$data.config)
       .then(response => {
         this.$data.formData = response.data.dataset
-      })
-      .catch(error => {
-        if (error.response) {
-          var statusCode = error.response.status
-          if (statusCode === 401 || statusCode === 403) {
-            this.$router.push({path: 'signin'})
-          } else {
-            console.log(error.response)
-          }
-        }
       })
   },
   methods: {
@@ -613,7 +602,7 @@ export default {
         action: 'create',
         rcdata: {formDef: this.$data.formData, transferTasks: this.$data.transferTask}
       }
-      axios.post(this.$props.serverUri + '/form', reqdata, this.$data.config)
+      this.$http.post(this.$props.serverUri + '/form', reqdata, this.$data.config)
       this.$router.push({path: 'formlist', params: {'serverUri': this.$props.serverUri}})
     },
     cancel: function () {

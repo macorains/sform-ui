@@ -130,7 +130,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 import 'open-iconic/font/css/open-iconic-bootstrap.css'
 
 export default {
@@ -168,23 +168,10 @@ export default {
       }
     }
     this.$data.loading = true
-    axios.get(this.$props.serverUri + '/form/list', this.$data.config)
+    this.$http.get(this.$props.serverUri + '/form/list', this.$data.config)
       .then(response => {
         this.$data.loading = false
         this.$data.formList = JSON.parse(response.data.dataset)
-      })
-      .catch(error => {
-        console.error(error)
-        if (error.response) {
-          console.error(error.response)
-          var statusCode = error.response.status
-          if (statusCode === 401 || statusCode === 403) {
-            this.$router.push({path: 'signin'})
-          } else {
-            console.error(error.response)
-          }
-        }
-        this.$data.loading = false
       })
   },
   methods: {
@@ -237,7 +224,7 @@ export default {
         rcdata: {formDef: tmp, transferTasks: {}}
       }
       this.$data.loading = true
-      axios.post(this.$props.serverUri + '/form', reqdata, this.$data.config)
+      this.$http.post(this.$props.serverUri + '/form', reqdata, this.$data.config)
         .then(response => {
           this.$data.loading = false
           var data = response.data.dataset
@@ -246,29 +233,14 @@ export default {
           this.$data.modalFormAddComplete = true
           this.$set(this.$data.formList, i, tmp)
         })
-        .catch(error => {
-          if (error.response) {
-            var statusCode = error.response.status
-            if (statusCode === 401 || statusCode === 403) {
-              this.$router.push({path: 'signin'})
-            } else {
-              console.log(error.response)
-            }
-          }
-          this.$data.loading = false
-        })
     },
     deleteForm: function (index) {
       var form = this.$data.formList[index]
       this.$data.loading = true
-      axios.delete(this.$props.serverUri + '/form/' + form.hashed_id, this.$data.config)
+      this.$http.delete(this.$props.serverUri + '/form/' + form.hashed_id, this.$data.config)
         .then(response => {
           this.$delete(this.$data.formList, index)
           this.$data.loading = false
-        })
-        .catch(error => {
-          this.$data.loading = false
-          console.log(error.response)
         })
     },
     dataView: function (hashedId) {

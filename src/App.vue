@@ -116,8 +116,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
   name: 'App',
   data: function () {
@@ -137,13 +135,9 @@ export default {
         'Access-Control-Allow-Origin': this.$data.serverUri
       }
     }
-    axios.get(this.$data.serverUri + '/user/isadmin', config)
+    this.$http.get(this.$data.serverUri + '/user/isadmin', config)
       .then(response => {
         this.$data.isAdmin = true
-      })
-      .catch(error => {
-        console.log(error.response)
-        this.$data.isAdmin = false
       })
   },
   methods: {
