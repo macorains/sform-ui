@@ -37,10 +37,11 @@
             メール送信元
           </b-col>
           <b-col>
-            <b-form-input
+            <b-form-select
               id="transferTask.config.mailFrom"
               v-model="tmpTransferTask.config.mailFrom"
-              type="text"
+              :options="fromAddressList"
+              class="mb-3"
             />
           </b-col>
         </b-row>
@@ -168,6 +169,9 @@ export default {
       } else {
         return ''
       }
+    },
+    fromAddressList: function () {
+      return this.$data.transferConfig.addressList.map(data => data.address)
     }
   },
   watch: {
