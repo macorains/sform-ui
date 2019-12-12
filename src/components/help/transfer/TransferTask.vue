@@ -4,7 +4,11 @@
       <h3>
         転送タスク
       </h3>
-      <img src="sample.png" width="800" height="600">
+      <img
+        src="sample.png"
+        width="800"
+        height="600"
+      >
       <dl>
         <dt>No.</dt>
         <dd>設定したフォームのデータ受信時に実行するタスクの実行順序番号</dd>

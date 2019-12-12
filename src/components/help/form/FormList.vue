@@ -4,7 +4,11 @@
       <h3>
         フォーム一覧画面
       </h3>
-      <img src="sample.png" width="800" height="600">
+      <img
+        src="sample.png"
+        width="800"
+        height="600"
+      >
       <dl>
         <dt>ID</dt>
         <dd>フォームを識別するID。フォーム設置時にフォームを指定する際にはこのIDを使用する。</dd>
