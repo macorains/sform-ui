@@ -277,22 +277,10 @@ export default {
     },
     insertTag: function (target) {
       var targetObj = this.$refs[target]
-      console.log(targetObj)
       var cursorPosition = targetObj.selectionStart
       var textBefore = targetObj.value.substr(0, cursorPosition)
       var textAfter = targetObj.value.substr(cursorPosition, targetObj.length)
       this.$set(this.$data.tmpTransferTask.config, target, textBefore + this.$refs.selectedTag.value + textAfter)
-
-      /*
-      var mailBody = this.$refs.mailBody
-      var cursorPosition = mailBody.selectionStart
-      var textBefore = mailBody.value.substr(0, cursorPosition)
-      var textAfter = mailBody.value.substr(cursorPosition, mailBody.length)
-      this.$set(this.$data.tmpTransferTask.config, 'mailBody', textBefore + this.$refs.selectedTag.value + textAfter)
-      */
-      console.log(this)
-      // this.$set(this.$data.tmpTransferTask.config, 'mailBody', textBefore + this.$computed.selectedFormColumnNameTag + textAfter)
-      // alert(mailBody.selectionStart)
     }
   }
 }
