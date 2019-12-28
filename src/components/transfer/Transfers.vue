@@ -212,7 +212,12 @@ export default {
       this.$data.transferTaskDeleteModalState = 0
     },
     transferDelete: function (index) {
-      this.$set(this.$data.transferTask[index], 'del_flg', 1)
+      var tmp = this.$data.transferTask.filter(task => task.del_flg === 0)[index]
+      this.$data.transferTask.forEach((task, index) => {
+        if (task === tmp) {
+          this.$set(this.$data.transferTask[index], 'del_flg', 1)
+        }
+      })
     }
   }
 }

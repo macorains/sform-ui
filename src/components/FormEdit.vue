@@ -497,7 +497,7 @@
             <b-col>
               <b-form-checkbox
                 id="formColRequired"
-                v-model="formColData.required"
+                v-model="formColData.validations.required"
                 value="true"
                 unchecked-value="false"
               />
