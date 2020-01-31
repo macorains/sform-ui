@@ -83,7 +83,6 @@ export default {
           'Access-Control-Allow-Origin': this.$props.serverUri
         }
       }
-      console.log(this.$http)
       var params = new URLSearchParams()
       params.append('email', this.email)
       params.append('group', this.group)

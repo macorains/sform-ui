@@ -120,7 +120,7 @@ export default {
   name: 'App',
   data: function () {
     return {
-      serverUri: 'http://localhost:9001',
+      serverUri: process.env.VUE_APP_API_URL,
       hashedFormId: '',
       isAdmin: false,
       axiosTimeout: 3000
