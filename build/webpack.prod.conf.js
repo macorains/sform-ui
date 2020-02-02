@@ -22,7 +22,7 @@ const getEnv = {
 }
 var env = process.env.NODE_ENV === 'testing' ?
   require('../config/test.env') :
-  getAEnv[process.env.NODE_ENV]()
+  getEnv[process.env.NODE_ENV]()
 
 var webpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -64,8 +64,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       filename: process.env.NODE_ENV === 'testing' ?
-        'index.html' :
-        config.build.index,
+        'index.html' : config.build.index,
       template: 'index.html',
       inject: true,
       minify: {
