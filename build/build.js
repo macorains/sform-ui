@@ -1,6 +1,10 @@
 require('./check-versions')()
 
-process.env.NODE_ENV = 'production'
+const envCheck = (env) => {
+  return env && (env === 'dev' || env === 'it' || env === 'production')
+}
+
+process.env.NODE_ENV = envCheck(process.argv[2]) ? process.argv[2] : 'production'
 
 var ora = require('ora')
 var rm = require('rimraf')
@@ -15,7 +19,7 @@ spinner.start()
 
 rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
   if (err) throw err
-  webpack(webpackConfig, function (err, stats) {
+  webpack(webpackConfig, function(err, stats) {
     spinner.stop()
     if (err) throw err
     process.stdout.write(stats.toString({
