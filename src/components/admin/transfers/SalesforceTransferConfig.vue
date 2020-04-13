@@ -119,8 +119,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
   name: 'SalesforceTransferConfig',
   props: {
@@ -143,7 +141,7 @@ export default {
         'Access-Control-Allow-Origin': this.$props.serverUri
       }
     }
-    axios.get(this.$props.serverUri + '/transfer/config/Salesforce', this.$data.config)
+    this.$http.get(this.$props.serverUri + '/transfer/config/Salesforce', this.$data.config)
       .then(response => {
         this.$set(this.$data, 'tmpTransferConfig', response.data.dataset)
       })
@@ -162,11 +160,9 @@ export default {
           config: this.$data.tmpTransferConfig
         }
       }
-      axios.post(this.$props.serverUri + '/transfer/config', reqdata, this.$data.config)
+      this.$http.post(this.$props.serverUri + '/transfer/config', reqdata, this.$data.config)
         .then(response => {
           console.log(response)
-        }).catch(error => {
-          console.log(error)
         })
       this.endEdit()
     }

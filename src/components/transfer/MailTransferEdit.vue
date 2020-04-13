@@ -8,7 +8,7 @@
       @hide="updateModalState"
     >
       <b-container class="text-left">
-        <b-row class="mb-3">
+        <b-row class="mb-2">
           <b-col cols="3">
             転送タスク名
           </b-col>
@@ -20,56 +20,61 @@
             />
           </b-col>
         </b-row>
-        <b-row class="mb-3">
+        <b-row class="mb-2">
           <b-col cols="3">
             メール件名
           </b-col>
           <b-col>
             <b-form-input
               id="transferTask.config.mailSubject"
+              ref="mailSubject"
               v-model="tmpTransferTask.config.mailSubject"
               type="text"
             />
           </b-col>
         </b-row>
-        <b-row class="mb-3">
+        <b-row class="mb-2">
           <b-col cols="3">
             メール送信元
           </b-col>
           <b-col>
-            <b-form-input
+            <b-form-select
               id="transferTask.config.mailFrom"
               v-model="tmpTransferTask.config.mailFrom"
-              type="text"
+              :options="fromAddressList"
             />
           </b-col>
         </b-row>
-        <b-row class="mb-3">
+        <b-row class="mb-2">
           <b-col cols="3">
             メール送信先
           </b-col>
           <b-col>
             <b-form-input
               id="transferTask.config.mailTo"
+              ref="mailTo"
               v-model="tmpTransferTask.config.mailTo"
               type="text"
             />
           </b-col>
         </b-row>
-        <b-row class="mb-3">
+        <b-row class="mb-2">
           <b-col cols="3">
             メール本文
           </b-col>
           <b-col>
             <b-form-textarea
               id="transferTask.config.mailBody"
+              ref="mailBody"
               v-model="tmpTransferTask.config.mailBody"
               :rows="10"
             />
           </b-col>
         </b-row>
-        <b-row class="mb-3">
-          <b-col cols="3" />
+        <b-row class="mb-2 pt-2 border-top">
+          <b-col cols="3">
+            タグ挿入
+          </b-col>
           <b-col cols="5">
             <b-form-select
               v-model="selectedFormColumnName"
@@ -79,10 +84,57 @@
           </b-col>
           <b-col cols="4">
             <b-form-input
+              ref="selectedTag"
               v-model="selectedFormColumnNameTag"
               type="text"
               size="sm"
+              readonly
             />
+          </b-col>
+        </b-row>
+        <b-row class="mb-2">
+          <b-col cols="3" />
+          <b-col cols="3">
+            <b-btn
+              size="sm"
+              block
+              @click="insertTag('mailSubject')"
+            >
+              <span
+                class="oi oi-plus"
+                title="plus"
+                aria-hidden="true"
+              />
+              メール件名
+            </b-btn>
+          </b-col>
+          <b-col cols="3">
+            <b-btn
+              size="sm"
+              block
+              @click="insertTag('mailTo')"
+            >
+              <span
+                class="oi oi-plus"
+                title="plus"
+                aria-hidden="true"
+              />
+              メール送信先
+            </b-btn>
+          </b-col>
+          <b-col cols="3">
+            <b-btn
+              size="sm"
+              block
+              @click="insertTag('mailBody')"
+            >
+              <span
+                class="oi oi-plus"
+                title="plus"
+                aria-hidden="true"
+              />
+              本文
+            </b-btn>
           </b-col>
         </b-row>
       </b-container>
@@ -102,6 +154,10 @@ import axios from 'axios'
 export default {
   name: 'MailTransferEdit',
   props: {
+    'hashedFormId': {
+      type: String,
+      default: ''
+    },
     'serverUri': {
       type: String,
       default: ''
@@ -126,6 +182,22 @@ export default {
         name: '',
         config: {}
       },
+      defaultTransferTask: {
+        config: {
+          formId: this.$props.hashedFormId,
+          mailSubject: '',
+          mailFrom: '',
+          mailTo: '',
+          mailBody: ''
+        },
+        created: '',
+        del_flg: 0,
+        id: 0,
+        modified: '',
+        name: 'MailTransfer Task',
+        status: 0,
+        transfer_type_id: 2
+      },
       transferConfig: {},
       selectedFormColumnName: '',
       columnAttachList: []
@@ -148,6 +220,13 @@ export default {
       } else {
         return ''
       }
+    },
+    fromAddressList: function () {
+      if (typeof (this.$data.transferConfig.addressList) === 'undefined') {
+        return null
+      } else {
+        return this.$data.transferConfig.addressList.map(data => data.address)
+      }
     }
   },
   watch: {
@@ -156,6 +235,9 @@ export default {
       if (modalState === 0 || typeof modalState === 'undefined') {
         this.$refs.modalMailTransferRuleSetting.hide()
       } else {
+        if (!Object.keys(this.$props.transferTask).length) {
+          this.$emit('setDefault', this.$data.defaultTransferTask)
+        }
         this.$refs.modalMailTransferRuleSetting.show()
       }
     },
@@ -169,16 +251,20 @@ export default {
       headers: {
         'x-Requested-With': '*',
         'X-Auth-Token': token,
-        'Access-Control-Allow-Origin': this.$props.serverUri
+        'Access-Control-Allow-Origin': this.$props.serverUri,
+        'timeout': 3000
       }
     }
     axios.get(this.$props.serverUri + '/transfer/config/Mail', this.$data.config)
       .then(response => {
         this.$set(this.$data, 'transferConfig', response.data.dataset)
+        if (!Object.keys(this.$props.transferTask).length) {
+          Object.assign(this.$props.transferTask, this.$data.defaultTransferTask)
+        }
         this.$set(this.$data, 'tmpTransferTask', this.$props.transferTask)
       })
       .catch(function (error) {
-        console.log(error.text)
+        console.error(error)
         this.$router.push({path: '/signin'})
       })
   },
@@ -188,6 +274,13 @@ export default {
     },
     updateModalState: function () {
       this.$emit('transferEditModalClose', this.$data.tmpTransferTask.transfer_type_id)
+    },
+    insertTag: function (target) {
+      var targetObj = this.$refs[target]
+      var cursorPosition = targetObj.selectionStart
+      var textBefore = targetObj.value.substr(0, cursorPosition)
+      var textAfter = targetObj.value.substr(cursorPosition, targetObj.length)
+      this.$set(this.$data.tmpTransferTask.config, target, textBefore + this.$refs.selectedTag.value + textAfter)
     }
   }
 }

@@ -63,6 +63,17 @@
                 {{ $t("message.edit") }}
               </b-button>
               <b-button
+                size="sm"
+                @click="dataView(item.hashed_id)"
+              >
+                <span
+                  class="oi oi-list"
+                  title="list"
+                  aria-hidden="true"
+                />
+                {{ $t("message.data_view") }}
+              </b-button>
+              <b-button
                 v-b-modal.modal_form_delete
                 size="sm"
                 @click="targetIndex = index"
@@ -105,11 +116,21 @@
         {{ $t('message.confirm_form_delete') }}
       </p>
     </b-modal>
+    <b-modal
+      id="modal_form_add_complete"
+      v-model="modalFormAddComplete"
+      :title="$t('message.confirm')"
+      ok-only
+    >
+      <p>
+        {{ $t('message.add_form_complete') }} {{ addedFormName }}
+      </p>
+    </b-modal>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 import 'open-iconic/font/css/open-iconic-bootstrap.css'
 
 export default {
@@ -127,7 +148,9 @@ export default {
       checkedColumn: [],
       formStatus: ['無効', '有効', '停止中'],
       config: {},
-      loading: false
+      loading: false,
+      modalFormAddComplete: false,
+      addedFormName: ''
     }
   },
   created: function () {
@@ -140,25 +163,15 @@ export default {
       headers: {
         'x-Requested-With': '*',
         'X-Auth-Token': token,
-        'Access-Control-Allow-Origin': this.$props.serverUri
+        'Access-Control-Allow-Origin': this.$props.serverUri,
+        'timeout': 3000
       }
     }
     this.$data.loading = true
-    axios.get(this.$props.serverUri + '/form/list', this.$data.config)
+    this.$http.get(this.$props.serverUri + '/form/list', this.$data.config)
       .then(response => {
         this.$data.loading = false
         this.$data.formList = JSON.parse(response.data.dataset)
-      })
-      .catch(error => {
-        if (error.response) {
-          var statusCode = error.response.status
-          if (statusCode === 401 || statusCode === 403) {
-            this.$router.push({path: 'signin'})
-          } else {
-            console.log(error.response)
-          }
-        }
-        this.$data.loading = false
       })
   },
   methods: {
@@ -168,12 +181,13 @@ export default {
     },
     add: function () {
       var i = Object.keys(this.$data.formList).length
+      this.$data.addedFormName = 'フォーム' + i
       var tmp = {
         index: i + '',
         id: '',
         status: '0',
-        name: 'フォーム' + i,
-        title: 'フォーム' + i,
+        name: this.$data.addedFormName,
+        title: this.$data.addedFormName,
         extLink1: false,
         cancelUrl: '',
         completeUrl: '',
@@ -210,38 +224,28 @@ export default {
         rcdata: {formDef: tmp, transferTasks: {}}
       }
       this.$data.loading = true
-      axios.post(this.$props.serverUri + '/form', reqdata, this.$data.config)
+      this.$http.post(this.$props.serverUri + '/form', reqdata, this.$data.config)
         .then(response => {
           this.$data.loading = false
           var data = response.data.dataset
           tmp.id = data.id
           tmp.hashed_id = data.hashed_id
+          this.$data.modalFormAddComplete = true
           this.$set(this.$data.formList, i, tmp)
-        })
-        .catch(error => {
-          if (error.response) {
-            var statusCode = error.response.status
-            if (statusCode === 401 || statusCode === 403) {
-              this.$router.push({path: 'signin'})
-            } else {
-              console.log(error.response)
-            }
-          }
-          this.$data.loading = false
         })
     },
     deleteForm: function (index) {
       var form = this.$data.formList[index]
       this.$data.loading = true
-      axios.delete(this.$props.serverUri + '/form/' + form.hashed_id, this.$data.config)
+      this.$http.delete(this.$props.serverUri + '/form/' + form.hashed_id, this.$data.config)
         .then(response => {
           this.$delete(this.$data.formList, index)
           this.$data.loading = false
         })
-        .catch(error => {
-          this.$data.loading = false
-          console.log(error.response)
-        })
+    },
+    dataView: function (hashedId) {
+      this.$emit('updateHashedFormId', hashedId)
+      this.$router.push({name: 'dataview', params: {hashedFormId: hashedId, serverUri: this.$props.serverUri}})
     }
   }
 }

@@ -2,14 +2,19 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
+import Toasted from 'vue-toasted'
 import BootstrapVue from 'bootstrap-vue'
 import App from './App'
-// import router from './router'
 import router from './router.js'
+import Axios from './axios'
+
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+Vue.prototype.$http = Axios
 Vue.use(BootstrapVue)
+// Vue.use(BVToastPlugin)
+Vue.use(Toasted)
 Vue.config.productionTip = false
 
 const data = require('./message.json')

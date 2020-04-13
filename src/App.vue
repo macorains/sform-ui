@@ -39,6 +39,18 @@
             />
             {{ $t("message.admin") }}
           </b-nav-item>
+          <b-nav-item
+            v-show="isMenuValid()"
+            href="#"
+            @click="openOnlineHelp()"
+          >
+            <span
+              class="oi oi-question-mark"
+              title="question-mark"
+              aria-hidden="true"
+            />
+            {{ $t("message.help") }}
+          </b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
@@ -104,15 +116,14 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
   name: 'App',
   data: function () {
     return {
-      serverUri: 'http://localhost:9001',
+      serverUri: process.env.VUE_APP_API_URL,
       hashedFormId: '',
-      isAdmin: false
+      isAdmin: false,
+      axiosTimeout: 3000
     }
   },
   created: function () {
@@ -124,13 +135,9 @@ export default {
         'Access-Control-Allow-Origin': this.$data.serverUri
       }
     }
-    axios.get(this.$data.serverUri + '/user/isadmin', config)
+    this.$http.get(this.$data.serverUri + '/user/isadmin', config)
       .then(response => {
         this.$data.isAdmin = true
-      })
-      .catch(error => {
-        console.log(error.response)
-        this.$data.isAdmin = false
       })
   },
   methods: {
@@ -146,13 +153,17 @@ export default {
     openAdmin: function () {
       this.$router.push({path: 'admin', params: {serverUri: this.$data.serverUri}})
     },
+    openOnlineHelp: function () {
+      let routeData = this.$router.resolve({name: 'help'})
+      window.open(routeData.href, '_blank')
+    },
     signout: function () {
       localStorage.removeItem('sformToken')
       this.$router.push({path: 'signin'})
     },
     isMenuValid: function () {
       var res = true
-      if (this.$route.path === '/signin') {
+      if (this.$route.path === '/signin' || this.$route.path === '/help') {
         res = false
       }
       return res
