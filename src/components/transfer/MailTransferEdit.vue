@@ -154,23 +154,23 @@ import axios from 'axios'
 export default {
   name: 'MailTransferEdit',
   props: {
-    'hashedFormId': {
+    hashedFormId: {
       type: String,
       default: ''
     },
-    'serverUri': {
+    serverUri: {
       type: String,
       default: ''
     },
-    'transferTask': {
+    transferTask: {
       type: Object,
       default: () => ({})
     },
-    'transferEditModalState': {
+    transferEditModalState: {
       type: Array,
       default: () => ([])
     },
-    'formCols': {
+    formCols: {
       type: Object,
       default: () => ({})
     }
@@ -252,7 +252,7 @@ export default {
         'x-Requested-With': '*',
         'X-Auth-Token': token,
         'Access-Control-Allow-Origin': this.$props.serverUri,
-        'timeout': 3000
+        timeout: 3000
       }
     }
     axios.get(this.$props.serverUri + '/transfer/config/Mail', this.$data.config)
@@ -265,7 +265,7 @@ export default {
       })
       .catch(function (error) {
         console.error(error)
-        this.$router.push({path: '/signin'})
+        this.$router.push({ path: '/signin' })
       })
   },
   methods: {

@@ -19,9 +19,9 @@ import TransferTask from './transfer/TransferTask.vue'
 export default {
   name: 'Help',
   components: {
-    'helpAbout': AboutSform,
-    'helpForm': Form,
-    'helpTransferTask': TransferTask
+    helpAbout: AboutSform,
+    helpForm: Form,
+    helpTransferTask: TransferTask
   }
 }
 </script>

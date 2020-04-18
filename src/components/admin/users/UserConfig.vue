@@ -117,7 +117,7 @@ export default {
     UserConfigEdit: UserConfigEdit
   },
   props: {
-    'serverUri': {
+    serverUri: {
       type: String,
       default: ''
     }
@@ -162,11 +162,11 @@ export default {
     addUser: function () {
       var newIndex = Object.keys(this.$data.userlist).length
       var tmp = {
-        'email': '',
-        'firstName': '',
-        'lastName': '',
-        'role': '',
-        'deletable': true
+        email: '',
+        firstName: '',
+        lastName: '',
+        role: '',
+        deletable: true
       }
       this.$set(this.$data.userlist, newIndex, tmp)
       this.$set(this.$data, 'selectedUser', this.$data.userlist[newIndex])
@@ -178,4 +178,3 @@ export default {
 
 <style scoped>
 </style>
-

@@ -136,7 +136,7 @@ import 'open-iconic/font/css/open-iconic-bootstrap.css'
 export default {
   name: 'FormList',
   props: {
-    'serverUri': {
+    serverUri: {
       type: String,
       default: ''
     }
@@ -156,7 +156,7 @@ export default {
   created: function () {
     var token = localStorage.getItem('sformToken')
     if (!this.$props.serverUri) {
-      this.$router.push({path: 'signin'})
+      this.$router.push({ path: 'signin' })
     }
     this.$data.serverUriString = this.$props.serverUri
     this.$data.config = {
@@ -164,7 +164,7 @@ export default {
         'x-Requested-With': '*',
         'X-Auth-Token': token,
         'Access-Control-Allow-Origin': this.$props.serverUri,
-        'timeout': 3000
+        timeout: 3000
       }
     }
     this.$data.loading = true
@@ -177,7 +177,7 @@ export default {
   methods: {
     edit: function (hashedId) {
       this.$emit('updateHashedFormId', hashedId)
-      this.$router.push({name: 'formedit', params: {hashedFormId: hashedId, serverUri: this.$props.serverUri}})
+      this.$router.push({ name: 'formedit', params: { hashedFormId: hashedId, serverUri: this.$props.serverUri } })
     },
     add: function () {
       var i = Object.keys(this.$data.formList).length
@@ -221,7 +221,7 @@ export default {
       var reqdata = {
         objtype: 'Form',
         action: 'create',
-        rcdata: {formDef: tmp, transferTasks: {}}
+        rcdata: { formDef: tmp, transferTasks: {} }
       }
       this.$data.loading = true
       this.$http.post(this.$props.serverUri + '/form', reqdata, this.$data.config)
@@ -245,7 +245,7 @@ export default {
     },
     dataView: function (hashedId) {
       this.$emit('updateHashedFormId', hashedId)
-      this.$router.push({name: 'dataview', params: {hashedFormId: hashedId, serverUri: this.$props.serverUri}})
+      this.$router.push({ name: 'dataview', params: { hashedFormId: hashedId, serverUri: this.$props.serverUri } })
     }
   }
 }

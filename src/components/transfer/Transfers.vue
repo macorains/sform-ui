@@ -122,20 +122,20 @@ import TransferTaskDeleteModal from './TransferTaskDeleteModal.vue'
 export default {
   name: 'Transfers',
   components: {
-    'salesforceTransferEdit': SalesforceTransferEdit,
-    'mailTransferEdit': MailTransferEdit,
-    'transferTaskDeleteModal': TransferTaskDeleteModal
+    salesforceTransferEdit: SalesforceTransferEdit,
+    mailTransferEdit: MailTransferEdit,
+    transferTaskDeleteModal: TransferTaskDeleteModal
   },
   props: {
-    'serverUri': {
+    serverUri: {
       type: String,
       default: ''
     },
-    'hashedFormId': {
+    hashedFormId: {
       type: String,
       default: ''
     },
-    'formCols': {
+    formCols: {
       type: Object,
       default: () => ({})
     }
@@ -178,7 +178,7 @@ export default {
       axios.get(this.$props.serverUri + '/transfer', this.$data.config)
         .then(response => {
           this.$data.transferList = response.data
-          this.$data.optionTransferType = this.$data.transferList.map(tr => ({value: tr.type_id, text: tr.name}))
+          this.$data.optionTransferType = this.$data.transferList.map(tr => ({ value: tr.type_id, text: tr.name }))
         })
     }
   },

@@ -36,11 +36,11 @@
 import axios from 'axios'
 export default {
   props: {
-    'serverUri': {
+    serverUri: {
       type: String,
       default: ''
     },
-    'hashedFormId': {
+    hashedFormId: {
       type: String,
       default: ''
     }
@@ -66,15 +66,15 @@ export default {
         this.$data.formdata = response.data.rows
         this.$data.headerdata = response.data.cols
         var res = []
-        for (let k in this.$data.headerdata) {
-          res.push({key: this.$data.headerdata[k].colId, label: this.$data.headerdata[k].name})
+        for (const k in this.$data.headerdata) {
+          res.push({ key: this.$data.headerdata[k].colId, label: this.$data.headerdata[k].name })
         }
         this.$data.headerLabel = res
       })
   },
   methods: {
     back: function () {
-      this.$router.push({path: 'formlist', params: {'serverUri': this.$props.serverUri}})
+      this.$router.push({ path: 'formlist', params: { serverUri: this.$props.serverUri } })
     }
   }
 }
