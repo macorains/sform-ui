@@ -122,7 +122,7 @@
 export default {
   name: 'SalesforceTransferConfig',
   props: {
-    'serverUri': {
+    serverUri: {
       type: String,
       default: ''
     }

@@ -48,7 +48,7 @@ export default {
     transferConfig: TransferConfig
   },
   props: {
-    'serverUri': {
+    serverUri: {
       type: String,
       default: ''
     }

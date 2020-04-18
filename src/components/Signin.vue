@@ -62,7 +62,7 @@
 export default {
   name: 'Signin',
   props: {
-    'serverUri': {
+    serverUri: {
       type: String,
       default: ''
     }
@@ -77,7 +77,7 @@ export default {
   },
   methods: {
     send: function (event) {
-      let config = {
+      const config = {
         headers: {
           'x-Requested-With': '*',
           'Access-Control-Allow-Origin': this.$props.serverUri
@@ -91,10 +91,10 @@ export default {
       this.$http.post(this.$props.serverUri + '/signIn', params, config)
         .then(response => {
           console.log(response)
-          let token = response.headers['x-auth-token']
+          const token = response.headers['x-auth-token']
           localStorage.setItem('sformToken', token)
           this.$emit('updateIsAdmin', true)
-          this.$router.push({path: 'formlist', params: {'serverUri': this.$props.serverUri}})
+          this.$router.push({ path: 'formlist', params: { serverUri: this.$props.serverUri } })
         })
     }
   }
