@@ -10,7 +10,7 @@ http.interceptors.response.use(function (response) { return response }, function
   // 認証エラー時の処理
   var statusCode = error.response.status
   if (statusCode === 400) {
-    let options = {
+    const options = {
       duration: 2000,
       fullWidth: true,
       type: 'error',
@@ -20,7 +20,7 @@ http.interceptors.response.use(function (response) { return response }, function
     }
     Vue.toasted.show('エラーが発生しました', options)
   } else if (statusCode === 401 || statusCode === 403) {
-    let options = {
+    const options = {
       duration: 2000,
       fullWidth: true,
       type: 'error',

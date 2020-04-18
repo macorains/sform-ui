@@ -100,23 +100,23 @@ import axios from 'axios'
 export default {
   name: 'SalesforceTransferEdit',
   props: {
-    'hashedFormId': {
+    hashedFormId: {
       type: String,
       default: ''
     },
-    'serverUri': {
+    serverUri: {
       type: String,
       default: ''
     },
-    'transferTask': {
+    transferTask: {
       type: Object,
       default: () => ({})
     },
-    'transferEditModalState': {
+    transferEditModalState: {
       type: Array,
       default: () => ([])
     },
-    'formCols': {
+    formCols: {
       type: Object,
       default: () => ({})
     }
@@ -202,7 +202,7 @@ export default {
       })
       .catch(function (error) {
         console.error(error.text)
-        this.$router.push({path: '/signin'})
+        this.$router.push({ path: '/signin' })
       })
   },
   methods: {
@@ -219,7 +219,7 @@ export default {
             .filter(field => field.type !== 'reference')
             .map(field => {
               var formColumnName = ''
-              for (let def of this.$props.transferTask.config.columnConvertDefinition) {
+              for (const def of this.$props.transferTask.config.columnConvertDefinition) {
                 if (def.sfCol === field.name) {
                   formColumnName = def.sformCol
                 }
@@ -240,7 +240,7 @@ export default {
       this.$data.tmpTransferTask.config.columnConvertDefinition =
           this.$data.columnAttachList
             .filter(def => def.salesforceObjectColumnName !== '' && def.formColumnName !== '')
-            .map(def => { return {sfCol: def.salesforceObjectColumnName, sformCol: def.formColumnName} })
+            .map(def => { return { sfCol: def.salesforceObjectColumnName, sformCol: def.formColumnName } })
       this.$refs.modalSalesforceTransferRuleSetting.hide()
     },
     updateModalState: function () {

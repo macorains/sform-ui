@@ -148,18 +148,18 @@ export default {
       this.$data.isAdmin = isAdmin
     },
     openFormList: function () {
-      this.$router.push({path: 'formlist', params: {serverUri: this.$data.serverUri}})
+      this.$router.push({ path: 'formlist', params: { serverUri: this.$data.serverUri } })
     },
     openAdmin: function () {
-      this.$router.push({path: 'admin', params: {serverUri: this.$data.serverUri}})
+      this.$router.push({ path: 'admin', params: { serverUri: this.$data.serverUri } })
     },
     openOnlineHelp: function () {
-      let routeData = this.$router.resolve({name: 'help'})
+      const routeData = this.$router.resolve({ name: 'help' })
       window.open(routeData.href, '_blank')
     },
     signout: function () {
       localStorage.removeItem('sformToken')
-      this.$router.push({path: 'signin'})
+      this.$router.push({ path: 'signin' })
     },
     isMenuValid: function () {
       var res = true

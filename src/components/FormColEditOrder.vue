@@ -41,14 +41,14 @@ import 'open-iconic/font/css/open-iconic-bootstrap.css'
 export default {
   name: 'FormColEditOrder',
   components: {
-    'draggable': Draggable
+    draggable: Draggable
   },
   props: {
-    'formColData': {
+    formColData: {
       type: Object,
       default: () => ({})
     },
-    'formColEditOrderModalState': {
+    formColEditOrderModalState: {
       type: Number,
       default: 0
     }

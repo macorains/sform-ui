@@ -91,20 +91,18 @@
   </div>
 </template>
 <script>
-// import axios from 'axios'
-
 export default {
   name: 'UserConfigEdit',
   props: {
-    'serverUri': {
+    serverUri: {
       type: String,
       default: ''
     },
-    'user': {
+    user: {
       type: Object,
       default: () => ({})
     },
-    'modalState': {
+    modalState: {
       type: Number,
       default: 0
     }
@@ -114,8 +112,8 @@ export default {
       config: {},
       userData: this.$props.user,
       roleOptions: [
-        {text: '一般', value: 'operator'},
-        {text: '管理者', value: 'admin'}
+        { text: '一般', value: 'operator' },
+        { text: '管理者', value: 'admin' }
       ]
     }
   },

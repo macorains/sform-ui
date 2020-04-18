@@ -33,7 +33,7 @@ export default {
     mailTransferConfig: MailTransferConfig
   },
   props: {
-    'serverUri': {
+    serverUri: {
       type: String,
       default: ''
     }

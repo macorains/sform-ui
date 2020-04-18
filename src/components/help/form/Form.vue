@@ -17,9 +17,9 @@ import FormColEdit from './FormColEdit.vue'
 export default {
   name: 'Form',
   components: {
-    'helpFormList': FormList,
-    'helpFormEdit': FormEdit,
-    'helpFormColEdit': FormColEdit
+    helpFormList: FormList,
+    helpFormEdit: FormEdit,
+    helpFormColEdit: FormColEdit
   }
 }
 </script>

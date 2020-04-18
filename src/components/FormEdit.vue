@@ -536,50 +536,50 @@ import Transfers from './transfer/Transfers.vue'
 export default {
   name: 'FormEdit',
   components: {
-    'transfers': Transfers,
-    'formColEditOrder': FormColEditOrder
+    transfers: Transfers,
+    formColEditOrder: FormColEditOrder
   },
   props: {
-    'serverUri': {
+    serverUri: {
       type: String,
       default: ''
     },
-    'hashedFormId': {
+    hashedFormId: {
       type: String,
       default: ''
     }
   },
   data: function () {
     return {
-      formColData: {validations: {}, selectList: {}},
+      formColData: { validations: {}, selectList: {} },
       formData: {},
       transferTask: {},
       config: {},
       formColEditOrderModalState: 0,
       optionFormColValidation: [
-        {value: '0', text: '無制限'},
-        {value: '1', text: '数値のみ'},
-        {value: '2', text: '英数字のみ'},
-        {value: '3', text: 'ひらがなのみ'},
-        {value: '4', text: 'カタカナのみ'},
-        {value: '5', text: 'メールアドレス'},
-        {value: '6', text: '郵便番号'}
+        { value: '0', text: '無制限' },
+        { value: '1', text: '数値のみ' },
+        { value: '2', text: '英数字のみ' },
+        { value: '3', text: 'ひらがなのみ' },
+        { value: '4', text: 'カタカナのみ' },
+        { value: '5', text: 'メールアドレス' },
+        { value: '6', text: '郵便番号' }
       ],
       optionFormColType: [
-        {value: '1', text: 'テキスト'},
-        {value: '2', text: 'コンボボックス（単一選択）'},
-        {value: '3', text: 'チェックボックス（複数選択）'},
-        {value: '4', text: 'ラジオボタン（単一選択）'},
-        {value: '5', text: 'テキストエリア'},
-        {value: '6', text: '隠しテキスト'},
-        {value: '7', text: '表示テキスト（非入力項目）'}
+        { value: '1', text: 'テキスト' },
+        { value: '2', text: 'コンボボックス（単一選択）' },
+        { value: '3', text: 'チェックボックス（複数選択）' },
+        { value: '4', text: 'ラジオボタン（単一選択）' },
+        { value: '5', text: 'テキストエリア' },
+        { value: '6', text: '隠しテキスト' },
+        { value: '7', text: '表示テキスト（非入力項目）' }
       ]
     }
   },
   created: function () {
     var token = localStorage.getItem('sformToken')
     if (!this.$props.hashedFormId) {
-      this.$router.push({path: '/formlist'})
+      this.$router.push({ path: '/formlist' })
       return
     }
     this.$data.config = {
@@ -587,7 +587,7 @@ export default {
         'x-Requested-With': '*',
         'X-Auth-Token': token,
         'Access-Control-Allow-Origin': this.$props.serverUri,
-        'timeout': 3000
+        timeout: 3000
       }
     }
     this.$http.get(this.$props.serverUri + '/form/' + this.$props.hashedFormId, this.$data.config)
@@ -600,13 +600,13 @@ export default {
       var reqdata = {
         objtype: 'Form',
         action: 'create',
-        rcdata: {formDef: this.$data.formData, transferTasks: this.$data.transferTask}
+        rcdata: { formDef: this.$data.formData, transferTasks: this.$data.transferTask }
       }
       this.$http.post(this.$props.serverUri + '/form', reqdata, this.$data.config)
-      this.$router.push({path: 'formlist', params: {'serverUri': this.$props.serverUri}})
+      this.$router.push({ path: 'formlist', params: { serverUri: this.$props.serverUri } })
     },
     cancel: function () {
-      this.$router.push({path: 'formlist', params: {'serverUri': this.$props.serverUri}})
+      this.$router.push({ path: 'formlist', params: { serverUri: this.$props.serverUri } })
     },
     addFormCol: function () {
       var i = Object.keys(this.$data.formData.formCols).length
