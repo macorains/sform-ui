@@ -8,6 +8,8 @@ var CopyWebpackPlugin = require('copy-webpack-plugin')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
+const { VueLoaderPlugin }= require('vue-loader')
+
 
 const getEnv = {
   'dev': () => {
@@ -104,7 +106,8 @@ var webpackConfig = merge(baseWebpackConfig, {
       from: path.resolve(__dirname, '../static'),
       to: config.build.assetsSubDirectory,
       ignore: ['.*']
-    }])
+    }]),
+    new VueLoaderPlugin()
   ]
 })
 
