@@ -75,6 +75,21 @@ export default {
       formList: {}
     }
   },
+  created: function () {
+    const config = {
+      headers: {
+        'x-Requested-With': '*',
+        'Access-Control-Allow-Origin': this.$props.serverUri
+      }
+    }
+    this.$http.get(this.$props.serverUri + '/adminExistsCheck', config)
+      .then(response => {
+        console.log(response.data.result)
+        if (response.data.result === false) {
+          this.$router.push({ path: 'createadmin', params: {} })
+        }
+      })
+  },
   methods: {
     send: function (event) {
       const config = {

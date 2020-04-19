@@ -20,15 +20,28 @@ http.interceptors.response.use(function (response) { return response }, function
     }
     Vue.toasted.show('エラーが発生しました', options)
   } else if (statusCode === 401 || statusCode === 403) {
-    const options = {
-      duration: 2000,
-      fullWidth: true,
-      type: 'error',
-      onComplete: function () {
-        router.push({ path: '/signin' })
+    const config = {
+      headers: {
+        'x-Requested-With': '*',
+        'Access-Control-Allow-Origin': this.$props.serverUri
       }
     }
-    Vue.toasted.show('サインインしてください', options)
+    this.$http.get(this.$props.serverUri + '/adminExistsCheck', config)
+      .then(response => {
+        if (response.data.result === false) {
+          router.push({ path: 'createadmin' })
+        } else {
+          const options = {
+            duration: 2000,
+            fullWidth: true,
+            type: 'error',
+            onComplete: function () {
+              router.push({ path: '/signin' })
+            }
+          }
+          Vue.toasted.show('サインインしてください', options)
+        }
+      })
   } else {
     alert('error!')
   }
