@@ -73,6 +73,9 @@ export default {
       password: '',
       formList: {}
     }
+  },
+  methods: {
+    send: function (event) {}
   }
 }
 </script>
