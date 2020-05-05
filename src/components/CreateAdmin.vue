@@ -10,6 +10,28 @@
             <p class="card-text pt-4">
               <b-form>
                 <b-form-group
+                  id="lastNameGroup"
+                  label-for="lastName"
+                  label="姓"
+                >
+                  <b-form-input
+                    id="lastName"
+                    v-model="lastName"
+                    type="text"
+                  />
+                </b-form-group>
+                <b-form-group
+                  id="firstNameGroup"
+                  label-for="firstName"
+                  label="名"
+                >
+                  <b-form-input
+                    id="firstName"
+                    v-model="firstName"
+                    type="text"
+                  />
+                </b-form-group>
+                <b-form-group
                   id="emailGroup"
                   label-for="email"
                   label="メールアドレス"
@@ -46,7 +68,7 @@
                   class="mt-4"
                   @click="send"
                 >
-                  Signin
+                  登録
                 </b-button>
               </b-form>
             </p>
@@ -54,10 +76,19 @@
         </b-col>
       </b-row>
     </b-container>
+    <b-modal
+      id="modalCreateAdminComplete"
+      title="確認"
+      ok-only="true"
+      @hidden="finish"
+    >
+      <p class="my-4">
+        {{ modalMessage }}
+      </p>
+    </b-modal>
   </div>
 </template>
 <script>
-// import axios from 'axios'
 export default {
   name: 'CreateAdmin',
   props: {
@@ -68,14 +99,37 @@ export default {
   },
   data: function () {
     return {
+      firstName: '',
+      lastName: '',
       email: '',
       group: 'Admin',
       password: '',
-      formList: {}
+      modalMessage: ''
     }
   },
   methods: {
-    send: function (event) {}
+    send: function (event) {
+      const config = {
+        headers: {
+          'x-Requested-With': '*',
+          'Access-Control-Allow-Origin': this.$props.serverUri
+        }
+      }
+      var params = new URLSearchParams()
+      params.append('firstName', this.firstName)
+      params.append('lastName', this.lastName)
+      params.append('email', this.email)
+      params.append('group', this.group)
+      params.append('password', this.password)
+      this.$http.post(this.$props.serverUri + '/signUp', params, config)
+        .then(response => {
+          this.modalMessage = response.data.message
+          this.$bvModal.show('modalCreateAdminComplete')
+        })
+    },
+    finish: function (event) {
+      this.$router.push({ path: 'signIn', params: {} })
+    }
   }
 }
 </script>
