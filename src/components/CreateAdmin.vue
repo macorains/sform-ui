@@ -79,7 +79,7 @@
     <b-modal
       id="modalCreateAdminComplete"
       title="確認"
-      ok-only="true"
+      :ok-only="true"
       @hidden="finish"
     >
       <p class="my-4">

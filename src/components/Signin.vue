@@ -105,12 +105,12 @@ export default {
       // axios.post(this.$props.serverUri + '/signIn', params, config)
       this.$http.post(this.$props.serverUri + '/signIn', params, config)
         .then(response => {
-          console.log(response)
           const token = response.headers['x-auth-token']
           localStorage.setItem('sformToken', token)
           this.$emit('updateIsAdmin', true)
-          this.$router.push({ path: 'formlist', params: { serverUri: this.$props.serverUri } })
+          this.$router.push({ path: 'formlist', params: { serverUri: this.$props.serverUri } }).catch(err => { console.log(err) })
         })
+        .catch(err => { console.log(err.response) })
     }
   }
 }

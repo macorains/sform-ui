@@ -16,7 +16,7 @@ http.interceptors.response.use(function (response) { return response }, function
         fullWidth: true,
         type: 'error',
         onComplete: function () {
-          router.push({ path: '/signin' })
+          router.push({ path: '/signIn' }).catch(err => { console.log(err) })
         }
       }
       Vue.toasted.show('エラーが発生しました', options)
@@ -37,7 +37,7 @@ http.interceptors.response.use(function (response) { return response }, function
               fullWidth: true,
               type: 'error',
               onComplete: function () {
-                router.push({ path: '/signin' })
+                router.push({ path: '/signIn' }).catch(err => { console.log(err) })
               }
             }
             Vue.toasted.show('サインインしてください', options)
