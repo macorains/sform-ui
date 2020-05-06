@@ -135,10 +135,12 @@ export default {
         'Access-Control-Allow-Origin': this.$data.serverUri
       }
     }
-    this.$http.get(this.$data.serverUri + '/user/isadmin', config)
-      .then(response => {
-        this.$data.isAdmin = true
-      })
+    if (token) {
+      this.$http.get(this.$data.serverUri + '/user/isadmin', config)
+        .then(response => {
+          this.$data.isAdmin = true
+        })
+    }
   },
   methods: {
     updateHashedFormId: function (hashedFormId) {

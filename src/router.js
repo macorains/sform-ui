@@ -8,6 +8,7 @@ import FormEdit from '@/components/FormEdit.vue'
 import Admin from '@/components/admin/Admin.vue'
 import Help from '@/components/help/Help.vue'
 import DataView from '@/components/dataview/DataView.vue'
+import CreateAdmin from '@/components/CreateAdmin.vue'
 
 Vue.use(VueRouter)
 
@@ -44,6 +45,11 @@ var router = new VueRouter({
     path: '/dataview',
     name: 'dataview',
     component: DataView
+  },
+  {
+    path: '/createadmin',
+    name: 'createadmin',
+    component: CreateAdmin
   }
   ]
 })
