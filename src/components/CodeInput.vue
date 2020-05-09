@@ -46,12 +46,31 @@ export default {
   },
   data: function () {
     return {
-      code: ''
+      code: '',
+      formToken: ''
     }
+  },
+  created: function () {
+    this.$data.formToken = this.$route.params.formToken
   },
   methods: {
     send: function (event) {
-      console.log('!')
+      const config = {
+        headers: {
+          'x-Requested-With': '*',
+          'Access-Control-Allow-Origin': this.$props.serverUri
+        }
+      }
+      var reqdata = {
+        form_token: this.$data.formToken,
+        verification_code: this.$data.code
+      }
+      this.$http.post(this.$props.serverUri + '/verification', reqdata, config)
+        .then(response => {
+          const token = response.headers['x-auth-token']
+          localStorage.setItem('sformToken', token)
+          this.$router.push({ path: 'formlist', params: { serverUri: this.$props.serverUri } })
+        })
     }
   }
 }
