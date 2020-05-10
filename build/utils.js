@@ -1,5 +1,6 @@
 var path = require('path')
 var config = require('../config')
+var MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 exports.assetsPath = function (_path) {
   var assetsSubDirectory = process.env.NODE_ENV === 'production'
