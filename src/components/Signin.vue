@@ -58,7 +58,6 @@
 </template>
 
 <script>
-// import axios from 'axios'
 export default {
   name: 'Signin',
   props: {
@@ -84,7 +83,6 @@ export default {
     }
     this.$http.get(this.$props.serverUri + '/adminExistsCheck', config)
       .then(response => {
-        console.log(response.data.result)
         if (response.data.result === false) {
           this.$router.push({ path: 'createadmin', params: {} })
         }
@@ -102,13 +100,10 @@ export default {
       params.append('email', this.email)
       params.append('group', this.group)
       params.append('password', this.password)
-      // axios.post(this.$props.serverUri + '/signIn', params, config)
       this.$http.post(this.$props.serverUri + '/signIn', params, config)
         .then(response => {
-          const token = response.headers['x-auth-token']
-          localStorage.setItem('sformToken', token)
           this.$emit('updateIsAdmin', true)
-          this.$router.push({ path: 'formlist', params: { serverUri: this.$props.serverUri } }).catch(err => { console.log(err) })
+          this.$router.push({ name: 'codeinput', params: { formToken: response.data.formToken, serverUri: this.$props.serverUri } }).catch(err => { console.log(err) })
         })
         .catch(err => { console.log(err.response) })
     }
