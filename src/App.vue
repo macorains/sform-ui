@@ -123,10 +123,22 @@ export default {
       serverUri: process.env.VUE_APP_API_URL,
       hashedFormId: '',
       isAdmin: false,
-      axiosTimeout: 3000
+      axiosTimeout: 3000,
+      errorMessage: 'Error!!!'
     }
   },
   created: function () {
+    console.log(this)
+    window.addEventListener('error', event => {
+      this.$bvModal.msgBoxOk('Error!')
+      console.log(event)
+    })
+
+    window.addEventListener('unhandledrejection', event => {
+      this.$bvModal.msgBoxOk('Error!!!')
+      console.log(event)
+    })
+
     var token = localStorage.getItem('sformToken')
     var config = {
       headers: {
