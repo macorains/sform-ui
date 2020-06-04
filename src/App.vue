@@ -128,15 +128,16 @@ export default {
     }
   },
   created: function () {
-    console.log(this)
     window.addEventListener('error', event => {
-      this.$bvModal.msgBoxOk('Error!')
-      console.log(event)
+      this.$bvModal.msgBoxOk(this.convertMessage(event), {
+        title: 'Error'
+      })
     })
 
     window.addEventListener('unhandledrejection', event => {
-      this.$bvModal.msgBoxOk('Error!!!')
-      console.log(event)
+      this.$bvModal.msgBoxOk(this.convertMessage(event), {
+        title: 'Error'
+      })
     })
 
     var token = localStorage.getItem('sformToken')
@@ -181,6 +182,16 @@ export default {
         res = false
       }
       return res
+    },
+    convertMessage: function (evt) {
+      const msg = evt.reason.response.data.message
+      const statusCode = evt.reason.response.status
+      if (statusCode === 400) {
+        if (msg.indexOf('InvalidPasswordException') > 0) {
+          return 'ユーザーまたはグループが存在しないかパスワードが間違えています'
+        }
+      }
+      return 'Undefined Error'
     }
   }
 }
