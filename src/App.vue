@@ -124,20 +124,26 @@ export default {
       hashedFormId: '',
       isAdmin: false,
       axiosTimeout: 3000,
-      errorMessage: 'Error!!!'
+      errorMessage: this.$i18n.t('message.error')
     }
   },
   created: function () {
     window.addEventListener('error', event => {
       this.$bvModal.msgBoxOk(this.convertMessage(event), {
-        title: 'Error'
+        title: this.$i18n.t('message.error')
       })
+      if (event.reason.response.status === 401 || event.reason.response.status === 403) {
+        this.$router.push({ path: 'signin' })
+      }
     })
 
     window.addEventListener('unhandledrejection', event => {
       this.$bvModal.msgBoxOk(this.convertMessage(event), {
-        title: 'Error'
+        title: this.$i18n.t('message.error')
       })
+      if (event.reason.response.status === 401 || event.reason.response.status === 403) {
+        this.$router.push({ path: 'signin' })
+      }
     })
 
     var token = localStorage.getItem('sformToken')
@@ -149,10 +155,12 @@ export default {
       }
     }
     if (token) {
-      this.$http.get(this.$data.serverUri + '/user/isadmin', config)
-        .then(response => {
-          this.$data.isAdmin = true
-        })
+      if (this.$route.path !== '/') {
+        this.$http.get(this.$data.serverUri + '/user/isadmin', config)
+          .then(response => {
+            this.$data.isAdmin = true
+          })
+      }
     }
   },
   methods: {
@@ -188,10 +196,16 @@ export default {
       const statusCode = evt.reason.response.status
       if (statusCode === 400) {
         if (msg.indexOf('InvalidPasswordException') > 0) {
-          return 'ユーザーまたはグループが存在しないかパスワードが間違えています'
+          return this.$i18n.t('message.error_invalid_password_exception')
+        }
+        if (msg === 'LoginFailureLimitExceeded') {
+          return this.$i18n.t('message.error_login_failure_limit_exceeded')
         }
       }
-      return 'Undefined Error'
+      if (statusCode === 401 || statusCode === 403) {
+        return this.$i18n.t('message.error_authorization')
+      }
+      return this.$i18n.t('message.error_undefined')
     }
   }
 }

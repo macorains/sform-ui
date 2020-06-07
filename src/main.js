@@ -20,8 +20,11 @@ const data = require('./message.json')
 Vue.use(VueI18n)
 const i18n = new VueI18n({
   locale: 'ja',
+  fallbackLocale: 'ja',
   messages: data
 })
+
+Vue.config.lang = 'ja'
 
 Vue.config.errorHandler = function (e, vm, info) {
   console.log('*** error ***')
