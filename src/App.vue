@@ -123,10 +123,29 @@ export default {
       serverUri: process.env.VUE_APP_API_URL,
       hashedFormId: '',
       isAdmin: false,
-      axiosTimeout: 3000
+      axiosTimeout: 3000,
+      errorMessage: this.$i18n.t('message.error')
     }
   },
   created: function () {
+    window.addEventListener('error', event => {
+      this.$bvModal.msgBoxOk(this.convertMessage(event), {
+        title: this.$i18n.t('message.error')
+      })
+      if (event.reason.response.status === 401 || event.reason.response.status === 403) {
+        this.$router.push({ path: 'signin' })
+      }
+    })
+
+    window.addEventListener('unhandledrejection', event => {
+      this.$bvModal.msgBoxOk(this.convertMessage(event), {
+        title: this.$i18n.t('message.error')
+      })
+      if (event.reason.response.status === 401 || event.reason.response.status === 403) {
+        this.$router.push({ path: 'signin' })
+      }
+    })
+
     var token = localStorage.getItem('sformToken')
     var config = {
       headers: {
@@ -136,10 +155,12 @@ export default {
       }
     }
     if (token) {
-      this.$http.get(this.$data.serverUri + '/user/isadmin', config)
-        .then(response => {
-          this.$data.isAdmin = true
-        })
+      if (this.$route.path !== '/') {
+        this.$http.get(this.$data.serverUri + '/user/isadmin', config)
+          .then(response => {
+            this.$data.isAdmin = true
+          })
+      }
     }
   },
   methods: {
@@ -169,6 +190,22 @@ export default {
         res = false
       }
       return res
+    },
+    convertMessage: function (evt) {
+      const msg = evt.reason.response.data.message
+      const statusCode = evt.reason.response.status
+      if (statusCode === 400) {
+        if (msg.indexOf('InvalidPasswordException') > 0) {
+          return this.$i18n.t('message.error_invalid_password_exception')
+        }
+        if (msg === 'LoginFailureLimitExceeded') {
+          return this.$i18n.t('message.error_login_failure_limit_exceeded')
+        }
+      }
+      if (statusCode === 401 || statusCode === 403) {
+        return this.$i18n.t('message.error_authorization')
+      }
+      return this.$i18n.t('message.error_undefined')
     }
   }
 }

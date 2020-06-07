@@ -167,16 +167,16 @@ export default {
         timeout: 3000
       }
     }
-    if (token) {
-      this.$data.loading = true
-      this.$http.get(this.$props.serverUri + '/form/list', this.$data.config)
-        .then(response => {
-          this.$data.loading = false
-          this.$data.formList = JSON.parse(response.data.dataset)
-        })
-    } else {
-      this.$router.push({ path: '/signin' })
-    }
+    // if (token) {
+    this.$data.loading = true
+    this.$http.get(this.$props.serverUri + '/form/list', this.$data.config)
+      .then(response => {
+        this.$data.loading = false
+        this.$data.formList = JSON.parse(response.data.dataset)
+      })
+    // } else {
+    //   this.$router.push({ path: '/signin' })
+    // }
   },
   methods: {
     edit: function (hashedId) {

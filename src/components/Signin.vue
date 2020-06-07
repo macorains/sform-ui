@@ -105,7 +105,6 @@ export default {
           this.$emit('updateIsAdmin', true)
           this.$router.push({ name: 'codeinput', params: { formToken: response.data.formToken, serverUri: this.$props.serverUri } }).catch(err => { console.log(err) })
         })
-        .catch(err => { console.log(err.response) })
     }
   }
 }

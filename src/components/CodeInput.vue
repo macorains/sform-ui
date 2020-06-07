@@ -65,8 +65,10 @@ export default {
         form_token: this.$data.formToken,
         verification_code: this.$data.code
       }
+      console.log(reqdata)
       this.$http.post(this.$props.serverUri + '/verification', reqdata, config)
         .then(response => {
+          console.log(response)
           const token = response.headers['x-auth-token']
           localStorage.setItem('sformToken', token)
           this.$router.push({ path: 'formlist', params: { serverUri: this.$props.serverUri } })
