@@ -132,18 +132,22 @@ export default {
       this.$bvModal.msgBoxOk(this.convertMessage(event), {
         title: this.$i18n.t('message.error')
       })
-      if (event.reason.response.status === 401 || event.reason.response.status === 403) {
-        this.$router.push({ path: 'signin' })
-      }
+        .then(trigger => {
+          if (event.reason.response.status === 401 || event.reason.response.status === 403) {
+            this.$router.push({ path: 'signin' })
+          }
+        })
     })
 
     window.addEventListener('unhandledrejection', event => {
       this.$bvModal.msgBoxOk(this.convertMessage(event), {
         title: this.$i18n.t('message.error')
       })
-      if (event.reason.response.status === 401 || event.reason.response.status === 403) {
-        this.$router.push({ path: 'signin' })
-      }
+        .then(trigger => {
+          if (event.reason.response.status === 401 || event.reason.response.status === 403) {
+            this.$router.push({ path: 'signin' })
+          }
+        })
     })
 
     var token = localStorage.getItem('sformToken')
@@ -155,7 +159,7 @@ export default {
       }
     }
     if (token) {
-      if (this.$route.path !== '/') {
+      if (this.$route.path !== '/' || this.$route.path !== '/signin') {
         this.$http.get(this.$data.serverUri + '/user/isadmin', config)
           .then(response => {
             this.$data.isAdmin = true
