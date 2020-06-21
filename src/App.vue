@@ -124,7 +124,8 @@ export default {
       hashedFormId: '',
       isAdmin: false,
       axiosTimeout: 3000,
-      errorMessage: this.$i18n.t('message.error')
+      errorMessage: this.$i18n.t('message.error'),
+      noMenuPages: ['/signin', '/help', '/codeinput', '/']
     }
   },
   created: function () {
@@ -163,7 +164,7 @@ export default {
       }
     }
     if (token) {
-      if (this.$route.path !== '/' || this.$route.path !== '/signin') {
+      if (this.$route.path !== '/' && this.$route.path !== '/signin') {
         this.$http.get(this.$data.serverUri + '/user/isadmin', config)
           .then(response => {
             this.$data.isAdmin = true
@@ -194,7 +195,7 @@ export default {
     },
     isMenuValid: function () {
       var res = true
-      if (this.$route.path === '/signin' || this.$route.path === '/help' || this.$route.path === '/codeinput') {
+      if (this.$data.noMenuPages.indexOf(this.$route.path) >= 0) {
         res = false
       }
       return res
