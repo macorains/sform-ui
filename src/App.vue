@@ -140,7 +140,7 @@ export default {
     })
 
     window.addEventListener('unhandledrejection', event => {
-      if (this.$rout.path === '/user/isadmin') {
+      if (this.$route.path === '/user/isadmin') {
         this.$data.isAdmin = false
       } else {
         this.$bvModal.msgBoxOk(this.convertMessage(event), {
@@ -194,7 +194,7 @@ export default {
     },
     isMenuValid: function () {
       var res = true
-      if (this.$route.path === '/signin' || this.$route.path === '/help') {
+      if (this.$route.path === '/signin' || this.$route.path === '/help' || this.$route.path === '/codeinput') {
         res = false
       }
       return res
@@ -208,6 +208,9 @@ export default {
         }
         if (msg === 'LoginFailureLimitExceeded') {
           return this.$i18n.t('message.error_login_failure_limit_exceeded')
+        }
+        if (msg === 'Invalid Verification Request' || msg === 'Verification Timeout') {
+          return this.$i18n.t('message.error_verification_failed')
         }
       }
       if (statusCode === 401 || statusCode === 403) {
