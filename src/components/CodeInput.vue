@@ -8,7 +8,7 @@
             :title="$t('message.code_input')"
           >
             <p class="card-text pt-4">
-              <b-form>
+              <b-form @submit.stop.prevent>
                 <b-form-group
                   id="codeGroup"
                   label-for="code"
@@ -25,6 +25,12 @@
                   @click="send"
                 >
                   {{ $t('message.send') }}
+                </b-button>
+                <b-button
+                  class="mt-4"
+                  @click="resignin"
+                >
+                  {{ $t('message.re_signin') }}
                 </b-button>
               </b-form>
             </p>
@@ -65,7 +71,6 @@ export default {
         form_token: this.$data.formToken,
         verification_code: this.$data.code
       }
-      console.log(reqdata)
       this.$http.post(this.$props.serverUri + '/verification', reqdata, config)
         .then(response => {
           console.log(response)
@@ -73,6 +78,9 @@ export default {
           localStorage.setItem('sformToken', token)
           this.$router.push({ path: 'formlist', params: { serverUri: this.$props.serverUri } })
         })
+    },
+    resignin: function () {
+      this.$router.push({ path: 'signin', params: { serverUri: this.$props.serverUri } })
     }
   }
 }
