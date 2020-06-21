@@ -163,8 +163,7 @@ export default {
       }
     }
     if (token) {
-      console.log('path:' + this.$route.path)
-      if (this.$route.path !== '/' || this.$route.path !== '/signin') {
+      if (this.$route.path !== '/' && this.$route.path !== '/signin') {
         this.$http.get(this.$data.serverUri + '/user/isadmin', config)
           .then(response => {
             this.$data.isAdmin = true
