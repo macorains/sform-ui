@@ -187,8 +187,8 @@ export default {
         status: 0,
         name: this.$data.addedFormName,
         title: this.$data.addedFormName,
-        cancel_url: '',
-        complete_url: '',
+        cancel_url: 'https://',
+        complete_url: 'https://',
         input_header: '',
         confirm_header: '',
         complete_text: '',
@@ -212,16 +212,12 @@ export default {
           }
         ]
       }
-      // var reqdata = {
-      //   objtype: 'Form',
-      //   action: 'create',
-      //   rcdata: { formDef: tmp, transferTasks: {} }
-      // }
       this.$data.loading = true
       this.$http.post(this.$props.serverUri + '/form/new', tmp, this.$data.config)
         .then(response => {
+          // TODO この辺りは新規データをリストに入れる形ではなくて、リロードした方が良さそう
           this.$data.loading = false
-          var data = response.data.dataset
+          var data = response.data
           tmp.id = data.id
           tmp.hashed_id = data.hashed_id
           this.$data.modalFormAddComplete = true
