@@ -170,7 +170,7 @@ export default {
     this.$http.get(this.$props.serverUri + '/form/list', this.$data.config)
       .then(response => {
         this.$data.loading = false
-        this.$data.formList = JSON.parse(response.data.dataset)
+        this.$data.formList = response.data.forms
       })
   },
   methods: {
@@ -182,48 +182,43 @@ export default {
       var i = Object.keys(this.$data.formList).length
       this.$data.addedFormName = 'フォーム' + i
       var tmp = {
-        index: i + '',
+        form_index: i,
         id: '',
-        status: '0',
+        status: 0,
         name: this.$data.addedFormName,
         title: this.$data.addedFormName,
-        extLink1: false,
-        cancelUrl: '',
-        completeUrl: '',
-        inputHeader: '',
-        confirmHeader: '',
-        completeText: '',
-        closeText: '',
-        replymailFrom: '',
-        replymailSubject: '',
-        replymailText: '',
-        noticemailSend: '',
-        noticemailText: '',
-        formCols: {
-          0: {
-            index: '0',
+        cancel_url: '',
+        complete_url: '',
+        input_header: '',
+        confirm_header: '',
+        complete_text: '',
+        close_text: '',
+        form_cols: [
+          {
+            col_index: 0,
             name: 'メールアドレス',
-            colId: 'email',
-            coltype: '1',
-            default: '',
+            col_id: 'email',
+            col_type: 1,
+            default_value: '',
+            select_list: [],
             validations: {
-              inputType: '5',
-              minValue: '0',
-              maxValue: '0',
-              minLength: '0',
-              maxLength: '0',
+              input_type: 5,
+              min_value: 0,
+              max_value: 0,
+              min_length: 0,
+              max_length: 0,
               required: true
             }
           }
-        }
+        ]
       }
-      var reqdata = {
-        objtype: 'Form',
-        action: 'create',
-        rcdata: { formDef: tmp, transferTasks: {} }
-      }
+      // var reqdata = {
+      //   objtype: 'Form',
+      //   action: 'create',
+      //   rcdata: { formDef: tmp, transferTasks: {} }
+      // }
       this.$data.loading = true
-      this.$http.post(this.$props.serverUri + '/form', reqdata, this.$data.config)
+      this.$http.post(this.$props.serverUri + '/form/new', tmp, this.$data.config)
         .then(response => {
           this.$data.loading = false
           var data = response.data.dataset

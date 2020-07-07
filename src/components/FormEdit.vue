@@ -150,25 +150,25 @@
               </thead>
               <tbody>
                 <tr
-                  v-for="item in formData.formCols"
+                  v-for="item in formData.form_cols"
                   :key="item.index"
                 >
                   <th scope="row">
-                    {{ Number(item.index)+1 }}
+                    {{ Number(item.col_index)+1 }}
                   </th>
                   <td>
                     {{ item.name }}
                   </td>
                   <td>
-                    {{ item.colId }}
+                    {{ item.col_id }}
                   </td>
                   <td>
-                    {{ colTypeName(item.coltype) }}
+                    {{ colTypeName(item.col_type) }}
                   </td>
                   <td>
                     <b-btn
                       size="sm"
-                      @click="startEditCol(item.index)"
+                      @click="startEditCol(item.col_index)"
                     >
                       <span
                         class="oi oi-pencil"
@@ -179,7 +179,7 @@
                     </b-btn>
                     <b-btn
                       size="sm"
-                      @click="deleteCol(item.index)"
+                      @click="deleteCol(item.col_index)"
                     >
                       <span
                         class="oi oi-trash"
@@ -227,7 +227,7 @@
           <b-col>
             <!-- フォーム項目並び替え -->
             <formColEditOrder
-              :form-col-data="formData.formCols"
+              :form-col-data="formData.form_cols"
               :form-col-edit-order-modal-state="formColEditOrderModalState"
               @reorderColEnd="reorderColEnd"
             />
@@ -236,12 +236,14 @@
         <b-row class="mt-5">
           <b-col>
             <!-- Transfer設定 -->
+            <!--
             <transfers
               :server-uri="serverUri"
               :hashed-form-id="hashedFormId"
               :form-cols="formData.formCols"
               @updateTransferTask="updateTransferTask"
             />
+            -->
           </b-col>
         </b-row>
         <b-row class="mt-3 border-top">
@@ -296,7 +298,7 @@
             <b-col>
               <b-form-input
                 id="formColId"
-                v-model="formColData.colId"
+                v-model="formColData.col_id"
                 type="text"
               />
             </b-col>
@@ -307,7 +309,7 @@
             </b-col>
             <b-col>
               <b-form-select
-                v-model="formColData.coltype"
+                v-model="formColData.col_type"
                 :options="optionFormColType"
                 class="mb-3"
               />
@@ -337,31 +339,31 @@
                 </thead>
                 <tbody>
                   <tr
-                    v-for="(item, index) in formColData.selectList"
-                    :key="item.index"
+                    v-for="(item, index) in formColData.select_list"
+                    :key="item.select_index"
                   >
                     <th scope="row">
                       {{ Number(index) + 1 }}
                     </th>
                     <td>
                       <span v-show="!item.inEdit">
-                        {{ item.displayText }}
+                        {{ item.select_name }}
                       </span>
                       <b-form-input
                         v-show="item.inEdit"
                         id="displayText"
-                        v-model="item.displayText"
+                        v-model="item.select_name"
                         type="text"
                       />
                     </td>
                     <td>
                       <span v-show="!item.inEdit">
-                        {{ item.value }}
+                        {{ item.select_value }}
                       </span>
                       <b-form-input
                         v-show="item.inEdit"
                         id="value"
-                        v-model="item.value"
+                        v-model="item.select_value"
                         type="text"
                       />
                     </td>
@@ -438,7 +440,7 @@
             </b-col>
             <b-col>
               <b-form-select
-                v-model="formColData.validations.inputType"
+                v-model="formColData.validations.input_type"
                 :options="optionFormColValidation"
                 class="mb-3"
               />
@@ -451,7 +453,7 @@
             <b-col cols="2">
               <b-form-input
                 id="formColValidationMinValue"
-                v-model="formColData.validations.minValue"
+                v-model="formColData.validations.min_value"
                 type="text"
               />
             </b-col>
@@ -461,7 +463,7 @@
             <b-col cols="2">
               <b-form-input
                 id="formColValidationMaxValue"
-                v-model="formColData.validations.maxValue"
+                v-model="formColData.validations.max_value"
                 type="text"
               />
             </b-col>
@@ -474,7 +476,7 @@
             <b-col cols="2">
               <b-form-input
                 id="formColValidationMinLength"
-                v-model="formColData.validations.minLength"
+                v-model="formColData.validations.min_length"
                 type="text"
               />
             </b-col>
@@ -484,7 +486,7 @@
             <b-col cols="2">
               <b-form-input
                 id="formColValidationMaxLength"
-                v-model="formColData.validations.maxLength"
+                v-model="formColData.validations.max_length"
                 type="text"
               />
             </b-col>
@@ -531,12 +533,12 @@
 <script>
 import 'open-iconic/font/css/open-iconic-bootstrap.css'
 import FormColEditOrder from './FormColEditOrder.vue'
-import Transfers from './transfer/Transfers.vue'
+// import Transfers from './transfer/Transfers.vue'
 
 export default {
   name: 'FormEdit',
   components: {
-    transfers: Transfers,
+    // transfers: Transfers,
     formColEditOrder: FormColEditOrder
   },
   props: {
@@ -592,18 +594,16 @@ export default {
     }
     this.$http.get(this.$props.serverUri + '/form/' + this.$props.hashedFormId, this.$data.config)
       .then(response => {
-        this.$data.formData = response.data.dataset
+        this.$data.formData = response.data
       })
   },
   methods: {
     save: function () {
-      var reqdata = {
-        objtype: 'Form',
-        action: 'create',
-        rcdata: { formDef: this.$data.formData, transferTasks: this.$data.transferTask }
-      }
-      this.$http.post(this.$props.serverUri + '/form', reqdata, this.$data.config)
-      this.$router.push({ path: 'formlist', params: { serverUri: this.$props.serverUri } })
+      const op = (!this.$data.formData.id) ? '/form/new' : '/form'
+      this.$http.post(this.$props.serverUri + op, this.$data.formData, this.$data.config)
+        .then(response => {
+          this.$router.push({ path: 'formlist', params: { serverUri: this.$props.serverUri } })
+        })
     },
     cancel: function () {
       this.$router.push({ path: 'formlist', params: { serverUri: this.$props.serverUri } })
@@ -628,7 +628,8 @@ export default {
       this.$set(this.$data.formData.formCols, i, tmp)
     },
     startEditCol: function (index) {
-      this.$data.formColData = this.$data.formData.formCols[index]
+      console.log(index)
+      this.$data.formColData = this.$data.formData.form_cols[index]
       this.$refs.modalColedit.show()
     },
     endEditCol: function () {

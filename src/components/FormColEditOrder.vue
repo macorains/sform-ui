@@ -45,8 +45,8 @@ export default {
   },
   props: {
     formColData: {
-      type: Object,
-      default: () => ({})
+      type: Array,
+      default: () => ([])
     },
     formColEditOrderModalState: {
       type: Number,
