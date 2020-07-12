@@ -613,16 +613,20 @@ export default {
         col_index: i,
         name: '項目' + colNum,
         col_id: 'col' + colNum,
-        col_type: '1',
+        col_type: 1,
         default_value: '',
+        form_id: this.$data.formData.id,
+        id: null,
         validations: {
-          inputType: '0',
-          minValue: '0',
-          maxValue: '0',
-          minLength: '0',
-          maxLength: '0'
+          input_type: 0,
+          min_value: 0,
+          max_value: 0,
+          min_length: 0,
+          max_length: 0,
+          form_col_id: null,
+          form_id: this.$data.formData.id
         },
-        selectList: []
+        select_list: []
       }
       this.$set(this.$data.formData.form_cols, i, tmp)
     },
