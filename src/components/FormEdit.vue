@@ -607,13 +607,14 @@ export default {
       this.$router.push({ path: 'formlist', params: { serverUri: this.$props.serverUri } })
     },
     addFormCol: function () {
-      var i = Object.keys(this.$data.formData.formCols).length
+      var i = Object.keys(this.$data.formData.form_cols).length
+      var colNum = i + 1
       var tmp = {
-        index: i + '',
-        name: '項目' + i,
-        colId: 'col' + i,
-        coltype: '1',
-        default: '',
+        col_index: i,
+        name: '項目' + colNum,
+        col_id: 'col' + colNum,
+        col_type: '1',
+        default_value: '',
         validations: {
           inputType: '0',
           minValue: '0',
@@ -621,12 +622,11 @@ export default {
           minLength: '0',
           maxLength: '0'
         },
-        selectList: {}
+        selectList: []
       }
-      this.$set(this.$data.formData.formCols, i, tmp)
+      this.$set(this.$data.formData.form_cols, i, tmp)
     },
     startEditCol: function (index) {
-      console.log(index)
       this.$data.formColData = this.$data.formData.form_cols[index]
       this.$refs.modalColedit.show()
     },
