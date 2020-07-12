@@ -11,7 +11,7 @@
             転送名
           </th>
           <th scope="col">
-            転送タイプ
+            転送設定
           </th>
           <th scope="col">
             操作
@@ -20,7 +20,7 @@
       </thead>
       <tbody>
         <tr
-          v-for="(task, index) in filteredTransferTaskList"
+          v-for="(task, index) in formData.transfer_tasks"
           :key="task.id"
         >
           <th scope="row">
@@ -56,8 +56,13 @@
       </tbody>
     </table>
     <b-container class="text-right">
-      <b-row class="text-right">
-        <b-col cols="7" />
+      <b-row class="alert alert-info">
+        <b-col
+          cols="7"
+          class="text-left"
+        >
+          {{ $t('message.add_transfer_task') }}
+        </b-col>
         <b-col
           cols="3"
           class="text-right"
@@ -84,6 +89,7 @@
         </b-col>
       </b-row>
     </b-container>
+    <!--
     <salesforceTransferEdit
       ref="salesforceTransferEdit"
       :hashed-form-id="hashedFormId"
@@ -104,6 +110,7 @@
       @transferEditModalClose="transferEditModalClose"
       @setDefault="setDefault"
     />
+    -->
     <transferTaskDeleteModal
       ref="transferTaskDeleteModal"
       :index="selectedTransferTask"
@@ -115,15 +122,15 @@
 </template>
 <script>
 import axios from 'axios'
-import SalesforceTransferEdit from './SalesforceTransferEdit.vue'
-import MailTransferEdit from './MailTransferEdit.vue'
+// import SalesforceTransferEdit from './SalesforceTransferEdit.vue'
+// import MailTransferEdit from './MailTransferEdit.vue'
 import TransferTaskDeleteModal from './TransferTaskDeleteModal.vue'
 
 export default {
   name: 'Transfers',
   components: {
-    salesforceTransferEdit: SalesforceTransferEdit,
-    mailTransferEdit: MailTransferEdit,
+    // salesforceTransferEdit: SalesforceTransferEdit,
+    // mailTransferEdit: MailTransferEdit,
     transferTaskDeleteModal: TransferTaskDeleteModal
   },
   props: {
@@ -135,14 +142,14 @@ export default {
       type: String,
       default: ''
     },
-    formCols: {
+    formData: {
       type: Object,
       default: () => ({})
     }
   },
   data: function () {
     return {
-      transferTask: [],
+      // transferTask: [],
       transferList: [],
       transferEditModalState: [],
       transferTaskDeleteModalState: 0,
@@ -171,14 +178,10 @@ export default {
       }
     }
     if (this.$props.hashedFormId) {
-      axios.get(this.$props.serverUri + '/transfertask/list/' + this.$props.hashedFormId, this.$data.config)
-        .then(response => {
-          this.$data.transferTask = response.data.dataset
-        })
-      axios.get(this.$props.serverUri + '/transfer', this.$data.config)
+      axios.get(this.$props.serverUri + '/transfer/selectlist', this.$data.config)
         .then(response => {
           this.$data.transferList = response.data
-          this.$data.optionTransferType = this.$data.transferList.map(tr => ({ value: tr.type_id, text: tr.name }))
+          this.$data.optionTransferType = this.$data.transferList.map(tr => ({ value: tr.id, text: tr.name }))
         })
     }
   },
