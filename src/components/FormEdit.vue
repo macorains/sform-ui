@@ -284,7 +284,7 @@
             <b-col>
               <b-form-input
                 id="formColName"
-                v-model="formColData.name"
+                v-model="formData.form_cols[inEditFormColIndex].name"
                 type="text"
               />
             </b-col>
@@ -296,7 +296,7 @@
             <b-col>
               <b-form-input
                 id="formColId"
-                v-model="formColData.col_id"
+                v-model="formData.form_cols[inEditFormColIndex].col_id"
                 type="text"
               />
             </b-col>
@@ -307,7 +307,7 @@
             </b-col>
             <b-col>
               <b-form-select
-                v-model="formColData.col_type"
+                v-model="formData.form_cols[inEditFormColIndex].col_type"
                 :options="optionFormColType"
                 class="mb-3"
               />
@@ -337,7 +337,7 @@
                 </thead>
                 <tbody>
                   <tr
-                    v-for="(item, index) in formColData.select_list"
+                    v-for="(item, index) in formData.form_cols[inEditFormColIndex].select_list"
                     :key="item.select_index"
                   >
                     <th scope="row">
@@ -427,7 +427,7 @@
             <b-col>
               <b-form-input
                 id="formColDefault"
-                v-model="formColData.default"
+                v-model="formData.form_cols[inEditFormColIndex].default"
                 type="text"
               />
             </b-col>
@@ -438,7 +438,7 @@
             </b-col>
             <b-col>
               <b-form-select
-                v-model="formColData.validations.input_type"
+                v-model="formData.form_cols[inEditFormColIndex].validations.input_type"
                 :options="optionFormColValidation"
                 class="mb-3"
               />
@@ -451,7 +451,7 @@
             <b-col cols="2">
               <b-form-input
                 id="formColValidationMinValue"
-                v-model="formColData.validations.min_value"
+                v-model="formData.form_cols[inEditFormColIndex].validations.min_value"
                 type="text"
               />
             </b-col>
@@ -461,7 +461,7 @@
             <b-col cols="2">
               <b-form-input
                 id="formColValidationMaxValue"
-                v-model="formColData.validations.max_value"
+                v-model="formData.form_cols[inEditFormColIndex].validations.max_value"
                 type="text"
               />
             </b-col>
@@ -474,7 +474,7 @@
             <b-col cols="2">
               <b-form-input
                 id="formColValidationMinLength"
-                v-model="formColData.validations.min_length"
+                v-model="formData.form_cols[inEditFormColIndex].validations.min_length"
                 type="text"
               />
             </b-col>
@@ -484,7 +484,7 @@
             <b-col cols="2">
               <b-form-input
                 id="formColValidationMaxLength"
-                v-model="formColData.validations.max_length"
+                v-model="formData.form_cols[inEditFormColIndex].validations.max_length"
                 type="text"
               />
             </b-col>
@@ -497,7 +497,7 @@
             <b-col>
               <b-form-checkbox
                 id="formColRequired"
-                v-model="formColData.validations.required"
+                v-model="formData.form_cols[inEditFormColIndex].validations.required"
                 value="true"
                 unchecked-value="false"
               />
@@ -555,6 +555,7 @@ export default {
       formData: {},
       transferTask: {},
       config: {},
+      inEditFormColIndex: 0,
       formColEditOrderModalState: 0,
       optionFormColValidation: [
         { value: '0', text: '無制限' },
@@ -624,13 +625,15 @@ export default {
           min_length: 0,
           max_length: 0,
           form_col_id: null,
-          form_id: this.$data.formData.id
+          form_id: this.$data.formData.id,
+          required: false
         },
         select_list: []
       }
       this.$set(this.$data.formData.form_cols, i, tmp)
     },
     startEditCol: function (index) {
+      this.$data.inEditFormColIndex = index
       this.$data.formColData = this.$data.formData.form_cols[index]
       this.$refs.modalColedit.show()
     },
@@ -638,19 +641,21 @@ export default {
       this.$refs.modalColedit.hide()
     },
     deleteCol: function (index) {
-      this.$delete(this.$data.formData.formCols, index)
+      this.$delete(this.$data.formData.form_cols, index)
     },
     addColSelectList: function () {
-      var colSize = Object.keys(this.$data.formColData.selectList).length
+      // var colSize = Object.keys(this.$data.colData.select_list).length
+      var colSize = Object.keys(this.$data.formData.form_cols[this.$data.inEditFormColIndex].select_list).length
       var tmp = {
-        index: colSize + '',
-        displayText: '選択項目' + colSize,
-        value: colSize + '',
-        default: 'false',
-        viewStyle: 'display:inline',
-        editStyle: 'display:none'
+        select_index: colSize + '',
+        select_name: '選択項目' + colSize,
+        select_value: colSize + '',
+        is_default: 'false',
+        view_style: 'display:inline',
+        edit_style: 'display:none'
       }
-      this.$set(this.$data.formColData.selectList, colSize, tmp)
+      // this.$set(this.$data.colData.select_list, colSize, tmp)
+      this.$set(this.$data.formData.form_cols[this.$data.inEditFormColIndex].select_list, colSize, tmp)
     },
     deleteColSelectList: function (index) {
       this.$delete(this.$data.formColData.selectList, index)
