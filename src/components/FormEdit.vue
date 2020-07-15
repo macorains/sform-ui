@@ -14,7 +14,8 @@
             >
               <b-form-radio-group
                 id="status"
-                v-model="formData.status"
+                v-model.number="formData.status"
+                type="number"
                 name="status"
               >
                 <b-form-radio value="0">
@@ -653,6 +654,7 @@ export default {
         view_style: 'display:inline',
         edit_style: 'display:none'
       }
+      // this.$set(this.$data.colData.select_list, colSize, tmp)
       this.$set(this.$data.formData.form_cols[this.$data.inEditFormColIndex].select_list, colSize, tmp)
     },
     deleteColSelectList: function (index) {
