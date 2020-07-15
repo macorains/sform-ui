@@ -558,13 +558,13 @@ export default {
       inEditFormColIndex: 0,
       formColEditOrderModalState: 0,
       optionFormColValidation: [
-        { value: '0', text: '無制限' },
-        { value: '1', text: '数値のみ' },
-        { value: '2', text: '英数字のみ' },
-        { value: '3', text: 'ひらがなのみ' },
-        { value: '4', text: 'カタカナのみ' },
-        { value: '5', text: 'メールアドレス' },
-        { value: '6', text: '郵便番号' }
+        { value: 0, text: '無制限' },
+        { value: 1, text: '数値のみ' },
+        { value: 2, text: '英数字のみ' },
+        { value: 3, text: 'ひらがなのみ' },
+        { value: 4, text: 'カタカナのみ' },
+        { value: 5, text: 'メールアドレス' },
+        { value: 6, text: '郵便番号' }
       ],
       optionFormColType: [
         { value: '1', text: 'テキスト' },
@@ -644,7 +644,6 @@ export default {
       this.$delete(this.$data.formData.form_cols, index)
     },
     addColSelectList: function () {
-      // var colSize = Object.keys(this.$data.colData.select_list).length
       var colSize = Object.keys(this.$data.formData.form_cols[this.$data.inEditFormColIndex].select_list).length
       var tmp = {
         select_index: colSize + '',
@@ -654,7 +653,6 @@ export default {
         view_style: 'display:inline',
         edit_style: 'display:none'
       }
-      // this.$set(this.$data.colData.select_list, colSize, tmp)
       this.$set(this.$data.formData.form_cols[this.$data.inEditFormColIndex].select_list, colSize, tmp)
     },
     deleteColSelectList: function (index) {
