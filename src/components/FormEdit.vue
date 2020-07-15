@@ -274,7 +274,9 @@
       </b-container>
       <b-modal
         ref="modalColedit"
-        size="lg"
+        centered="true"
+        size="xl"
+        content-class="height:1000px"
         :title="$t('message.edit_form_item')"
       >
         <b-container class="text-left form-col-edit">
@@ -568,13 +570,13 @@ export default {
         { value: 6, text: '郵便番号' }
       ],
       optionFormColType: [
-        { value: '1', text: 'テキスト' },
-        { value: '2', text: 'コンボボックス（単一選択）' },
-        { value: '3', text: 'チェックボックス（複数選択）' },
-        { value: '4', text: 'ラジオボタン（単一選択）' },
-        { value: '5', text: 'テキストエリア' },
-        { value: '6', text: '隠しテキスト' },
-        { value: '7', text: '表示テキスト（非入力項目）' }
+        { value: 1, text: 'テキスト' },
+        { value: 2, text: 'コンボボックス（単一選択）' },
+        { value: 3, text: 'チェックボックス（複数選択）' },
+        { value: 4, text: 'ラジオボタン（単一選択）' },
+        { value: 5, text: 'テキストエリア' },
+        { value: 6, text: '隠しテキスト' },
+        { value: 7, text: '表示テキスト（非入力項目）' }
       ]
     }
   },
@@ -647,10 +649,11 @@ export default {
     addColSelectList: function () {
       var colSize = Object.keys(this.$data.formData.form_cols[this.$data.inEditFormColIndex].select_list).length
       var tmp = {
-        select_index: colSize + '',
+        form_id: this.$data.formData.id,
+        select_index: colSize,
         select_name: '選択項目' + colSize,
         select_value: colSize + '',
-        is_default: 'false',
+        is_default: false,
         view_style: 'display:inline',
         edit_style: 'display:none'
       }
