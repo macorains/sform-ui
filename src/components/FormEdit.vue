@@ -676,10 +676,10 @@ export default {
     },
     reorderColEnd: function (formCols) {
       this.$data.formColEditOrderModalState = 0
-      this.$data.formData.formCols = {}
+      this.$data.formData.form_cols = []
       for (var col in formCols) {
-        this.$data.formData.formCols[col] = formCols[col]
-        this.$data.formData.formCols[col].index = col
+        this.$data.formData.form_cols[col] = formCols[col]
+        this.$data.formData.form_cols[col].col_index = Number(col)
       }
     },
     updateTransferTask: function (transferTask) {
