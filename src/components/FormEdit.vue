@@ -152,7 +152,7 @@
               <tbody>
                 <tr
                   v-for="item in formData.form_cols"
-                  :key="item.index"
+                  :key="item.col_index"
                 >
                   <th scope="row">
                     {{ Number(item.col_index)+1 }}
@@ -274,7 +274,7 @@
       </b-container>
       <b-modal
         ref="modalColedit"
-        centered="true"
+        :centered="true"
         size="xl"
         content-class="height:1000px"
         :title="$t('message.edit_form_item')"
@@ -347,32 +347,30 @@
                       {{ Number(index) + 1 }}
                     </th>
                     <td>
-                      <span v-show="!item.inEdit">
+                      <span v-show="!item.in_edit">
                         {{ item.select_name }}
                       </span>
                       <b-form-input
-                        v-show="item.inEdit"
-                        id="displayText"
+                        v-show="item.in_edit"
                         v-model="item.select_name"
                         type="text"
                       />
                     </td>
                     <td>
-                      <span v-show="!item.inEdit">
+                      <span v-show="!item.in_edit">
                         {{ item.select_value }}
                       </span>
                       <b-form-input
-                        v-show="item.inEdit"
-                        id="value"
+                        v-show="item.in_edit"
                         v-model="item.select_value"
                         type="text"
                       />
                     </td>
                     <td>
                       <b-btn
-                        v-show="!item.inEdit"
+                        v-show="!item.in_edit"
                         size="sm"
-                        @click="deleteColSelectList(item.index)"
+                        @click="deleteColSelectList(item.select_index)"
                       >
                         <span
                           class="oi oi-trash"
@@ -382,9 +380,9 @@
                         {{ $t('message.delete') }}
                       </b-btn>
                       <b-btn
-                        v-show="!item.inEdit"
+                        v-show="!item.in_edit"
                         size="sm"
-                        @click="editColSelectList(item.index)"
+                        @click="editColSelectList(item.select_index)"
                       >
                         <span
                           class="oi oi-x"
@@ -394,9 +392,9 @@
                         {{ $t('message.edit') }}
                       </b-btn>
                       <b-btn
-                        v-show="item.inEdit"
+                        v-show="item.in_edit"
                         size="sm"
-                        @click="endEditColSelectList(item.index)"
+                        @click="endEditColSelectList(item.select_index)"
                       >
                         <span
                           class="oi oi-check"
@@ -657,19 +655,19 @@ export default {
         view_style: 'display:inline',
         edit_style: 'display:none'
       }
-      // this.$set(this.$data.colData.select_list, colSize, tmp)
       this.$set(this.$data.formData.form_cols[this.$data.inEditFormColIndex].select_list, colSize, tmp)
     },
     deleteColSelectList: function (index) {
-      this.$delete(this.$data.formColData.selectList, index)
+      this.$delete(this.$data.formData.form_cols[this.$data.inEditFormColIndex].select_list, index)
     },
     editColSelectList: function (index) {
-      for (var sel in this.$data.formColData.selectList) {
-        this.$set(this.$data.formColData.selectList[sel], 'inEdit', sel === index)
+      const selectList = this.$data.formData.form_cols[this.$data.inEditFormColIndex].select_list
+      for (var sel in selectList) {
+        this.$set(selectList[sel], 'in_edit', selectList[sel].select_index === index)
       }
     },
     endEditColSelectList: function (index) {
-      this.$set(this.$data.formColData.selectList[index], 'inEdit', false)
+      this.$set(this.$data.formData.form_cols[this.$data.inEditFormColIndex].select_list[index], 'in_edit', false)
     },
     reorderColStart: function () {
       this.$data.formColEditOrderModalState = 1
