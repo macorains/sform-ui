@@ -178,7 +178,7 @@ export default {
       }
     }
     if (this.$props.hashedFormId) {
-      axios.get(this.$props.serverUri + '/transfer/selectlist', this.$data.config)
+      axios.get(this.$props.serverUri + '/transfer/config/selectlist', this.$data.config)
         .then(response => {
           this.$data.transferList = response.data
           this.$data.optionTransferType = this.$data.transferList.map(tr => ({ value: tr.id, text: tr.name }))

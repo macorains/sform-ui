@@ -1,42 +1,32 @@
 <template>
   <div class="transferConfig">
     <div class="container">
-      <b-card no-body>
-        <b-tabs
-          pills
-          card
-          vertical
-        >
-          <b-tab
-            title="Salesforce"
-            active
-          >
-            <salesforceTransferConfig :server-uri="serverUri" />
-          </b-tab>
-          <b-tab title="Mail">
-            <mail-transfer-config :server-uri="serverUri" />
-          </b-tab>
-        </b-tabs>
-      </b-card>
     </div>
   </div>
 </template>
-
 <script>
-import SalesforceTransferConfig from './SalesforceTransferConfig.vue'
-import MailTransferConfig from './MailTransferConfig.vue'
-
 export default {
   name: 'TransferConfig',
-  components: {
-    salesforceTransferConfig: SalesforceTransferConfig,
-    mailTransferConfig: MailTransferConfig
-  },
   props: {
     serverUri: {
       type: String,
       default: ''
     }
+  },
+  created: function () {
+    var token = localStorage.getItem('sformToken')
+    this.$data.config = {
+      headers: {
+        'x-Requested-With': '*',
+        'X-Auth-Token': token,
+        'Access-Control-Allow-Origin': this.$props.serverUri,
+        timeout: 3000
+      }
+    }
+    this.$http.get(this.$props.serverUri + '/transfer/config/list', this.$data.config)
+      .then(response => {
+        console.log(response)
+      })
   }
 }
 </script>
