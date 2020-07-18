@@ -27,7 +27,7 @@
             :key="item.config_index"
           >
             <th scope="row">
-              {{ Number(item.config_index) }}
+              {{ Number(item.config_index) + 1 }}
             </th>
             <td>
               {{ item.name }}
@@ -41,7 +41,7 @@
             <td>
               <b-btn
                 size="sm"
-                @click="test(item.col_index)"
+                @click="edit(item.config_index)"
               >
                 <span
                   class="oi oi-pencil"
@@ -49,17 +49,6 @@
                   aria-hidden="true"
                 />
                 {{ $t('message.edit') }}
-              </b-btn>
-              <b-btn
-                size="sm"
-                @click="test(item.col_index)"
-              >
-                <span
-                  class="oi oi-trash"
-                  title="trash"
-                  aria-hidden="true"
-                />
-                {{ $t('message.delete') }}
               </b-btn>
             </td>
           </tr>
@@ -95,13 +84,16 @@ export default {
     this.$http.get(this.$props.serverUri + '/transfer/config/list', this.$data.config)
       .then(response => {
         this.$data.transferConfigList = response.data
-        console.log(response.data)
       })
   },
   methods: {
-    test: function () {
-      alert('!')
+    edit: function (index) {
+      this.$http.get(this.$props.serverUri + '/transfer/config/' + this.$data.transferConfigList[index].id, this.$data.config)
+        .then(response => {
+          console.log(response.data)
+        })
     }
+
   }
 }
 </script>
