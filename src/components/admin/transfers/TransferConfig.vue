@@ -55,11 +55,21 @@
         </tbody>
       </table>
     </div>
+    <mailTransferConfig
+      :server-uri="serverUri"
+      :is-visible="modalState.mail"
+      :transfer-config-id="transferConfigId"
+      @changeModalState="changeModalState"
+    />
   </div>
 </template>
 <script>
+import MailTransferConfig from './MailTransferConfig.vue'
 export default {
   name: 'TransferConfig',
+  components: {
+    mailTransferConfig: MailTransferConfig
+  },
   props: {
     serverUri: {
       type: String,
@@ -68,7 +78,12 @@ export default {
   },
   data: function () {
     return {
-      transferConfigList: []
+      transferConfigList: [],
+      transferConfigId: 0,
+      modalState: {
+        salesforce: false,
+        mail: false
+      }
     }
   },
   created: function () {
@@ -88,10 +103,17 @@ export default {
   },
   methods: {
     edit: function (index) {
-      this.$http.get(this.$props.serverUri + '/transfer/config/' + this.$data.transferConfigList[index].id, this.$data.config)
-        .then(response => {
-          console.log(response.data)
-        })
+      const target = this.$data.transferConfigList[index]
+      this.$data.transferConfigId = target.id
+      this.$data.modalState[target.type_code.toLowerCase()] = true
+      // this.$http.get(this.$props.serverUri + '/transfer/config/' + this.$data.transferConfigList[index].id, this.$data.config)
+      //   .then(response => {
+      //     this.$data.transferConfigDetail = response.data
+      //     this.$data.modalState[this.$data.transferConfigDetail.type_code.toLowerCase()] = true
+      //   })
+    },
+    changeModalState: function (target, state) {
+      this.$data.modalState[target] = state
     }
 
   }

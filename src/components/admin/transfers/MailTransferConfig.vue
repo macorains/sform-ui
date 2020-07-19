@@ -1,152 +1,159 @@
 <template>
-  <div class="mailTransferConfig">
-    <div class="container">
-      <b-card
-        :header="$t('message.sender_mail_addresses')"
-        class="text-left"
-      >
-        <b-row>
-          <b-col cols="1">
-            {{ $t('message.number') }}
-          </b-col>
-          <b-col cols="4">
-            {{ $t('message.name') }}
-          </b-col>
-          <b-col>
-            {{ $t('message.email_address') }}
-          </b-col>
-        </b-row>
-        <b-row
-          v-for="(data, index) in transferConfig.addressList"
-          :key="index"
-          class="mt-1"
-        >
-          <b-col cols="1">
-            {{ index + 1 }}
-          </b-col>
-          <b-col cols="4">
-            {{ data.name }}
-          </b-col>
-          <b-col>
-            {{ data.address }}
-          </b-col>
-        </b-row>
-      </b-card>
-      <b-btn
-        v-b-modal.modal_mail_transfer_config_edit
-        class="mt-3"
-        block
-      >
-        <span
-          class="oi oi-pencil"
-          title="pencil"
-          aria-hidden="true"
-        />
-        {{ $t('message.edit') }}
-      </b-btn>
-    </div>
-    <b-modal
-      id="modal_mail_transfer_config_edit"
-      ref="modalMailTransferConfigEdit"
-      :title="$t('message.mail_transfer_setting')"
-      size="lg"
-      :hide-header-close="true"
-      :hide-footer="true"
-      @shown="modalInit"
-    >
-      <b-container class="text-left">
-        <b-card :header="$t('message.sender_mail_addresses')">
-          <b-row>
-            <b-col cols="1">
-              {{ $t('message.number') }}
-            </b-col>
-            <b-col cols="4">
-              {{ $t('message.name') }}
-            </b-col>
-            <b-col>
-              {{ $t('message.email_address') }}
-            </b-col>
-            <b-col />
-          </b-row>
-          <b-form-row
-            v-for="(data, index) in tmpTransferConfig.addressList"
-            :key="index"
-            class="mt-1"
+  <b-modal
+    id="modal_mail_transfer_config_edit"
+    ref="modalMailTransferConfigEdit"
+    :title="$t('message.mail_transfer_setting')"
+    size="lg"
+    :hide-header-close="true"
+    :visible="isVisible"
+    @close="modalClose()"
+    @hide="modalClose()"
+    @show="modalInit()"
+  >
+    <b-container class="text-left">
+      <b-form-row>
+        <b-col>
+          <b-form-checkbox
+            id="use_cc"
+            v-model="transferConfig.detail.mail.use_cc"
+            name="use_cc"
           >
-            <b-col cols="1">
-              {{ index + 1 }}
-            </b-col>
-            <b-col cols="4">
+            {{ $t('message.use_cc') }}
+          </b-form-checkbox>
+        </b-col>
+      </b-form-row>
+      <b-form-row>
+        <b-col>
+          <b-form-checkbox
+            id="use_bcc"
+            v-model="transferConfig.detail.mail.use_bcc"
+            name="use_bcc"
+          >
+            {{ $t('message.use_bcc') }}
+          </b-form-checkbox>
+        </b-col>
+      </b-form-row>
+      <b-form-row>
+        <b-col>
+          <b-form-checkbox
+            id="use_replyto"
+            v-model="transferConfig.detail.mail.use_replyto"
+            name="use_replyto"
+          >
+            {{ $t('message.use_replyto') }}
+          </b-form-checkbox>
+        </b-col>
+      </b-form-row>
+      <h5 class="mt-3">
+        メールアドレス
+      </h5>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">
+              No.
+            </th>
+            <th scope="col">
+              {{ $t('message.name') }}
+            </th>
+            <th scope="col">
+              {{ $t('message.mail_address') }}
+            </th>
+            <th scope="col">
+              {{ $t('message.action') }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="item in transferConfig.detail.mail.mail_address_list"
+            :key="item.address_index"
+          >
+            <th scope="row">
+              {{ Number(item.address_index) + 1 }}
+            </th>
+            <td>
+              <span v-show="!inEdit || ( inEdit && item.address_index != inEditIndex )">
+                {{ item.name }}
+              </span>
               <b-form-input
-                v-model="data.name"
-                size="sm"
+                v-show="inEdit && item.address_index == inEditIndex"
+                v-model="item.name"
+                type="text"
               />
-            </b-col>
-            <b-col>
+            </td>
+            <td>
+              <span v-show="!inEdit || ( inEdit && item.address_index != inEditIndex )">
+                {{ item.address }}
+              </span>
               <b-form-input
-                v-model="data.address"
-                size="sm"
+                v-show="inEdit && item.address_index == inEditIndex"
+                v-model="item.address"
+                type="text"
               />
-            </b-col>
-            <b-col
-              cols="1"
-              class="text-right"
-            >
+            </td>
+            <td>
               <b-btn
+                v-show="!inEdit"
                 size="sm"
-                @click="deleteAddress(index)"
+                @click="edit(item.address_index)"
               >
                 <span
-                  class="oi oi-trash"
-                  title="trash"
+                  class="oi oi-pencil"
+                  title="pencil"
                   aria-hidden="true"
                 />
-                {{ $t('message.delete') }}
+                {{ $t('message.edit') }}
               </b-btn>
-            </b-col>
-          </b-form-row>
-          <b-form-row class="mt-3">
-            <b-col
-              cols="12"
-              class="text-center"
-            >
               <b-btn
+                v-show="inEdit && item.address_index == inEditIndex"
                 size="sm"
-                @click="addAddress"
+                @click="endEdit(item.address_index)"
               >
                 <span
-                  class="oi oi-plus"
-                  title="plus"
+                  class="oi oi-check"
+                  title="check"
                   aria-hidden="true"
                 />
-                追加
+                {{ $t('message.end_edit') }}
               </b-btn>
-            </b-col>
-          </b-form-row>
-        </b-card>
-        <b-form-row class="mt-5 text-right">
-          <b-col>
-            <b-btn @click="endEdit">
-              <span
-                class="oi oi-x"
-                title="cancel"
-                aria-hidden="true"
-              />
-              キャンセル
-            </b-btn>
-            <b-btn @click="save">
-              <span
-                class="oi oi-plus"
-                title="plus"
-                aria-hidden="true"
-              />
-              保存
-            </b-btn>
-          </b-col>
-        </b-form-row>
-      </b-container>
-    </b-modal>
-  </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </b-container>
+    <div
+      slot="modal-footer"
+      class="w-100 text-right"
+    >
+      <b-col>
+        <b-btn
+          class="mt-3"
+          variant="danger"
+          @click="modalClose()"
+        >
+          <span
+            class="oi oi-x"
+            title="x"
+            aria-hidden="true"
+          />
+          {{ $t('message.cancel') }}
+        </b-btn>
+        <b-btn
+          class="mt-3"
+          variant="primary"
+          @click="save"
+        >
+          <span
+            class="oi oi-check"
+            title="check"
+            aria-hidden="true"
+          />
+          {{ $t('message.end_edit') }}
+        </b-btn>
+      </b-col>
+    </div>
+  </b-modal>
 </template>
 
 <script>
@@ -156,12 +163,25 @@ export default {
     serverUri: {
       type: String,
       default: ''
+    },
+    isVisible: {
+      type: Boolean,
+      default: false
+    },
+    transferConfigId: {
+      type: Number,
+      default: 0
     }
   },
   data: function () {
     return {
-      transferConfig: {},
-      tmpTransferConfig: {}
+      transferConfig: {
+        detail: {
+          mail: {}
+        }
+      },
+      inEdit: false,
+      inEditIndex: 0
     }
   },
   created: function () {
@@ -173,74 +193,26 @@ export default {
         'Access-Control-Allow-Origin': this.$props.serverUri
       }
     }
-    this.$http.get(this.$props.serverUri + '/transfer/config/Mail', this.$data.config)
-      .then(response => {
-        this.$set(this.$data, 'transferConfig', response.data.dataset)
-      })
   },
   methods: {
     modalInit: function () {
-      this.$data.tmpTransferConfig = JSON.parse(JSON.stringify(this.$data.transferConfig))
-      return ''
+      this.$http.get(this.$props.serverUri + '/transfer/config/' + this.$props.transferConfigId, this.$data.config)
+        .then(response => {
+          this.$data.transferConfig = response.data
+        })
+    },
+    modalClose: function () {
+      this.$emit('changeModalState', 'mail', false)
+    },
+    edit: function (index) {
+      this.$data.inEdit = true
+      this.$data.inEditIndex = index
     },
     endEdit: function () {
-      var newTmpTransferConfig = this.$data.tmpTransferConfig.addressList.filter(addr => {
-        return addr.name !== '' && addr.address !== ''
-      })
-      this.$set(this.$data.tmpTransferConfig, 'addressList', newTmpTransferConfig)
-      this.$refs.modalMailTransferConfigEdit.hide()
-    },
-    addAddress: function () {
-      var tmp = {
-        address: '',
-        id: '',
-        name: ''
-      }
-      var newIndex = Object.keys(this.$data.tmpTransferConfig.addressList).length
-      this.$set(this.$data.tmpTransferConfig.addressList, newIndex, tmp)
-    },
-    deleteAddress: function (index) {
-      this.$delete(this.$data.tmpTransferConfig.addressList, index)
+      this.$data.inEdit = false
     },
     save: function () {
-      var reqdata = {
-        rcdata: {
-          transferName: 'Mail',
-          config: this.$data.tmpTransferConfig
-        }
-      }
-      this.$http.post(this.$props.serverUri + '/transfer/config', reqdata, this.$data.config)
-        .then(response => {
-          console.log(response)
-          this.$data.transferConfig = JSON.parse(JSON.stringify(this.$data.tmpTransferConfig))
-        })
-      this.endEdit()
-    }
-  },
-  i18n: {
-    messages: {
-      ja: {
-        message: {
-          delete: '削除',
-          edit: '編集',
-          email_address: 'メールアドレス',
-          mail_transfer_setting: 'Mail転送設定',
-          name: '名前',
-          number: 'No.',
-          sender_mail_addresses: '送信元メールアドレス'
-        }
-      },
-      en: {
-        message: {
-          delete: 'Delete',
-          edit: 'Edit',
-          email_address: 'E-mail address',
-          mail_transfer_setting: 'Mail Transfer Setting',
-          name: 'Name',
-          number: 'No.',
-          sender_mail_addresses: 'Sender Mail Addresses'
-        }
-      }
+      this.modalClose()
     }
   }
 }
