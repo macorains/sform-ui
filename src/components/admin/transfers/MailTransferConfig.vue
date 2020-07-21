@@ -106,6 +106,18 @@
                 {{ $t('message.edit') }}
               </b-btn>
               <b-btn
+                v-show="!inEdit"
+                size="sm"
+                @click="del(item.address_index)"
+              >
+                <span
+                  class="oi oi-x"
+                  title="x"
+                  aria-hidden="true"
+                />
+                {{ $t('message.delete') }}
+              </b-btn>
+              <b-btn
                 v-show="inEdit && item.address_index == inEditIndex"
                 size="sm"
                 @click="endEdit(item.address_index)"
@@ -116,6 +128,35 @@
                   aria-hidden="true"
                 />
                 {{ $t('message.end_edit') }}
+              </b-btn>
+            </td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+            <td>
+              <b-form-input
+                v-model="newName"
+                type="text"
+              />
+            </td>
+            <td>
+              <b-form-input
+                v-model="newAddress"
+                type="email"
+              />
+            </td>
+            <td>
+              <b-btn
+                v-show="!inEdit"
+                size="sm"
+                @click="add"
+              >
+                <span
+                  class="oi oi-plus"
+                  title="plus"
+                  aria-hidden="true"
+                />
+                {{ $t('message.add') }}
               </b-btn>
             </td>
           </tr>
@@ -149,7 +190,7 @@
             title="check"
             aria-hidden="true"
           />
-          {{ $t('message.end_edit') }}
+          {{ $t('message.save_change') }}
         </b-btn>
       </b-col>
     </div>
@@ -181,7 +222,9 @@ export default {
         }
       },
       inEdit: false,
-      inEditIndex: 0
+      inEditIndex: 0,
+      newName: '',
+      newAddress: ''
     }
   },
   created: function () {
@@ -202,6 +245,8 @@ export default {
         })
     },
     modalClose: function () {
+      this.$data.newName = null
+      this.$data.newAddress = null
       this.$emit('changeModalState', 'mail', false)
     },
     edit: function (index) {
@@ -213,6 +258,20 @@ export default {
     },
     save: function () {
       this.modalClose()
+    },
+    add: function () {
+      const addressList = this.$data.transferConfig.detail.mail.mail_address_list
+      const listLength = addressList.length
+      addressList.push({ address_index: listLength, name: this.$data.newName, address: this.$data.newAddress, id: null, transfer_config_mail_id: this.$data.transferConfig.detail.mail.id })
+      this.$data.newName = null
+      this.$data.newAddress = null
+    },
+    del: function (index) {
+      const addressList = this.$data.transferConfig.detail.mail.mail_address_list
+      this.$delete(addressList, index)
+      for (var i = 0; i < addressList.length; i++) {
+        addressList[i].address_index = i
+      }
     }
   }
 }
