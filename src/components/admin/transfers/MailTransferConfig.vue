@@ -257,7 +257,10 @@ export default {
       this.$data.inEdit = false
     },
     save: function () {
-      this.modalClose()
+      this.$http.post(this.$props.serverUri + '/transfer/config', this.$data.transferConfig, this.$data.config)
+        .then(response => {
+          this.modalClose()
+        })
     },
     add: function () {
       const addressList = this.$data.transferConfig.detail.mail.mail_address_list
