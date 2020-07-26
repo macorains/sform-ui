@@ -1,121 +1,193 @@
 <template>
-  <div class="salesforceTransferConfig">
-    <div class="container">
-      <b-container class="text-left">
-        <b-row class="mb-3">
-          <b-col cols="3">
-            ユーザー名
-          </b-col>
-          <b-col />
-        </b-row>
-        <b-row class="mb-3">
-          <b-col cols="3">
-            パスワード
-          </b-col>
-          <b-col>
-            ********
-          </b-col>
-        </b-row>
-        <b-row class="mb-3">
-          <b-col cols="3">
-            セキュリティトークン
-          </b-col>
-          <b-col>
-            ********
-          </b-col>
-        </b-row>
-      </b-container>
-      <b-btn
-        v-b-modal.modal_salesforce_transfer_config_edit
-        class="mt-3"
-        block
-      >
-        <span
-          class="oi oi-pencil"
-          title="pencil"
-          aria-hidden="true"
-        />
-        {{ $t("message.edit") }}
-      </b-btn>
-    </div>
-    <b-modal
-      id="modal_salesforce_transfer_config_edit"
-      ref="modalSalesforceTransferConfigEdit"
-      title="Salesforce設定"
-      :hide-header-close="true"
-      :hide-footer="true"
-      @shown="modalInit"
-      @hide="endEdit"
+  <b-modal
+    id="modal_salesforce_transfer_config_edit"
+    ref="modalSalesforceTransferConfigEdit"
+    dialog-class="modal-hg"
+    :title="$t('message.salesforce_transfer_setting')"
+    size="lg"
+    :hide-header-close="true"
+    :hide-footer="true"
+    :visible="isVisible"
+    @shown="modalInit"
+    @hide="endEdit"
+  >
+    <b-container class="text-left">
+      <b-row>
+        <b-col cols="4">
+          <b-form-row>
+            <b-col>
+              <b-form-group
+                id="userGroup"
+                label-for="user"
+                :label="$t('message.username')"
+              >
+                <b-form-input
+                  id="user"
+                  v-model="transferConfig.detail.salesforce.sf_user_name"
+                  type="text"
+                />
+              </b-form-group>
+            </b-col>
+          </b-form-row>
+          <b-form-row>
+            <b-col>
+              <b-form-group
+                id="passwordGroup"
+                label-for="password"
+                :label="$t('message.password')"
+              >
+                <b-form-input
+                  id="password"
+                  v-model="transferConfig.detail.salesforce.sf_password"
+                  type="password"
+                />
+              </b-form-group>
+            </b-col>
+          </b-form-row>
+          <b-form-row>
+            <b-col>
+              <b-form-group
+                id="securityTokenGroup"
+                label-for="security_token"
+                :label="$t('message.security_token')"
+              >
+                <b-form-input
+                  id="security_token"
+                  v-model="transferConfig.detail.salesforce.sf_security_token"
+                  type="password"
+                />
+              </b-form-group>
+            </b-col>
+          </b-form-row>
+          <b-form-row class="mt-5 text-right">
+            <b-col>
+              <b-btn @click="check">
+                <span
+                  class="oi oi-check"
+                  title="check"
+                  aria-hidden="true"
+                />
+                {{ $t('message.connection_check') }}
+              </b-btn>
+            </b-col>
+          </b-form-row>
+        </b-col>
+        <b-col cols="4">
+          <b class="mr-2">オブジェクト</b>
+          <b-btn
+            size="sm"
+            @click="importObject"
+          >
+            <span
+              class="oi oi-cloud-download"
+              title="check"
+              aria-hidden="true"
+            />
+            {{ $t('message.import_object') }}
+          </b-btn>
+          <table class="table mt-1 scroll-table">
+            <thead>
+              <tr>
+                <th>有効</th>
+                <th>オブジェクト名</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="item in transferConfig.detail.salesforce.objects"
+                :key="item.id"
+              >
+                <td>
+                  <b-checkbox
+                    v-model="item.active"
+                  />
+                </td>
+                <td @click="selectObject(item)">
+                  {{ item.label }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </b-col>
+        <b-col cols="4">
+          <span v-if="Object.keys(selectedObject).length">
+            <b class="mr-2">{{ selectedObject.label }}のフィールド</b>
+            <b-btn
+              size="sm"
+              @click="importField(selectedObject.name)"
+            >
+              <span
+                class="oi oi-cloud-download"
+                title="check"
+                aria-hidden="true"
+              />
+              {{ $t('message.import_field') }}
+            </b-btn>
+            <table
+              class="table mt-1 scroll-table"
+            >
+              <thead>
+                <tr>
+                  <th>有効</th>
+                  <th>  フィールド名</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="item in selectedObject.fields"
+                  :key="item.id"
+                >
+                  <td>
+                    <b-checkbox
+                      v-model="item.active"
+                    />
+                  </td>
+                  <td>
+                    {{ item.label }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </span>
+        </b-col>
+      </b-row>
+    </b-container>
+    <b-container>
+      <b-row>
+        <b-col class="text-right">
+          <b-btn @click="endEdit">
+            <span
+              class="oi oi-x"
+              title="cancel"
+              aria-hidden="true"
+            />
+            {{ $t('message.cancel') }}
+          </b-btn>
+          <b-btn @click="save">
+            <span
+              class="oi oi-plus"
+              title="plus"
+              aria-hidden="true"
+            />
+            {{ $t('message.save_change') }}
+          </b-btn>
+        </b-col>
+      </b-row>
+    </b-container>
+    <b-spinner
+      v-show="inCheckWaiting"
+      variant="primary"
+    />
+    <b-toast
+      id="checkResult"
+      title="Salesforce"
+      toaster="b-toaster-bottom-right"
+      static
+      no-auto-hide
     >
-      <b-container class="text-left">
-        <b-form-row>
-          <b-col>
-            <b-form-group
-              id="userGroup"
-              label-for="user"
-              :label="$t('message.username')"
-            >
-              <b-form-input
-                id="user"
-                v-model="tmpTransferConfig.user"
-                type="text"
-              />
-            </b-form-group>
-          </b-col>
-        </b-form-row>
-        <b-form-row>
-          <b-col>
-            <b-form-group
-              id="passwordGroup"
-              label-for="password"
-              :label="$t('message.password')"
-            >
-              <b-form-input
-                id="password"
-                v-model="tmpTransferConfig.password"
-                type="text"
-              />
-            </b-form-group>
-          </b-col>
-        </b-form-row>
-        <b-form-row>
-          <b-col>
-            <b-form-group
-              id="securityTokenGroup"
-              label-for="security_token"
-              :label="$t('message.security_token')"
-            >
-              <b-form-input
-                id="security_token"
-                v-model="tmpTransferConfig.securityToken"
-                type="text"
-              />
-            </b-form-group>
-          </b-col>
-        </b-form-row>
-        <b-form-row class="mt-5 text-right">
-          <b-col>
-            <b-btn @click="endEdit">
-              <span
-                class="oi oi-x"
-                title="cancel"
-                aria-hidden="true"
-              />
-              キャンセル
-            </b-btn>
-            <b-btn @click="save">
-              <span
-                class="oi oi-plus"
-                title="plus"
-                aria-hidden="true"
-              />
-              保存
-            </b-btn>
-          </b-col>
-        </b-form-row>
-      </b-container>
-    </b-modal>
-  </div>
+      {{ checkResult.message }}
+    </b-toast>
+  </b-modal>
 </template>
 
 <script>
@@ -125,11 +197,27 @@ export default {
     serverUri: {
       type: String,
       default: ''
+    },
+    isVisible: {
+      type: Boolean,
+      default: false
+    },
+    transferConfigId: {
+      type: Number,
+      default: 0
     }
   },
   data: function () {
     return {
-      tmpTransferConfig: {}
+      tmpTransferConfig: {},
+      transferConfig: {
+        detail: {
+          salesforce: {}
+        }
+      },
+      checkResult: {},
+      inCheckWaiting: false,
+      selectedObject: {}
     }
   },
   created: function () {
@@ -141,34 +229,99 @@ export default {
         'Access-Control-Allow-Origin': this.$props.serverUri
       }
     }
-    this.$http.get(this.$props.serverUri + '/transfer/config/Salesforce', this.$data.config)
-      .then(response => {
-        this.$set(this.$data, 'tmpTransferConfig', response.data.dataset)
-      })
   },
   methods: {
     modalInit: function () {
-      return ''
+      this.$http.get(this.$props.serverUri + '/transfer/config/' + this.$props.transferConfigId, this.$data.config)
+        .then(response => {
+          this.$data.transferConfig = response.data
+        })
     },
     endEdit: function () {
-      this.$refs.modalSalesforceTransferConfigEdit.hide()
+      this.$data.selectedObject = {}
+      this.$emit('changeModalState', 'salesforce', false)
     },
     save: function () {
-      var reqdata = {
-        rcdata: {
-          transferName: 'Salesforce',
-          config: this.$data.tmpTransferConfig
-        }
-      }
-      this.$http.post(this.$props.serverUri + '/transfer/config', reqdata, this.$data.config)
+      this.$http.post(this.$props.serverUri + '/transfer/config', this.$data.transferConfig, this.$data.config)
         .then(response => {
           console.log(response)
         })
       this.endEdit()
+    },
+    check: function () {
+      const requestData = {
+        username: this.$data.transferConfig.detail.salesforce.sf_user_name,
+        password: this.$data.transferConfig.detail.salesforce.sf_password,
+        security_token: this.$data.transferConfig.detail.salesforce.sf_security_token
+      }
+      this.$bvToast.hide('checkResult')
+      this.$data.inCheckWaiting = true
+      this.$http.post(this.$props.serverUri + '/transfer/salesforce/check', requestData, this.$data.config)
+        .then(response => {
+          this.$data.inCheckWaiting = false
+          this.$data.checkResult = response.data
+          this.$bvToast.show('checkResult')
+          console.log(response)
+        })
+    },
+    selectObject: function (obj) {
+      this.$data.selectedObject = obj
+    },
+    importObject: function () {
+      this.$http.get(this.$props.serverUri + '/transfer/salesforce/object/' + this.$props.transferConfigId, this.$data.config)
+        .then(response => {
+          response.data.forEach(obj => this.appendObject(obj))
+        })
+    },
+    importField: function (objName) {
+      this.$http.get(this.$props.serverUri + '/transfer/salesforce/field/' + this.$props.transferConfigId + '/' + objName, this.$data.config)
+        .then(response => {
+          response.data.forEach(field => this.appendField(objName, field))
+        })
+    },
+    appendObject: function (obj) {
+      const targetObj = this.$data.transferConfig.detail.salesforce.objects
+      if (targetObj.map(o => o.name).indexOf(obj.name)) {
+        const newObj = {
+          active: false,
+          fields: [],
+          id: null,
+          label: obj.label,
+          name: obj.name,
+          transfer_config_salesforce_id: this.$data.transferConfig.detail.salesforce.id
+        }
+        this.$set(targetObj, targetObj.length, newObj)
+      }
+    },
+    appendField: function (objName, field) {
+      const targetObj = this.$data.transferConfig.detail.salesforce.objects.filter(o => o.name === objName)[0]
+      if (targetObj.fields.map(f => f.name).indexOf(field.name)) {
+        const newField = {
+          active: false,
+          id: null,
+          label: field.label,
+          name: field.name,
+          field_type: field.field_type,
+          transfer_config_salesforce_object_id: targetObj.id
+        }
+        this.$set(targetObj.fields, targetObj.fields.length, newField)
+      }
     }
   }
 }
 </script>
 
-<style scoped>
+<style>
+#modal_salesforce_transfer_config_edit > div {
+  max-width: 80%;
+}
+
+.scroll-table > thead, .scroll-table > tbody {
+  display:block;
+}
+.scroll-table > tbody {
+  max-height: 70vh;
+  overflow-y: scroll;
+}
+
 </style>

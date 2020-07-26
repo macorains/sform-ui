@@ -61,14 +61,22 @@
       :transfer-config-id="transferConfigId"
       @changeModalState="changeModalState"
     />
+    <salesforceTransferConfig
+      :server-uri="serverUri"
+      :is-visible="modalState.salesforce"
+      :transfer-config-id="transferConfigId"
+      @changeModalState="changeModalState"
+    />
   </div>
 </template>
 <script>
 import MailTransferConfig from './MailTransferConfig.vue'
+import SalesforceTransferConfig from './SalesforceTransferConfig.vue'
 export default {
   name: 'TransferConfig',
   components: {
-    mailTransferConfig: MailTransferConfig
+    mailTransferConfig: MailTransferConfig,
+    salesforceTransferConfig: SalesforceTransferConfig
   },
   props: {
     serverUri: {
@@ -106,11 +114,6 @@ export default {
       const target = this.$data.transferConfigList[index]
       this.$data.transferConfigId = target.id
       this.$data.modalState[target.type_code.toLowerCase()] = true
-      // this.$http.get(this.$props.serverUri + '/transfer/config/' + this.$data.transferConfigList[index].id, this.$data.config)
-      //   .then(response => {
-      //     this.$data.transferConfigDetail = response.data
-      //     this.$data.modalState[this.$data.transferConfigDetail.type_code.toLowerCase()] = true
-      //   })
     },
     changeModalState: function (target, state) {
       this.$data.modalState[target] = state
