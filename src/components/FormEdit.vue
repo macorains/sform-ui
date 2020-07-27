@@ -237,7 +237,7 @@
         <b-row class="mt-5">
           <b-col>
             <!-- Transfer設定 -->
-            <transfers
+            <transferTasks
               :server-uri="serverUri"
               :hashed-form-id="hashedFormId"
               :form-data="formData"
@@ -532,12 +532,12 @@
 <script>
 import 'open-iconic/font/css/open-iconic-bootstrap.css'
 import FormColEditOrder from './FormColEditOrder.vue'
-import Transfers from './transfer/Transfers.vue'
+import TransferTasks from './transferTask/TransferTasks.vue'
 
 export default {
   name: 'FormEdit',
   components: {
-    transfers: Transfers,
+    transferTasks: TransferTasks,
     formColEditOrder: FormColEditOrder
   },
   props: {
@@ -553,7 +553,17 @@ export default {
   data: function () {
     return {
       formColData: { validations: {}, selectList: {} },
-      formData: {},
+      formData: {
+        form_cols: [
+          {
+            name: '',
+            validations: {
+              input_type: 1
+            }
+          }
+        ],
+        transfer_tasks: []
+      },
       transferTask: {},
       config: {},
       inEditFormColIndex: 0,
