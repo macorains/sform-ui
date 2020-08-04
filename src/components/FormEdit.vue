@@ -562,7 +562,13 @@ export default {
             }
           }
         ],
-        transfer_tasks: []
+        form_transfer_tasks: [
+          {
+            mail: {
+              subject: ''
+            }
+          }
+        ]
       },
       transferTask: {},
       config: {},

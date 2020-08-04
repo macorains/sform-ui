@@ -20,7 +20,7 @@
       </thead>
       <tbody>
         <tr
-          v-for="(task, index) in formData.transfer_tasks"
+          v-for="(task, index) in formData.form_transfer_tasks"
           :key="task.id"
         >
           <th scope="row">
@@ -106,7 +106,7 @@
       :hashed-form-id="hashedFormId"
       :server-uri="serverUri"
       :is-visible="transferEditModalState.mail"
-      :transfer-task="formData.transfer_tasks[selectedTransferTask]"
+      :transfer-task="formData.form_transfer_tasks[selectedTransferTask]"
       :form-cols="formData.form_cols"
       @transferEditModalClose="transferEditModalClose"
       @setDefault="setDefault"
@@ -197,12 +197,12 @@ export default {
       this.$data.transferEditModalState[this.getTransferType(task)] = true
     },
     newEdit: function (type) {
-      var len = this.$data.transferTask.length
-      this.$set(this.$data.transferTask, len, {})
+      var len = this.$props.formData.form_transfer_tasks.length
+      this.$set(this.$props.formData.form_transfer_tasks, len, {})
       this.edit(len, type)
     },
     setDefault: function (data) {
-      this.$set(this.$data.transferTask, this.$data.selectedTransferTask, data)
+      this.$set(this.$props.formData.form_transfer_tasks, this.$data.selectedTransferTask, data)
     },
     transferType: function (id) {
       return this.$data.transferList.filter(transfer => transfer.type_id === id).map(transfer => transfer.name).shift()

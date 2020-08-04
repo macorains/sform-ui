@@ -2,7 +2,6 @@
   <b-modal
     id="modal_salesforce_transfer_config_edit"
     ref="modalSalesforceTransferConfigEdit"
-    dialog-class="modal-hg"
     :title="$t('message.salesforce_transfer_setting')"
     size="lg"
     :hide-header-close="true"

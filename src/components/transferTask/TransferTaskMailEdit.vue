@@ -1,153 +1,178 @@
 <template>
-  <div class="mail-transfer-edit">
-    <b-modal
-      ref="modalMailTransferRuleSetting"
-      size="lg"
-      hide-footer
-      title="MailTransfer設定"
-      :visible="isVisible"
-      @hide="updateModalState"
+  <b-modal
+    id="modal_mail_transfer_task_edit"
+    ref="modalMailTransferRuleSetting"
+    size="lg"
+    hide-footer
+    title="MailTransfer設定"
+    :visible="isVisible"
+    @shown="modalInit"
+    @hide="updateModalState"
+  >
+    <b-container>
+      <b-row>
+        <b-col cols="9">
+          <b-container class="text-left">
+            <b-row class="mb-2">
+              <b-col cols="3">
+                転送タスク名
+              </b-col>
+              <b-col cols="9">
+                <b-form-input
+                  id="transferTask.name"
+                  v-model="transferTask.name"
+                  type="text"
+                />
+              </b-col>
+            </b-row>
+            <b-row class="mb-2">
+              <b-col cols="3">
+                件名
+              </b-col>
+              <b-col cols="9">
+                <b-form-input
+                  id="transferTask.mail.subject"
+                  ref="subject"
+                  v-model="transferTask.mail.subject"
+                  type="text"
+                />
+              </b-col>
+            </b-row>
+            <b-row class="mb-2">
+              <b-col cols="3">
+                送信元
+              </b-col>
+              <b-col cols="9">
+                <b-form-select
+                  id="transferTask.mail.from_address_id"
+                  v-model="transferTask.mail.from_address_id"
+                  :options="mailAddressList"
+                />
+              </b-col>
+            </b-row>
+            <b-row class="mb-2">
+              <b-col cols="3">
+                送信先
+              </b-col>
+              <b-col cols="9">
+                <b-form-input
+                  id="transferTask.mail.to_address"
+                  ref="to_address"
+                  v-model="transferTask.mail.to_address"
+                  type="text"
+                />
+              </b-col>
+            </b-row>
+            <b-row
+              v-if="transferConfig.detail.mail.use_cc"
+              class="mb-2"
+            >
+              <b-col cols="3">
+                Cc
+              </b-col>
+              <b-col cols="9">
+                <b-form-input
+                  id="transferTask.mail.cc_address"
+                  ref="cc_address"
+                  v-model="transferTask.mail.cc_address"
+                  type="text"
+                />
+              </b-col>
+            </b-row>
+            <b-row
+              v-if="transferConfig.detail.mail.use_bcc"
+              class="mb-2"
+            >
+              <b-col cols="3">
+                Bcc
+              </b-col>
+              <b-col cols="9">
+                <b-form-select
+                  id="transferTask.mail.bcc_address_id"
+                  v-model="transferTask.mail.bcc_address_id"
+                  :options="mailAddressList"
+                />
+              </b-col>
+            </b-row>
+            <b-row
+              v-if="transferConfig.detail.mail.use_replyto"
+              class="mb-2"
+            >
+              <b-col cols="3">
+                Reply-to
+              </b-col>
+              <b-col cols="9">
+                <b-form-select
+                  id="transferTask.mail.replyto_address_id"
+                  v-model="transferTask.mail.replyto_address_id"
+                  :options="mailAddressList"
+                />
+              </b-col>
+            </b-row>
+            <b-row class="mb-2">
+              <b-col cols="3">
+                メール本文
+              </b-col>
+              <b-col cols="9">
+                <b-form-textarea
+                  id="transferTask.mail.body"
+                  ref="body"
+                  v-model="transferTask.mail.body"
+                  :rows="10"
+                />
+              </b-col>
+            </b-row>
+          </b-container>
+        </b-col>
+        <b-col class="border-left">
+          <h5>フォーム項目タグ</h5>
+          <b-list-group
+            v-for="item in formCols"
+            id="form_col_tags"
+            :key="item.col_index"
+            class="mb-2"
+          >
+            <b-list-group-item
+              :active="selectedTagIndex == item.col_index"
+              class="tags"
+              @click="selectTag(item.col_index)"
+            >
+              {{ item.name }}
+            </b-list-group-item>
+          </b-list-group>
+          <b-button
+            @click="insertTag('subject')"
+          >
+            件名
+          </b-button>
+          <b-button
+            @click="insertTag('to_address')"
+          >
+            送信先
+          </b-button>
+          <b-button
+            v-if="transferConfig.detail.mail.use_cc"
+            @click="insertTag('cc_address')"
+          >
+            Cc
+          </b-button>
+          <b-button
+            @click="insertTag('body')"
+          >
+            本文
+          </b-button>
+        </b-col>
+      </b-row>
+    </b-container>
+
+    <b-btn
+      class="mt-3"
+      block
+      @click="updateTransferTask"
     >
-      <b-container class="text-left">
-        <b-row class="mb-2">
-          <b-col cols="3">
-            転送タスク名
-          </b-col>
-          <b-col>
-            <b-form-input
-              id="transferTask.name"
-              v-model="transferTask.name"
-              type="text"
-            />
-          </b-col>
-        </b-row>
-        <b-row class="mb-2">
-          <b-col cols="3">
-            メール件名
-          </b-col>
-          <b-col>
-            <b-form-input
-              id="transferTask.mail.subject"
-              ref="mailSubject"
-              v-model="transferTask.mail.subject"
-              type="text"
-            />
-          </b-col>
-        </b-row>
-        <b-row class="mb-2">
-          <b-col cols="3">
-            メール送信元
-          </b-col>
-          <b-col>
-            <b-form-select
-              id="transferTask.mail.from_address_id"
-              v-model="transferTask.mail.from_address_id"
-              :options="fromAddressList"
-            />
-          </b-col>
-        </b-row>
-        <b-row class="mb-2">
-          <b-col cols="3">
-            メール送信先
-          </b-col>
-          <b-col>
-            <b-form-input
-              id="transferTask.mail.to_address"
-              ref="mailTo"
-              v-model="transferTask.mail.to_address"
-              type="text"
-            />
-          </b-col>
-        </b-row>
-        <b-row class="mb-2">
-          <b-col cols="3">
-            メール本文
-          </b-col>
-          <b-col>
-            <b-form-textarea
-              id="transferTask.mail.body"
-              ref="mailBody"
-              v-model="transferTask.mail.body"
-              :rows="10"
-            />
-          </b-col>
-        </b-row>
-        <b-row class="mb-2 pt-2 border-top">
-          <b-col cols="3">
-            タグ挿入
-          </b-col>
-          <b-col cols="5">
-            <b-form-select
-              v-model="selectedFormColumnName"
-              :options="formColumnList"
-              size="sm"
-            />
-          </b-col>
-          <b-col cols="4">
-            <b-form-input
-              ref="selectedTag"
-              v-model="selectedFormColumnNameTag"
-              type="text"
-              size="sm"
-              readonly
-            />
-          </b-col>
-        </b-row>
-        <b-row class="mb-2">
-          <b-col cols="3" />
-          <b-col cols="3">
-            <b-btn
-              size="sm"
-              block
-              @click="insertTag('mailSubject')"
-            >
-              <span
-                class="oi oi-plus"
-                title="plus"
-                aria-hidden="true"
-              />
-              メール件名
-            </b-btn>
-          </b-col>
-          <b-col cols="3">
-            <b-btn
-              size="sm"
-              block
-              @click="insertTag('mailTo')"
-            >
-              <span
-                class="oi oi-plus"
-                title="plus"
-                aria-hidden="true"
-              />
-              メール送信先
-            </b-btn>
-          </b-col>
-          <b-col cols="3">
-            <b-btn
-              size="sm"
-              block
-              @click="insertTag('mailBody')"
-            >
-              <span
-                class="oi oi-plus"
-                title="plus"
-                aria-hidden="true"
-              />
-              本文
-            </b-btn>
-          </b-col>
-        </b-row>
-      </b-container>
-      <b-btn
-        class="mt-3"
-        block
-        @click="updateTransferTask"
-      >
-        編集終了
-      </b-btn>
-    </b-modal>
-  </div>
+      編集終了
+    </b-btn>
+  </b-modal>
 </template>
 <script>
 export default {
@@ -177,10 +202,6 @@ export default {
   data: function () {
     return {
       config: {},
-      tmpTransferTask: {
-        name: '',
-        config: {}
-      },
       defaultTransferTask: {
         config: {
           formId: this.$props.hashedFormId,
@@ -197,63 +218,39 @@ export default {
         status: 0,
         transfer_type_id: 2
       },
-      transferConfig: {},
-      selectedFormColumnName: '',
-      columnAttachList: []
-    }
-  },
-  computed: {
-    formColumnList: function () {
-      var formCols = []
-      if (typeof this.$props.formCols === 'object') {
-        for (var col in this.$props.formCols) {
-          col = { value: this.$props.formCols[col].colId, text: this.$props.formCols[col].name }
-          formCols.push(col)
+      transferConfig: {
+        detail: {
+          mail: {
+            use_cc: false,
+            use_bcc: false,
+            use_replyto: false
+          }
         }
-      }
-      return formCols
-    },
-    selectedFormColumnNameTag: function () {
-      if (this.$data.selectedFormColumnName !== '') {
-        return '{%' + this.$data.selectedFormColumnName + '%}'
-      } else {
-        return ''
-      }
-    },
-    fromAddressList: function () {
-      if (typeof (this.$data.transferConfig.addressList) === 'undefined') {
-        return []
-      } else {
-        return this.$data.transferConfig.addressList.map(data => data.address)
-      }
+      },
+      selectedTagIndex: -1,
+      mailAddressList: []
     }
   },
   created: function () {
-    // var token = localStorage.getItem('sformToken')
-    // this.$data.config = {
-    //   headers: {
-    //     'x-Requested-With': '*',
-    //     'X-Auth-Token': token,
-    //     'Access-Control-Allow-Origin': this.$props.serverUri,
-    //     timeout: 3000
-    //   }
-    // }
-    // axios.get(this.$props.serverUri + '/transfer/config/Mail', this.$data.config)
-    //   .then(response => {
-    //     this.$set(this.$data, 'transferConfig', response.data.dataset)
-    //     if (!Object.keys(this.$props.transferTask).length) {
-    //       Object.assign(this.$props.transferTask, this.$data.defaultTransferTask)
-    //     }
-    //     this.$set(this.$data, 'tmpTransferTask', this.$props.transferTask)
-    //   })
-    //   .catch(function (error) {
-    //     console.error(error)
-    //     this.$router.push({ path: '/signin' })
-    //   })
-    console.log('created')
+    var token = localStorage.getItem('sformToken')
+    this.$data.config = {
+      headers: {
+        'x-Requested-With': '*',
+        'X-Auth-Token': token,
+        'Access-Control-Allow-Origin': this.$props.serverUri
+      }
+    }
   },
   methods: {
+    modalInit: function () {
+      this.$http.get(this.$props.serverUri + '/transfer/config/' + this.$props.transferTask.transfer_config_id, this.$data.config)
+        .then(response => {
+          this.$data.transferConfig = response.data
+          this.$data.mailAddressList = this.$data.transferConfig.detail.mail.mail_address_list.map(addr => ({ value: addr.id, text: addr.name + '(' + addr.address + ')' }))
+        })
+    },
     updateTransferTask: function () {
+      this.$data.selectedTagIndex = -1
       this.$refs.modalMailTransferRuleSetting.hide()
     },
     updateModalState: function () {
@@ -264,8 +261,19 @@ export default {
       var cursorPosition = targetObj.selectionStart
       var textBefore = targetObj.value.substr(0, cursorPosition)
       var textAfter = targetObj.value.substr(cursorPosition, targetObj.length)
-      this.$set(this.$data.tmpTransferTask.config, target, textBefore + this.$refs.selectedTag.value + textAfter)
+      this.$set(this.$props.transferTask.mail, target, textBefore + '{%' + this.$props.formCols[this.$data.selectedTagIndex].col_id + '%}' + textAfter)
+    },
+    selectTag: function (index) {
+      this.$data.selectedTagIndex = index
     }
   }
 }
 </script>
+<style>
+#modal_mail_transfer_task_edit > div {
+  max-width: 70%;
+}
+#form_col_tags > div {
+  padding:0.5rem 1.25rem
+}
+</style>
