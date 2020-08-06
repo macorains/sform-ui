@@ -203,20 +203,24 @@ export default {
     return {
       config: {},
       defaultTransferTask: {
-        config: {
-          formId: this.$props.hashedFormId,
-          mailSubject: '',
-          mailFrom: '',
-          mailTo: '',
-          mailBody: ''
+        form_id: this.$props.FormId,
+        form_transfer_task_condition: [],
+        id: null,
+        mail: {
+          bcc_address_id: null,
+          body: '',
+          cc_address: '',
+          form_transfer_task_id: null,
+          from_address_id: null,
+          id: null,
+          replyto_address_id: null,
+          subject: '',
+          to_address: ''
         },
-        created: '',
-        del_flg: 0,
-        id: 0,
-        modified: '',
-        name: 'MailTransfer Task',
-        status: 0,
-        transfer_type_id: 2
+        name: 'Mailtransfer Task',
+        salesforce: null,
+        task_index: null,
+        transfer_config_id: null
       },
       transferConfig: {
         detail: {
@@ -254,7 +258,7 @@ export default {
       this.$refs.modalMailTransferRuleSetting.hide()
     },
     updateModalState: function () {
-      this.$emit('transferEditModalClose', 'mail')
+      this.$emit('transferEditModalClose', 'Mail')
     },
     insertTag: function (target) {
       var targetObj = this.$refs[target]

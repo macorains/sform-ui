@@ -31,7 +31,7 @@
           <td>
             <b-btn
               size="sm"
-              @click="edit(index, task)"
+              @click="edit(index, transferType(task.transfer_type_id))"
             >
               <span
                 class="oi oi-pencil"
@@ -68,7 +68,7 @@
           class="text-right"
         >
           <b-form-select
-            v-model="selectedTransferType"
+            v-model="selectedTransferConfigId"
             :options="optionTransferType"
             class="mb-3"
           />
@@ -77,7 +77,7 @@
           <b-btn
             block
             size="sm"
-            @click="newEdit(selectedTransferType)"
+            @click="newEdit(selectedTransferConfigId)"
           >
             <span
               class="oi oi-plus"
@@ -98,18 +98,16 @@
       :transfer-task="transferTask[selectedTransferTask]"
       :form-cols="formCols"
       @transferEditModalClose="transferEditModalClose"
-      @setDefault="setDefault"
     />
     -->
     <transferTaskMailEdit
       ref="transferTaskMailEdit"
-      :hashed-form-id="hashedFormId"
+      :form-id="formData.id"
       :server-uri="serverUri"
-      :is-visible="transferEditModalState.mail"
+      :is-visible="transferEditModalState.Mail"
       :transfer-task="formData.form_transfer_tasks[selectedTransferTask]"
       :form-cols="formData.form_cols"
       @transferEditModalClose="transferEditModalClose"
-      @setDefault="setDefault"
     />
     <transferTaskDeleteModal
       ref="transferTaskDeleteModal"
@@ -149,14 +147,39 @@ export default {
   },
   data: function () {
     return {
+      defaultTransferTask: {
+        Mail: {
+          form_id: this.$props.formData.id,
+          form_transfer_task_condition: [],
+          id: null,
+          mail: {
+            bcc_address_id: null,
+            body: '',
+            cc_address: '',
+            form_transfer_task_id: null,
+            from_address_id: null,
+            id: null,
+            replyto_address_id: null,
+            subject: '',
+            to_address: ''
+          },
+          name: '',
+          salesforce: null,
+          task_index: null,
+          transfer_config_id: null
+        },
+        Salesforce: {
+          id: ''
+        }
+      },
       transferList: [],
       transferEditModalState: {
-        mail: false,
-        salesforce: false
+        Mail: false,
+        Salesforce: false
       },
       transferTaskDeleteModalState: 0,
       selectedTransferTask: 0,
-      selectedTransferType: 0,
+      selectedTransferConfigId: 0,
       optionTransferType: []
     }
   },
@@ -188,24 +211,25 @@ export default {
     }
   },
   methods: {
-    getTransferType: function (task) {
-      const types = ['mail', 'salesforce']
-      return types.filter(t => task[t] !== null)[0]
+    getDefaultTransferTask: function (transferType) {
+      var transferTask = this.$data.defaultTransferTask[transferType]
+      transferTask.transfer_config_id = this.$data.selectedTransferConfigId
+      transferTask.task_index = this.$props.formData.form_transfer_tasks.length
+      transferTask.name = 'Task' + transferTask.task_index
+      return transferTask
     },
     edit: function (index, task) {
       this.selectedTransferTask = index
-      this.$data.transferEditModalState[this.getTransferType(task)] = true
+      this.$data.transferEditModalState[task] = true
     },
-    newEdit: function (type) {
+    newEdit: function (transferConfigId) {
+      const transferType = this.$data.transferList.filter(t => t.id === transferConfigId).map(t => t.type_code).shift()
       var len = this.$props.formData.form_transfer_tasks.length
-      this.$set(this.$props.formData.form_transfer_tasks, len, {})
-      this.edit(len, type)
-    },
-    setDefault: function (data) {
-      this.$set(this.$props.formData.form_transfer_tasks, this.$data.selectedTransferTask, data)
+      this.$set(this.$props.formData.form_transfer_tasks, len, this.getDefaultTransferTask(transferType))
+      this.edit(len, transferType)
     },
     transferType: function (id) {
-      return this.$data.transferList.filter(transfer => transfer.type_id === id).map(transfer => transfer.name).shift()
+      return this.$data.transferList.filter(transfer => transfer.type_id === id).map(transfer => transfer.type_code).shift()
     },
     transferEditModalClose: function (type) {
       this.$data.transferEditModalState[type] = false
