@@ -42,7 +42,7 @@
             </b-btn>
             <b-btn
               size="sm"
-              @click="transferDeleteModalOpen(index)"
+              @click="transferTaskDeleteModalOpen(index)"
             >
               <span
                 class="oi oi-trash"
@@ -97,7 +97,7 @@
       :transfer-edit-modal-state="transferEditModalState"
       :transfer-task="transferTask[selectedTransferTask]"
       :form-cols="formCols"
-      @transferEditModalClose="transferEditModalClose"
+      @transferTaskEditModalClose="transferTaskEditModalClose"
     />
     -->
     <transferTaskMailEdit
@@ -107,14 +107,14 @@
       :is-visible="transferEditModalState.Mail"
       :transfer-task="formData.form_transfer_tasks[selectedTransferTask]"
       :form-cols="formData.form_cols"
-      @transferEditModalClose="transferEditModalClose"
+      @transferTaskEditModalClose="transferTaskEditModalClose"
     />
     <transferTaskDeleteModal
       ref="transferTaskDeleteModal"
       :index="selectedTransferTask"
-      :transfer-task-delete-modal-state="transferTaskDeleteModalState"
-      @transferDeleteModalClose="transferDeleteModalClose"
-      @transferDelete="transferDelete"
+      :is-visible="transferTaskDeleteModalState"
+      @transferTaskDeleteModalClose="transferTaskDeleteModalClose"
+      @transferTaskDelete="transferTaskDelete"
     />
   </div>
 </template>
@@ -150,7 +150,7 @@ export default {
       defaultTransferTask: {
         Mail: {
           form_id: this.$props.formData.id,
-          form_transfer_task_condition: [],
+          form_transfer_task_conditions: [],
           id: null,
           mail: {
             bcc_address_id: null,
@@ -177,20 +177,10 @@ export default {
         Mail: false,
         Salesforce: false
       },
-      transferTaskDeleteModalState: 0,
+      transferTaskDeleteModalState: false,
       selectedTransferTask: 0,
       selectedTransferConfigId: 0,
       optionTransferType: []
-    }
-  },
-  computed: {
-    filteredTransferTaskList: function () {
-      return this.$data.transferTask.filter(task => task.del_flg === 0)
-    }
-  },
-  watch: {
-    transferTask: function () {
-      this.$emit('updateTransferTask', this.$data.transferTask)
     }
   },
   created: function () {
@@ -213,6 +203,7 @@ export default {
   methods: {
     getDefaultTransferTask: function (transferType) {
       var transferTask = this.$data.defaultTransferTask[transferType]
+      transferTask.form_id = this.$props.formData.id
       transferTask.transfer_config_id = this.$data.selectedTransferConfigId
       transferTask.task_index = this.$props.formData.form_transfer_tasks.length
       transferTask.name = 'Task' + transferTask.task_index
@@ -231,26 +222,21 @@ export default {
     transferType: function (id) {
       return this.$data.transferList.filter(transfer => transfer.type_id === id).map(transfer => transfer.type_code).shift()
     },
-    transferEditModalClose: function (type) {
+    transferTaskEditModalClose: function (type) {
       this.$data.transferEditModalState[type] = false
     },
-    transferEditModalOpen: function () {
+    transferTaskEditModalOpen: function () {
       this.$data.transferEditModalState[this.$data.selectedTransferType] = true
     },
-    transferDeleteModalOpen: function (index) {
+    transferTaskDeleteModalOpen: function (index) {
       this.selectedTransferTask = index
-      this.$data.transferTaskDeleteModalState = 1
+      this.$data.transferTaskDeleteModalState = true
     },
-    transferDeleteModalClose: function () {
-      this.$data.transferTaskDeleteModalState = 0
+    transferTaskDeleteModalClose: function () {
+      this.$data.transferTaskDeleteModalState = false
     },
-    transferDelete: function (index) {
-      var tmp = this.$data.transferTask.filter(task => task.del_flg === 0)[index]
-      this.$data.transferTask.forEach((task, index) => {
-        if (task === tmp) {
-          this.$set(this.$data.transferTask[index], 'del_flg', 1)
-        }
-      })
+    transferTaskDelete: function (index) {
+      this.$delete(this.$props.formData.form_transfer_tasks, index)
     }
   }
 }

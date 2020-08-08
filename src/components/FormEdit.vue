@@ -1,6 +1,15 @@
 <template>
   <div class="form_edit">
-    <div class="container">
+    <div
+      v-show="loading"
+      class="loader"
+    >
+      Now loading...
+    </div>
+    <div
+      v-show="!loading"
+      class="container"
+    >
       <h1 class="mt-5 mb-5">
         {{ $t('message.form_edit') }}
       </h1>
@@ -591,7 +600,8 @@ export default {
         { value: 5, text: 'テキストエリア' },
         { value: 6, text: '隠しテキスト' },
         { value: 7, text: '表示テキスト（非入力項目）' }
-      ]
+      ],
+      loading: false
     }
   },
   created: function () {
@@ -600,6 +610,7 @@ export default {
       this.$router.push({ path: '/formlist' })
       return
     }
+    this.$data.loading = true
     this.$data.config = {
       headers: {
         'x-Requested-With': '*',
@@ -611,6 +622,7 @@ export default {
     this.$http.get(this.$props.serverUri + '/form/' + this.$props.hashedFormId, this.$data.config)
       .then(response => {
         this.$data.formData = response.data
+        this.$data.loading = false
       })
   },
   methods: {

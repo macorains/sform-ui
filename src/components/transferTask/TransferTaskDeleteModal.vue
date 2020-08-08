@@ -1,9 +1,9 @@
 <template>
   <b-modal
     ref="tranferTaskDeleteModal"
-    v-model="modalState"
     size="sm"
     :title="$t('message.confirm')"
+    :visible="isVisible"
     @ok="deleteTransferTask"
     @hidden="closeTransferTaskDeleteModal"
   >
@@ -20,28 +20,18 @@ export default {
       type: Number,
       default: 0
     },
-    transferTaskDeleteModalState: {
-      type: Number,
-      default: 0
-    }
-  },
-  data: function () {
-    return {
-      modalState: false
-    }
-  },
-  watch: {
-    transferTaskDeleteModalState: function () {
-      this.$data.modalState = this.$props.transferTaskDeleteModalState === 1
+    isVisible: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
     deleteTransferTask: function () {
-      this.$emit('transferDelete', this.$props.index)
+      this.$emit('transferTaskDelete', this.$props.index)
       this.closeTransferTaskDeleteModal()
     },
     closeTransferTaskDeleteModal: function () {
-      this.$emit('transferDeleteModalClose')
+      this.$emit('transferTaskDeleteModalClose')
     }
   }
 }
