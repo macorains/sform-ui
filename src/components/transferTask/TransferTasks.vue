@@ -1,20 +1,20 @@
 <template>
   <div class="transfers">
-    <h3>転送タスク</h3>
+    <h3>{{ $t('message.transfer_task') }}</h3>
     <table class="table table-striped">
       <thead>
         <tr>
           <th scope="col">
-            No.
+            {{ $t('message.no') }}
           </th>
           <th scope="col">
-            転送名
+            {{ $t('message.transfer_task_name') }}
           </th>
           <th scope="col">
-            転送設定
+            {{ $t('message.transfer_config_name') }}
           </th>
           <th scope="col">
-            操作
+            {{ $t('message.action') }}
           </th>
         </tr>
       </thead>

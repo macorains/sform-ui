@@ -4,10 +4,9 @@
     ref="modalMailTransferRuleSetting"
     size="lg"
     hide-footer
-    title="MailTransfer設定"
+    :title="$t('message.mail_transfer_setting')"
     :visible="isVisible"
     @shown="modalInit"
-    @hide="updateModalState"
   >
     <b-container>
       <b-row>
@@ -15,7 +14,7 @@
           <b-container class="text-left">
             <b-row class="mb-2">
               <b-col cols="3">
-                転送タスク名
+                {{ $t('message.transfer_task_name') }}
               </b-col>
               <b-col cols="9">
                 <b-form-input
@@ -27,7 +26,7 @@
             </b-row>
             <b-row class="mb-2">
               <b-col cols="3">
-                件名
+                {{ $t('message.mail_subject') }}
               </b-col>
               <b-col cols="9">
                 <b-form-input
@@ -40,7 +39,7 @@
             </b-row>
             <b-row class="mb-2">
               <b-col cols="3">
-                送信元
+                {{ $t('message.mail_from') }}
               </b-col>
               <b-col cols="9">
                 <b-form-select
@@ -52,7 +51,7 @@
             </b-row>
             <b-row class="mb-2">
               <b-col cols="3">
-                送信先
+                {{ $t('message.mail_to') }}
               </b-col>
               <b-col cols="9">
                 <b-form-input
@@ -68,7 +67,7 @@
               class="mb-2"
             >
               <b-col cols="3">
-                Cc
+                {{ $t('message.mail_cc') }}
               </b-col>
               <b-col cols="9">
                 <b-form-input
@@ -84,7 +83,7 @@
               class="mb-2"
             >
               <b-col cols="3">
-                Bcc
+                {{ $t('message.mail_bcc') }}
               </b-col>
               <b-col cols="9">
                 <b-form-select
@@ -99,7 +98,7 @@
               class="mb-2"
             >
               <b-col cols="3">
-                Reply-to
+                {{ $t('message.mail_replyto') }}
               </b-col>
               <b-col cols="9">
                 <b-form-select
@@ -111,7 +110,7 @@
             </b-row>
             <b-row class="mb-2">
               <b-col cols="3">
-                メール本文
+                {{ $t('message.mail_body') }}
               </b-col>
               <b-col cols="9">
                 <b-form-textarea
@@ -125,7 +124,7 @@
           </b-container>
         </b-col>
         <b-col class="border-left">
-          <h5>フォーム項目タグ</h5>
+          <h5>{{ $t('message.tags_of_form_column') }}</h5>
           <b-list-group
             v-for="item in formCols"
             id="form_col_tags"
@@ -143,23 +142,23 @@
           <b-button
             @click="insertTag('subject')"
           >
-            件名
+            {{ $t('message.mail_subject') }}
           </b-button>
           <b-button
             @click="insertTag('to_address')"
           >
-            送信先
+            {{ $t('message.mail_to') }}
           </b-button>
           <b-button
             v-if="transferConfig.detail.mail.use_cc"
             @click="insertTag('cc_address')"
           >
-            Cc
+            {{ $t('message.mail_cc') }}
           </b-button>
           <b-button
             @click="insertTag('body')"
           >
-            本文
+            {{ $t('message.mail_body') }}
           </b-button>
         </b-col>
       </b-row>
@@ -170,7 +169,7 @@
       block
       @click="updateTransferTask"
     >
-      編集終了
+      {{ $t('message.end_edit') }}
     </b-btn>
   </b-modal>
 </template>
@@ -256,9 +255,7 @@ export default {
     updateTransferTask: function () {
       this.$data.selectedTagIndex = -1
       this.$refs.modalMailTransferRuleSetting.hide()
-    },
-    updateModalState: function () {
-      this.$emit('transferEditModalClose', 'Mail')
+      this.$emit('transferTaskEditModalClose', 'Mail')
     },
     insertTag: function (target) {
       var targetObj = this.$refs[target]
