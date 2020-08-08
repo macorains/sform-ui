@@ -175,12 +175,8 @@
 </template>
 <script>
 export default {
-  name: 'MailTransferEdit',
+  name: 'TransferTaskMailEdit',
   props: {
-    hashedFormId: {
-      type: String,
-      default: ''
-    },
     serverUri: {
       type: String,
       default: ''
@@ -201,26 +197,6 @@ export default {
   data: function () {
     return {
       config: {},
-      defaultTransferTask: {
-        form_id: this.$props.FormId,
-        form_transfer_task_condition: [],
-        id: null,
-        mail: {
-          bcc_address_id: null,
-          body: '',
-          cc_address: '',
-          form_transfer_task_id: null,
-          from_address_id: null,
-          id: null,
-          replyto_address_id: null,
-          subject: '',
-          to_address: ''
-        },
-        name: 'Mailtransfer Task',
-        salesforce: null,
-        task_index: null,
-        transfer_config_id: null
-      },
       transferConfig: {
         detail: {
           mail: {

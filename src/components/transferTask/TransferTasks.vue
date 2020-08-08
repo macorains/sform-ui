@@ -27,11 +27,11 @@
             {{ index+1 }}
           </th>
           <td>{{ task.name }}</td>
-          <td>{{ transferType(task.transfer_type_id) }}</td>
+          <td>{{ transferType(index) }}</td>
           <td>
             <b-btn
               size="sm"
-              @click="edit(index, transferType(task.transfer_type_id))"
+              @click="edit(index, transferType(index))"
             >
               <span
                 class="oi oi-pencil"
@@ -89,20 +89,16 @@
         </b-col>
       </b-row>
     </b-container>
-    <!--
-    <salesforceTransferEdit
-      ref="salesforceTransferEdit"
-      :hashed-form-id="hashedFormId"
+    <transferTaskSalesforceEdit
+      ref="TransferTaskSalesforceEdit"
       :server-uri="serverUri"
-      :transfer-edit-modal-state="transferEditModalState"
-      :transfer-task="transferTask[selectedTransferTask]"
-      :form-cols="formCols"
+      :is-visible="transferEditModalState.Salesforce"
+      :transfer-task="formData.form_transfer_tasks[selectedTransferTask]"
+      :form-cols="formData.form_cols"
       @transferTaskEditModalClose="transferTaskEditModalClose"
     />
-    -->
     <transferTaskMailEdit
       ref="transferTaskMailEdit"
-      :form-id="formData.id"
       :server-uri="serverUri"
       :is-visible="transferEditModalState.Mail"
       :transfer-task="formData.form_transfer_tasks[selectedTransferTask]"
@@ -120,14 +116,14 @@
 </template>
 <script>
 import axios from 'axios'
-// import SalesforceTransferEdit from './SalesforceTransferEdit.vue'
+import TransferTaskSalesforceEdit from './TransferTaskSalesforceEdit.vue'
 import TransferTaskMailEdit from './TransferTaskMailEdit.vue'
 import TransferTaskDeleteModal from './TransferTaskDeleteModal.vue'
 
 export default {
   name: 'Transfers',
   components: {
-    // salesforceTransferEdit: SalesforceTransferEdit,
+    transferTaskSalesforceEdit: TransferTaskSalesforceEdit,
     transferTaskMailEdit: TransferTaskMailEdit,
     transferTaskDeleteModal: TransferTaskDeleteModal
   },
@@ -169,7 +165,18 @@ export default {
           transfer_config_id: null
         },
         Salesforce: {
-          id: ''
+          form_id: this.$props.formData.id,
+          form_transfer_task_conditions: [],
+          id: null,
+          mail: null,
+          name: '',
+          salesforce: {
+            form_transfer_task_id: null,
+            object_name: null,
+            fields: []
+          },
+          task_index: null,
+          transfer_config_id: null
         }
       },
       transferList: [],
@@ -219,8 +226,10 @@ export default {
       this.$set(this.$props.formData.form_transfer_tasks, len, this.getDefaultTransferTask(transferType))
       this.edit(len, transferType)
     },
-    transferType: function (id) {
-      return this.$data.transferList.filter(transfer => transfer.type_id === id).map(transfer => transfer.type_code).shift()
+    transferType: function (index) {
+      return this.$data.transferList.map(t => {
+        return this.$props.formData.form_transfer_tasks[index][t.type_code.toLowerCase()] === null ? '' : t.type_code
+      }).filter(t => t !== '').shift()
     },
     transferTaskEditModalClose: function (type) {
       this.$data.transferEditModalState[type] = false

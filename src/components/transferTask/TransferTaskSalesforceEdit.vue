@@ -5,8 +5,8 @@
       size="lg"
       hide-footer
       title="SalesforceTransfer設定"
-      @show="updateColumnAttachList"
-      @hide="updateModalState"
+      :visible="isVisible"
+      @shown="modalInit"
     >
       <b-container class="text-left">
         <b-row class="mb-3">
@@ -16,7 +16,7 @@
           <b-col>
             <b-form-input
               id="transferTask.name"
-              v-model="tmpTransferTask.name"
+              v-model="transferTask.name"
               type="text"
             />
           </b-col>
@@ -29,7 +29,7 @@
           </b-col>
           <b-col>
             <b-form-select
-              v-model="selectedSalesforceObject"
+              v-model="transferTask.salesforce.object_name"
               :options="salesforceObjectList"
               class="mb-3"
             />
@@ -56,7 +56,7 @@
               </thead>
               <tbody>
                 <tr
-                  v-for="(item, index) in columnAttachList"
+                  v-for="(item, index) in transferTask.salesforce.fields"
                   :key="index"
                 >
                   <td>{{ item.salesforceObjectColumnLabel }}</td>
@@ -98,12 +98,8 @@
 import axios from 'axios'
 
 export default {
-  name: 'SalesforceTransferEdit',
+  name: 'TransferTaskSalesforceEdit',
   props: {
-    hashedFormId: {
-      type: String,
-      default: ''
-    },
     serverUri: {
       type: String,
       default: ''
@@ -112,75 +108,57 @@ export default {
       type: Object,
       default: () => ({})
     },
-    transferEditModalState: {
-      type: Array,
-      default: () => ([])
+    isVisible: {
+      type: Boolean,
+      default: false
     },
     formCols: {
-      type: Object,
-      default: () => ({})
+      type: Array,
+      default: () => ([])
     }
   },
   data: function () {
     return {
       config: {},
-      tmpTransferTask: {
-        name: '',
-        config: {}
-      },
-      defaultTransferTask: {
-        config: {
-          formId: this.$props.hashedFormId,
-          sfObject: '',
-          columnConvertDefinition: {}
-        },
-        created: '',
-        del_flg: 0,
-        id: 0,
-        modified: '',
-        name: 'SalesforceTask',
-        status: 0,
-        transfer_type_id: 1
-      },
       selectedSalesforceObject: '',
       transferConfig: {},
       salesforceObjectList: [],
       columnAttachList: []
     }
   },
-  computed: {
-    formColumnList: function () {
-      var formCols = []
-      if (typeof this.$props.formCols === 'object') {
-        for (var col in this.$props.formCols) {
-          col = { value: this.$props.formCols[col].colId, text: this.$props.formCols[col].name }
-          formCols.push(col)
-        }
-      }
-      return formCols
-    }
-  },
-  watch: {
-    transferEditModalState: function () {
-      var modalState = this.$props.transferEditModalState[this.$data.transferConfig.id]
-      if (modalState === 0 || typeof modalState === 'undefined') {
-        this.$refs.modalSalesforceTransferRuleSetting.hide()
-      } else {
-        if (!Object.keys(this.$props.transferTask).length) {
-          this.$emit('setDefault', this.$data.defaultTransferTask)
-        }
-        this.$set(this.$data, 'tmpTransferTask', this.$props.transferTask)
-        this.$refs.modalSalesforceTransferRuleSetting.show()
-      }
-    },
-    transferTask: function () {
-      this.$set(this.$data, 'tmpTransferTask', this.$props.transferTask)
-      this.$set(this.$data, 'selectedSalesforceObject', this.$props.transferTask.config.sfObject)
-    },
-    selectedSalesforceObject: function () {
-      this.updateColumnAttachList()
-    }
-  },
+  // computed: {
+  //   formColumnList: function () {
+  //     var formCols = []
+  //     if (typeof this.$props.formCols === 'object') {
+  //       for (var col in this.$props.formCols) {
+  //         col = { value: this.$props.formCols[col].colId, text: this.$props.formCols[col].name }
+  //         formCols.push(col)
+  //       }
+  //     }
+  //     return formCols
+  //   }
+  // },
+  // watch: {
+  //   transferEditModalState: function () {
+  //     var modalState = this.$props.transferEditModalState[this.$data.transferConfig.id]
+  //     if (modalState === 0 || typeof modalState === 'undefined') {
+  //       this.$refs.modalSalesforceTransferRuleSetting.hide()
+  //     } else {
+  //       if (!Object.keys(this.$props.transferTask).length) {
+  //         this.$emit('setDefault', this.$data.defaultTransferTask)
+  //       }
+  //       this.$set(this.$data, 'tmpTransferTask', this.$props.transferTask)
+  //       this.$refs.modalSalesforceTransferRuleSetting.show()
+  //     }
+  //   },
+  //   transferTask: function () {
+  //     this.$set(this.$data, 'tmpTransferTask', this.$props.transferTask)
+  //     this.$set(this.$data, 'selectedSalesforceObject', this.$props.transferTask.config.sfObject)
+  //   },
+  //   selectedSalesforceObject: function () {
+  //     this.updateColumnAttachList()
+  //   }
+  // },
   created: function () {
     var token = localStorage.getItem('sformToken')
     this.$data.config = {
@@ -190,22 +168,24 @@ export default {
         'Access-Control-Allow-Origin': this.$props.serverUri
       }
     }
-    axios.get(this.$props.serverUri + '/transfer/config/Salesforce', this.$data.config)
-      .then(response => {
-        this.$set(this.$data, 'transferConfig', response.data.dataset)
-        var salesforceObjectList = this.$data.transferConfig.sfObjectDefinition
-          .filter(m => m.createable)
-          .filter(m => m.searchLayoutable)
-          .map(m => { return { value: m.name, text: m.label } })
-        this.$set(this.$data, 'salesforceObjectList', salesforceObjectList)
-        this.$set(this.$data, 'tmpTransferTask', this.$props.transferTask)
-      })
-      .catch(function (error) {
-        console.error(error.text)
-        this.$router.push({ path: '/signin' })
-      })
   },
   methods: {
+    modalInit: function () {
+      axios.get(this.$props.serverUri + '/transfer/config/' + this.$props.transferTask.transfer_config_id, this.$data.config)
+        .then(response => {
+          this.$data.transferConfig = response.data
+          // var salesforceObjectList = this.$data.transferConfig.sfObjectDefinition
+          //   .filter(m => m.createable)
+          //   .filter(m => m.searchLayoutable)
+          //   .map(m => { return { value: m.name, text: m.label } })
+          // this.$set(this.$data, 'salesforceObjectList', salesforceObjectList)
+          // this.$set(this.$data, 'tmpTransferTask', this.$props.transferTask)
+        })
+        .catch(function (error) {
+          console.error(error.text)
+          this.$router.push({ path: '/signin' })
+        })
+    },
     updateColumnAttachList: function () {
       this.$data.tmpTransferTask.config.sfObject = this.$data.selectedSalesforceObject
       var columnAttachList = []
@@ -242,10 +222,10 @@ export default {
             .filter(def => def.salesforceObjectColumnName !== '' && def.formColumnName !== '')
             .map(def => { return { sfCol: def.salesforceObjectColumnName, sformCol: def.formColumnName } })
       this.$refs.modalSalesforceTransferRuleSetting.hide()
-    },
-    updateModalState: function () {
-      this.$emit('transferEditModalClose', this.$data.tmpTransferTask.transfer_type_id)
     }
+    // updateModalState: function () {
+    //   this.$emit('transferTaskEditModalClose', 'Salesforce')
+    // }
   }
 }
 </script>
