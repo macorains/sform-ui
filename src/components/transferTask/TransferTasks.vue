@@ -212,7 +212,7 @@ export default {
       var transferTask = this.$data.defaultTransferTask[transferType]
       transferTask.form_id = this.$props.formData.id
       transferTask.transfer_config_id = this.$data.selectedTransferConfigId
-      transferTask.task_index = this.$props.formData.form_transfer_tasks.length
+      transferTask.task_index = this.$props.formData.form_transfer_tasks.length + 1
       transferTask.name = 'Task' + transferTask.task_index
       return transferTask
     },

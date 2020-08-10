@@ -6,6 +6,7 @@
       hide-footer
       title="SalesforceTransfer設定"
       :visible="isVisible"
+      @hide="modalClose"
       @shown="modalInit"
     >
       <b-container class="text-left">
@@ -30,8 +31,9 @@
           <b-col>
             <b-form-select
               v-model="transferTask.salesforce.object_name"
-              :options="salesforceObjectList"
+              :options="object_list"
               class="mb-3"
+              @change="updateFieldList"
             />
           </b-col>
         </b-row>
@@ -56,15 +58,15 @@
               </thead>
               <tbody>
                 <tr
-                  v-for="(item, index) in transferTask.salesforce.fields"
+                  v-for="(item, index) in field_list"
                   :key="index"
                 >
-                  <td>{{ item.salesforceObjectColumnLabel }}</td>
-                  <td>{{ item.salesforceObjectColumnType }}</td>
+                  <td>{{ item.label }}</td>
+                  <td>{{ item.field_type }}</td>
                   <td>
                     <b-form-select
-                      v-model="item.formColumnName"
-                      :options="formColumnList"
+                      v-model="item.column_id"
+                      :options="column_list"
                       size="sm"
                     />
                   </td>
@@ -122,43 +124,11 @@ export default {
       config: {},
       selectedSalesforceObject: '',
       transferConfig: {},
-      salesforceObjectList: [],
-      columnAttachList: []
+      object_list: [],
+      field_list: [],
+      column_list: []
     }
   },
-  // computed: {
-  //   formColumnList: function () {
-  //     var formCols = []
-  //     if (typeof this.$props.formCols === 'object') {
-  //       for (var col in this.$props.formCols) {
-  //         col = { value: this.$props.formCols[col].colId, text: this.$props.formCols[col].name }
-  //         formCols.push(col)
-  //       }
-  //     }
-  //     return formCols
-  //   }
-  // },
-  // watch: {
-  //   transferEditModalState: function () {
-  //     var modalState = this.$props.transferEditModalState[this.$data.transferConfig.id]
-  //     if (modalState === 0 || typeof modalState === 'undefined') {
-  //       this.$refs.modalSalesforceTransferRuleSetting.hide()
-  //     } else {
-  //       if (!Object.keys(this.$props.transferTask).length) {
-  //         this.$emit('setDefault', this.$data.defaultTransferTask)
-  //       }
-  //       this.$set(this.$data, 'tmpTransferTask', this.$props.transferTask)
-  //       this.$refs.modalSalesforceTransferRuleSetting.show()
-  //     }
-  //   },
-  //   transferTask: function () {
-  //     this.$set(this.$data, 'tmpTransferTask', this.$props.transferTask)
-  //     this.$set(this.$data, 'selectedSalesforceObject', this.$props.transferTask.config.sfObject)
-  //   },
-  //   selectedSalesforceObject: function () {
-  //     this.updateColumnAttachList()
-  //   }
-  // },
   created: function () {
     var token = localStorage.getItem('sformToken')
     this.$data.config = {
@@ -171,61 +141,55 @@ export default {
   },
   methods: {
     modalInit: function () {
+      this.$data.field_list = []
       axios.get(this.$props.serverUri + '/transfer/config/' + this.$props.transferTask.transfer_config_id, this.$data.config)
         .then(response => {
           this.$data.transferConfig = response.data
-          // var salesforceObjectList = this.$data.transferConfig.sfObjectDefinition
-          //   .filter(m => m.createable)
-          //   .filter(m => m.searchLayoutable)
-          //   .map(m => { return { value: m.name, text: m.label } })
-          // this.$set(this.$data, 'salesforceObjectList', salesforceObjectList)
-          // this.$set(this.$data, 'tmpTransferTask', this.$props.transferTask)
+          this.$data.object_list = this.$data.transferConfig.detail.salesforce.objects.filter(o => o.active).map(o => ({ value: o.name, text: o.label }))
+          this.$data.column_list = this.$props.formCols.map(c => ({ value: c.col_id, text: c.name }))
+          if (this.$props.transferTask.salesforce.object_name !== null) {
+            this.updateFieldList()
+          }
+          this.$data.field_list.forEach((c, i) => {
+            const index = this.$props.transferTask.salesforce.fields.findIndex(f => f.field_name === c.name)
+            if (index >= 0) {
+              this.$data.field_list[i].column_id = this.$props.transferTask.salesforce.fields[index].form_column_id
+            }
+          })
         })
         .catch(function (error) {
           console.error(error.text)
           this.$router.push({ path: '/signin' })
         })
     },
-    updateColumnAttachList: function () {
-      this.$data.tmpTransferTask.config.sfObject = this.$data.selectedSalesforceObject
-      var columnAttachList = []
-      if (typeof this.$data.transferConfig.sfObjectDefinition === 'object') {
-        var salesforceObjectDef = this.$data.transferConfig.sfObjectDefinition
-          .filter(m => m.name === this.$data.selectedSalesforceObject)
-          .shift()
-        if (salesforceObjectDef !== undefined && salesforceObjectDef.fields !== undefined && typeof salesforceObjectDef.fields === 'object') {
-          columnAttachList = salesforceObjectDef.fields
-            .filter(field => field.updateable)
-            .filter(field => field.type !== 'reference')
-            .map(field => {
-              var formColumnName = ''
-              for (const def of this.$props.transferTask.config.columnConvertDefinition) {
-                if (def.sfCol === field.name) {
-                  formColumnName = def.sformCol
-                }
-              }
-              return {
-                salesforceObjectColumnLabel: field.label,
-                salesforceObjectColumnName: field.name,
-                salesforceObjectColumnType: field.type,
-                formColumnLabel: '',
-                formColumnName: formColumnName
-              }
-            })
-        }
-      }
-      this.$set(this.$data, 'columnAttachList', columnAttachList)
+    modalClose: function () {
+      this.$emit('transferTaskEditModalClose', 'Salesforce')
+    },
+    updateFieldList: function () {
+      this.$data.field_list = this.$data.transferConfig.detail.salesforce.objects.filter(o => o.name === this.$props.transferTask.salesforce.object_name).flatMap(o => o.fields).filter(f => f.active)
     },
     updateTransferTask: function () {
-      this.$data.tmpTransferTask.config.columnConvertDefinition =
-          this.$data.columnAttachList
-            .filter(def => def.salesforceObjectColumnName !== '' && def.formColumnName !== '')
-            .map(def => { return { sfCol: def.salesforceObjectColumnName, sformCol: def.formColumnName } })
-      this.$refs.modalSalesforceTransferRuleSetting.hide()
+      this.$data.field_list.forEach(c => {
+        if ('column_id' in c) {
+          const index = this.$props.transferTask.salesforce.fields.findIndex(f => f.field_name === c.name)
+          console.log('***')
+          console.log(index)
+          if (index >= 0) {
+            this.$props.transferTask.salesforce.fields[index].form_column_id = c.column_id
+          } else {
+            const field = {
+              id: null,
+              form_transfer_task_salesforce_id: this.$props.transferTask.salesforce.id,
+              form_column_id: c.column_id,
+              field_name: c.name
+            }
+            const length = this.$props.transferTask.salesforce.fields.length
+            this.$set(this.$props.transferTask.salesforce.fields, length, field)
+          }
+        }
+      })
+      this.modalClose()
     }
-    // updateModalState: function () {
-    //   this.$emit('transferTaskEditModalClose', 'Salesforce')
-    // }
   }
 }
 </script>
