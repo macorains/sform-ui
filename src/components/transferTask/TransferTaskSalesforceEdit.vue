@@ -172,8 +172,6 @@ export default {
       this.$data.field_list.forEach(c => {
         if ('column_id' in c) {
           const index = this.$props.transferTask.salesforce.fields.findIndex(f => f.field_name === c.name)
-          console.log('***')
-          console.log(index)
           if (index >= 0) {
             this.$props.transferTask.salesforce.fields[index].form_column_id = c.column_id
           } else {
