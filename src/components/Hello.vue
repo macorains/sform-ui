@@ -5,7 +5,7 @@
       size="sm"
       @click="signin()"
     >
-    サインイン
+      サインイン
     </b-button>
   </div>
 </template>

@@ -130,14 +130,18 @@ export default {
   },
   created: function () {
     window.addEventListener('error', event => {
-      this.$bvModal.msgBoxOk(this.convertMessage(event), {
-        title: this.$i18n.t('message.error')
-      })
-        .then(trigger => {
-          if (event.reason.response.status === 401 || event.reason.response.status === 403) {
-            this.$router.push({ path: 'signin' })
-          }
+      if (this.$route.path === '/user/isadmin') {
+        this.$data.isAdmin = false
+      } else {
+        this.$bvModal.msgBoxOk(this.convertMessage(event), {
+          title: this.$i18n.t('message.error')
         })
+          .then(trigger => {
+            if (event.reason.response.status === 401 || event.reason.response.status === 403) {
+              this.$router.push({ path: 'signin' })
+            }
+          })
+      }
     })
 
     window.addEventListener('unhandledrejection', event => {
@@ -168,6 +172,10 @@ export default {
         this.$http.get(this.$data.serverUri + '/user/isadmin', config)
           .then(response => {
             this.$data.isAdmin = true
+          }).catch(error => {
+            if (error.response.status === '401') {
+              this.$router.push({ path: 'signin' })
+            }
           })
       }
     }
