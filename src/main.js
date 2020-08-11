@@ -13,7 +13,6 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 Vue.prototype.$http = Axios
 Vue.use(BootstrapVue)
-// Vue.use(BVToastPlugin)
 Vue.use(Toasted)
 Vue.config.productionTip = false
 
@@ -21,8 +20,19 @@ const data = require('./message.json')
 Vue.use(VueI18n)
 const i18n = new VueI18n({
   locale: 'ja',
+  fallbackLocale: 'ja',
   messages: data
 })
+
+Vue.config.lang = 'ja'
+
+Vue.config.errorHandler = function (e, vm, info) {
+  console.log('*** error ***')
+  console.log(e)
+  console.log(vm)
+  console.log(info)
+  return false
+}
 
 /* eslint-disable no-new */
 new Vue({

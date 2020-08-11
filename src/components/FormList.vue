@@ -130,7 +130,6 @@
 </template>
 
 <script>
-// import axios from 'axios'
 import 'open-iconic/font/css/open-iconic-bootstrap.css'
 
 export default {
@@ -143,7 +142,7 @@ export default {
   },
   data: function () {
     return {
-      formList: {},
+      formList: [],
       serverUriString: '',
       checkedColumn: [],
       formStatus: ['無効', '有効', '停止中'],
@@ -167,16 +166,12 @@ export default {
         timeout: 3000
       }
     }
-    if (token) {
-      this.$data.loading = true
-      this.$http.get(this.$props.serverUri + '/form/list', this.$data.config)
-        .then(response => {
-          this.$data.loading = false
-          this.$data.formList = JSON.parse(response.data.dataset)
-        })
-    } else {
-      this.$router.push({ path: '/signin' })
-    }
+    this.$data.loading = true
+    this.$http.get(this.$props.serverUri + '/form/list', this.$data.config)
+      .then(response => {
+        this.$data.loading = false
+        this.$data.formList = response.data.forms
+      })
   },
   methods: {
     edit: function (hashedId) {
@@ -184,54 +179,48 @@ export default {
       this.$router.push({ name: 'formedit', params: { hashedFormId: hashedId, serverUri: this.$props.serverUri } })
     },
     add: function () {
+      if (typeof this.$data.formList === 'undefined') {
+        this.$data.formList = []
+      }
       var i = Object.keys(this.$data.formList).length
       this.$data.addedFormName = 'フォーム' + i
       var tmp = {
-        index: i + '',
+        form_index: i,
         id: '',
-        status: '0',
+        status: 0,
         name: this.$data.addedFormName,
         title: this.$data.addedFormName,
-        extLink1: false,
-        cancelUrl: '',
-        completeUrl: '',
-        inputHeader: '',
-        confirmHeader: '',
-        completeText: '',
-        closeText: '',
-        replymailFrom: '',
-        replymailSubject: '',
-        replymailText: '',
-        noticemailSend: '',
-        noticemailText: '',
-        formCols: {
-          0: {
-            index: '0',
+        cancel_url: 'https://',
+        complete_url: 'https://',
+        input_header: '',
+        confirm_header: '',
+        complete_text: '',
+        close_text: '',
+        form_cols: [
+          {
+            col_index: 0,
             name: 'メールアドレス',
-            colId: 'email',
-            coltype: '1',
-            default: '',
+            col_id: 'email',
+            col_type: 1,
+            default_value: '',
+            select_list: [],
             validations: {
-              inputType: '5',
-              minValue: '0',
-              maxValue: '0',
-              minLength: '0',
-              maxLength: '0',
+              input_type: 5,
+              min_value: 0,
+              max_value: 0,
+              min_length: 0,
+              max_length: 0,
               required: true
             }
           }
-        }
-      }
-      var reqdata = {
-        objtype: 'Form',
-        action: 'create',
-        rcdata: { formDef: tmp, transferTasks: {} }
+        ]
       }
       this.$data.loading = true
-      this.$http.post(this.$props.serverUri + '/form', reqdata, this.$data.config)
+      this.$http.post(this.$props.serverUri + '/form/new', tmp, this.$data.config)
         .then(response => {
+          // TODO この辺りは新規データをリストに入れる形ではなくて、リロードした方が良さそう
           this.$data.loading = false
-          var data = response.data.dataset
+          var data = response.data
           tmp.id = data.id
           tmp.hashed_id = data.hashed_id
           this.$data.modalFormAddComplete = true

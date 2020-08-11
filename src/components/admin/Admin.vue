@@ -12,17 +12,6 @@
           <b-tab active>
             <template slot="title">
               <span
-                class="oi oi-person"
-                title="person"
-                aria-hidden="true"
-              />
-              {{ $t('message.user') }}
-            </template>
-            <userConfig :server-uri="serverUri" />
-          </b-tab>
-          <b-tab>
-            <template slot="title">
-              <span
                 class="oi oi-transfer"
                 title="transfer"
                 aria-hidden="true"
@@ -30,6 +19,17 @@
               {{ $t('message.transfer') }}
             </template>
             <transferConfig :server-uri="serverUri" />
+          </b-tab>
+          <b-tab>
+            <template slot="title">
+              <span
+                class="oi oi-person"
+                title="person"
+                aria-hidden="true"
+              />
+              {{ $t('message.user') }}
+            </template>
+            <userConfig :server-uri="serverUri" />
           </b-tab>
         </b-tabs>
       </b-card>

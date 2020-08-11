@@ -123,10 +123,42 @@ export default {
       serverUri: process.env.VUE_APP_API_URL,
       hashedFormId: '',
       isAdmin: false,
-      axiosTimeout: 3000
+      axiosTimeout: 3000,
+      errorMessage: this.$i18n.t('message.error'),
+      noMenuPages: ['/signin', '/help', '/codeinput', '/']
     }
   },
   created: function () {
+    window.addEventListener('error', event => {
+      if (this.$route.path === '/user/isadmin') {
+        this.$data.isAdmin = false
+      } else {
+        this.$bvModal.msgBoxOk(this.convertMessage(event), {
+          title: this.$i18n.t('message.error')
+        })
+          .then(trigger => {
+            if (event.reason.response.status === 401 || event.reason.response.status === 403) {
+              this.$router.push({ path: 'signin' })
+            }
+          })
+      }
+    })
+
+    window.addEventListener('unhandledrejection', event => {
+      if (this.$route.path === '/user/isadmin') {
+        this.$data.isAdmin = false
+      } else {
+        this.$bvModal.msgBoxOk(this.convertMessage(event), {
+          title: this.$i18n.t('message.error')
+        })
+          .then(trigger => {
+            if (event.reason.response.status === 401 || event.reason.response.status === 403) {
+              this.$router.push({ path: 'signin' })
+            }
+          })
+      }
+    })
+
     var token = localStorage.getItem('sformToken')
     var config = {
       headers: {
@@ -136,10 +168,16 @@ export default {
       }
     }
     if (token) {
-      this.$http.get(this.$data.serverUri + '/user/isadmin', config)
-        .then(response => {
-          this.$data.isAdmin = true
-        })
+      if (this.$route.path !== '/' && this.$route.path !== '/signin') {
+        this.$http.get(this.$data.serverUri + '/user/isadmin', config)
+          .then(response => {
+            this.$data.isAdmin = true
+          }).catch(error => {
+            if (error.response.status === '401') {
+              this.$router.push({ path: 'signin' })
+            }
+          })
+      }
     }
   },
   methods: {
@@ -165,10 +203,29 @@ export default {
     },
     isMenuValid: function () {
       var res = true
-      if (this.$route.path === '/signin' || this.$route.path === '/help') {
+      if (this.$data.noMenuPages.indexOf(this.$route.path) >= 0) {
         res = false
       }
       return res
+    },
+    convertMessage: function (evt) {
+      const msg = evt.reason.response.data.message
+      const statusCode = evt.reason.response.status
+      if (statusCode === 400) {
+        if (msg.indexOf('InvalidPasswordException') > 0) {
+          return this.$i18n.t('message.error_invalid_password_exception')
+        }
+        if (msg === 'LoginFailureLimitExceeded') {
+          return this.$i18n.t('message.error_login_failure_limit_exceeded')
+        }
+        if (msg === 'Invalid Verification Request' || msg === 'Verification Timeout') {
+          return this.$i18n.t('message.error_verification_failed')
+        }
+      }
+      if (statusCode === 401 || statusCode === 403) {
+        return this.$i18n.t('message.error_authorization')
+      }
+      return this.$i18n.t('message.error_undefined')
     }
   }
 }
