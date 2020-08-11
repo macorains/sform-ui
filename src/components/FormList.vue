@@ -142,7 +142,7 @@ export default {
   },
   data: function () {
     return {
-      formList: {},
+      formList: [],
       serverUriString: '',
       checkedColumn: [],
       formStatus: ['無効', '有効', '停止中'],
@@ -179,6 +179,9 @@ export default {
       this.$router.push({ name: 'formedit', params: { hashedFormId: hashedId, serverUri: this.$props.serverUri } })
     },
     add: function () {
+      if (typeof this.$data.formList === 'undefined') {
+        this.$data.formList = []
+      }
       var i = Object.keys(this.$data.formList).length
       this.$data.addedFormName = 'フォーム' + i
       var tmp = {
