@@ -1,177 +1,179 @@
 <template>
-  <b-modal
-    id="modal_mail_transfer_task_edit"
-    ref="modalMailTransferRuleSetting"
-    size="lg"
-    hide-footer
-    :title="$t('message.mail_transfer_setting')"
-    :visible="isVisible"
-    @shown="modalInit"
-  >
-    <b-container>
-      <b-row>
-        <b-col cols="9">
-          <b-container class="text-left">
-            <b-row class="mb-2">
-              <b-col cols="3">
-                {{ $t('message.transfer_task_name') }}
-              </b-col>
-              <b-col cols="9">
-                <b-form-input
-                  id="transferTask.name"
-                  v-model="transferTask.name"
-                  type="text"
-                />
-              </b-col>
-            </b-row>
-            <b-row class="mb-2">
-              <b-col cols="3">
-                {{ $t('message.mail_subject') }}
-              </b-col>
-              <b-col cols="9">
-                <b-form-input
-                  id="transferTask.mail.subject"
-                  ref="subject"
-                  v-model="transferTask.mail.subject"
-                  type="text"
-                />
-              </b-col>
-            </b-row>
-            <b-row class="mb-2">
-              <b-col cols="3">
-                {{ $t('message.mail_from') }}
-              </b-col>
-              <b-col cols="9">
-                <b-form-select
-                  id="transferTask.mail.from_address_id"
-                  v-model="transferTask.mail.from_address_id"
-                  :options="mailAddressList"
-                />
-              </b-col>
-            </b-row>
-            <b-row class="mb-2">
-              <b-col cols="3">
-                {{ $t('message.mail_to') }}
-              </b-col>
-              <b-col cols="9">
-                <b-form-input
-                  id="transferTask.mail.to_address"
-                  ref="to_address"
-                  v-model="transferTask.mail.to_address"
-                  type="text"
-                />
-              </b-col>
-            </b-row>
-            <b-row
-              v-if="transferConfig.detail.mail.use_cc"
-              class="mb-2"
-            >
-              <b-col cols="3">
-                {{ $t('message.mail_cc') }}
-              </b-col>
-              <b-col cols="9">
-                <b-form-input
-                  id="transferTask.mail.cc_address"
-                  ref="cc_address"
-                  v-model="transferTask.mail.cc_address"
-                  type="text"
-                />
-              </b-col>
-            </b-row>
-            <b-row
-              v-if="transferConfig.detail.mail.use_bcc"
-              class="mb-2"
-            >
-              <b-col cols="3">
-                {{ $t('message.mail_bcc') }}
-              </b-col>
-              <b-col cols="9">
-                <b-form-select
-                  id="transferTask.mail.bcc_address_id"
-                  v-model="transferTask.mail.bcc_address_id"
-                  :options="mailAddressList"
-                />
-              </b-col>
-            </b-row>
-            <b-row
-              v-if="transferConfig.detail.mail.use_replyto"
-              class="mb-2"
-            >
-              <b-col cols="3">
-                {{ $t('message.mail_replyto') }}
-              </b-col>
-              <b-col cols="9">
-                <b-form-select
-                  id="transferTask.mail.replyto_address_id"
-                  v-model="transferTask.mail.replyto_address_id"
-                  :options="mailAddressList"
-                />
-              </b-col>
-            </b-row>
-            <b-row class="mb-2">
-              <b-col cols="3">
-                {{ $t('message.mail_body') }}
-              </b-col>
-              <b-col cols="9">
-                <b-form-textarea
-                  id="transferTask.mail.body"
-                  ref="body"
-                  v-model="transferTask.mail.body"
-                  :rows="10"
-                />
-              </b-col>
-            </b-row>
-          </b-container>
-        </b-col>
-        <b-col class="border-left">
-          <h5>{{ $t('message.tags_of_form_column') }}</h5>
-          <b-list-group
-            v-for="item in formCols"
-            id="form_col_tags"
-            :key="item.col_index"
-            class="mb-2"
-          >
-            <b-list-group-item
-              :active="selectedTagIndex == item.col_index"
-              class="tags"
-              @click="selectTag(item.col_index)"
-            >
-              {{ item.name }}
-            </b-list-group-item>
-          </b-list-group>
-          <b-button
-            @click="insertTag('subject')"
-          >
-            {{ $t('message.mail_subject') }}
-          </b-button>
-          <b-button
-            @click="insertTag('to_address')"
-          >
-            {{ $t('message.mail_to') }}
-          </b-button>
-          <b-button
-            v-if="transferConfig.detail.mail.use_cc"
-            @click="insertTag('cc_address')"
-          >
-            {{ $t('message.mail_cc') }}
-          </b-button>
-          <b-button
-            @click="insertTag('body')"
-          >
-            {{ $t('message.mail_body') }}
-          </b-button>
-        </b-col>
-      </b-row>
-    </b-container>
-
-    <b-btn
-      class="mt-3"
-      block
-      @click="updateTransferTask"
+  <div v-if="transferTask.mail">
+    <b-modal
+      id="modal_mail_transfer_task_edit"
+      ref="modalMailTransferRuleSetting"
+      size="lg"
+      hide-footer
+      :title="$t('message.mail_transfer_setting')"
+      :visible="isVisible"
+      @shown="modalInit"
     >
-      {{ $t('message.end_edit') }}
-    </b-btn>
-  </b-modal>
+      <b-container>
+        <b-row>
+          <b-col cols="9">
+            <b-container class="text-left">
+              <b-row class="mb-2">
+                <b-col cols="3">
+                  {{ $t('message.transfer_task_name') }}
+                </b-col>
+                <b-col cols="9">
+                  <b-form-input
+                    id="transferTask.name"
+                    v-model="transferTask.name"
+                    type="text"
+                  />
+                </b-col>
+              </b-row>
+              <b-row class="mb-2">
+                <b-col cols="3">
+                  {{ $t('message.mail_subject') }}
+                </b-col>
+                <b-col cols="9">
+                  <b-form-input
+                    id="transferTask.mail.subject"
+                    ref="subject"
+                    v-model="transferTask.mail.subject"
+                    type="text"
+                  />
+                </b-col>
+              </b-row>
+              <b-row class="mb-2">
+                <b-col cols="3">
+                  {{ $t('message.mail_from') }}
+                </b-col>
+                <b-col cols="9">
+                  <b-form-select
+                    id="transferTask.mail.from_address_id"
+                    v-model="transferTask.mail.from_address_id"
+                    :options="mailAddressList"
+                  />
+                </b-col>
+              </b-row>
+              <b-row class="mb-2">
+                <b-col cols="3">
+                  {{ $t('message.mail_to') }}
+                </b-col>
+                <b-col cols="9">
+                  <b-form-input
+                    id="transferTask.mail.to_address"
+                    ref="to_address"
+                    v-model="transferTask.mail.to_address"
+                    type="text"
+                  />
+                </b-col>
+              </b-row>
+              <b-row
+                v-if="transferConfig.detail.mail.use_cc"
+                class="mb-2"
+              >
+                <b-col cols="3">
+                  {{ $t('message.mail_cc') }}
+                </b-col>
+                <b-col cols="9">
+                  <b-form-input
+                    id="transferTask.mail.cc_address"
+                    ref="cc_address"
+                    v-model="transferTask.mail.cc_address"
+                    type="text"
+                  />
+                </b-col>
+              </b-row>
+              <b-row
+                v-if="transferConfig.detail.mail.use_bcc"
+                class="mb-2"
+              >
+                <b-col cols="3">
+                  {{ $t('message.mail_bcc') }}
+                </b-col>
+                <b-col cols="9">
+                  <b-form-select
+                    id="transferTask.mail.bcc_address_id"
+                    v-model="transferTask.mail.bcc_address_id"
+                    :options="mailAddressList"
+                  />
+                </b-col>
+              </b-row>
+              <b-row
+                v-if="transferConfig.detail.mail.use_replyto"
+                class="mb-2"
+              >
+                <b-col cols="3">
+                  {{ $t('message.mail_replyto') }}
+                </b-col>
+                <b-col cols="9">
+                  <b-form-select
+                    id="transferTask.mail.replyto_address_id"
+                    v-model="transferTask.mail.replyto_address_id"
+                    :options="mailAddressList"
+                  />
+                </b-col>
+              </b-row>
+              <b-row class="mb-2">
+                <b-col cols="3">
+                  {{ $t('message.mail_body') }}
+                </b-col>
+                <b-col cols="9">
+                  <b-form-textarea
+                    id="transferTask.mail.body"
+                    ref="body"
+                    v-model="transferTask.mail.body"
+                    :rows="10"
+                  />
+                </b-col>
+              </b-row>
+            </b-container>
+          </b-col>
+          <b-col class="border-left">
+            <h5>{{ $t('message.tags_of_form_column') }}</h5>
+            <b-list-group
+              v-for="item in formCols"
+              id="form_col_tags"
+              :key="item.col_index"
+              class="mb-2"
+            >
+              <b-list-group-item
+                :active="selectedTagIndex == item.col_index"
+                class="tags"
+                @click="selectTag(item.col_index)"
+              >
+                {{ item.name }}
+              </b-list-group-item>
+            </b-list-group>
+            <b-button
+              @click="insertTag('subject')"
+            >
+              {{ $t('message.mail_subject') }}
+            </b-button>
+            <b-button
+              @click="insertTag('to_address')"
+            >
+              {{ $t('message.mail_to') }}
+            </b-button>
+            <b-button
+              v-if="transferConfig.detail.mail.use_cc"
+              @click="insertTag('cc_address')"
+            >
+              {{ $t('message.mail_cc') }}
+            </b-button>
+            <b-button
+              @click="insertTag('body')"
+            >
+              {{ $t('message.mail_body') }}
+            </b-button>
+          </b-col>
+        </b-row>
+      </b-container>
+
+      <b-btn
+        class="mt-3"
+        block
+        @click="updateTransferTask"
+      >
+        {{ $t('message.end_edit') }}
+      </b-btn>
+    </b-modal>
+  </div>
 </template>
 <script>
 export default {
