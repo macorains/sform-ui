@@ -1,5 +1,8 @@
 <template>
-  <div class="salesforce-transfer-edit">
+  <div
+    v-if="transferTask.salesforce"
+    class="salesforce-transfer-edit"
+  >
     <b-modal
       ref="modalSalesforceTransferRuleSetting"
       size="lg"
