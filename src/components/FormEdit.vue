@@ -648,11 +648,12 @@ export default {
         form_id: this.$data.formData.id,
         id: null,
         validations: {
+          id: null,
           input_type: 0,
-          min_value: 0,
-          max_value: 0,
-          min_length: 0,
-          max_length: 0,
+          min_value: null,
+          max_value: null,
+          min_length: null,
+          max_length: null,
           form_col_id: null,
           form_id: this.$data.formData.id,
           required: false
