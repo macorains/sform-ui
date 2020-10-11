@@ -206,10 +206,10 @@ export default {
             select_list: [],
             validations: {
               input_type: 5,
-              min_value: 0,
-              max_value: 0,
-              min_length: 0,
-              max_length: 0,
+              min_value: '',
+              max_value: '',
+              min_length: '',
+              max_length: '',
               required: true
             }
           }
