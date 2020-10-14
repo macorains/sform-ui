@@ -437,7 +437,7 @@
             <b-col>
               <b-form-input
                 id="formColDefault"
-                v-model="formData.form_cols[inEditFormColIndex].default"
+                v-model="formData.form_cols[inEditFormColIndex].default_value"
                 type="text"
               />
             </b-col>
@@ -650,10 +650,10 @@ export default {
         validations: {
           id: null,
           input_type: 0,
-          min_value: null,
-          max_value: null,
-          min_length: null,
-          max_length: null,
+          min_value: '',
+          max_value: '',
+          min_length: '',
+          max_length: '',
           form_col_id: null,
           form_id: this.$data.formData.id,
           required: false
