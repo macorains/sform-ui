@@ -4,6 +4,7 @@
   "description": "A Vue.js project",
   "author": "macorains",
   "private": true,
+  "homepage": "./",
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",
