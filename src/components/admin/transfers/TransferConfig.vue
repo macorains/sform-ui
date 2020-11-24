@@ -57,13 +57,13 @@
     </div>
     <mailTransferConfig
       :server-uri="serverUri"
-      :is-visible="modalState.mail"
+      :is-visible="modalState.Mail"
       :transfer-config-id="transferConfigId"
       @changeModalState="changeModalState"
     />
     <salesforceTransferConfig
       :server-uri="serverUri"
-      :is-visible="modalState.salesforce"
+      :is-visible="modalState.Salesforce"
       :transfer-config-id="transferConfigId"
       @changeModalState="changeModalState"
     />
@@ -89,8 +89,8 @@ export default {
       transferConfigList: [],
       transferConfigId: 0,
       modalState: {
-        salesforce: false,
-        mail: false
+        Salesforce: false,
+        Mail: false
       }
     }
   },
@@ -113,7 +113,7 @@ export default {
     edit: function (index) {
       const target = this.$data.transferConfigList[index]
       this.$data.transferConfigId = target.id
-      this.$data.modalState[target.type_code.toLowerCase()] = true
+      this.$data.modalState[target.type_code] = true
     },
     changeModalState: function (target, state) {
       this.$data.modalState[target] = state

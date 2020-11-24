@@ -4,6 +4,7 @@
   "description": "A Vue.js project",
   "author": "macorains",
   "private": true,
+  "homepage": "./",
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",
@@ -46,7 +47,7 @@
     "chalk": "^4.0.0",
     "chromedriver": "^81.0.0",
     "connect-history-api-fallback": "^1.6.0",
-    "copy-webpack-plugin": "^5.1.1",
+    "copy-webpack-plugin": "^6.3.2",
     "cross-env": "^7.0.2",
     "cross-spawn": "^7.0.2",
     "css-loader": "^3.5.2",

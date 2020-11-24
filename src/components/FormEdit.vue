@@ -67,7 +67,7 @@
             >
               <b-form-input
                 id="urlAfterCancel"
-                v-model="formData.cancelUrl"
+                v-model="formData.cancel_url"
                 type="text"
               />
             </b-form-group>
@@ -78,7 +78,7 @@
             >
               <b-form-input
                 id="urlAfterComplete"
-                v-model="formData.completeUrl"
+                v-model="formData.complete_url"
                 type="text"
               />
             </b-form-group>
@@ -89,7 +89,7 @@
             >
               <b-form-textarea
                 id="formInputHeader"
-                v-model="formData.inputHeader"
+                v-model="formData.input_header"
                 :rows="3"
                 :max-rows="10"
               />
@@ -101,7 +101,7 @@
             >
               <b-form-textarea
                 id="formConfirmHeader"
-                v-model="formData.confirmHeader"
+                v-model="formData.confirm_header"
                 :rows="3"
                 :max-rows="10"
               />
@@ -113,7 +113,7 @@
             >
               <b-form-textarea
                 id="formCompleteText"
-                v-model="formData.completeText"
+                v-model="formData.complete_text"
                 :rows="3"
                 :max-rows="10"
               />
@@ -125,7 +125,7 @@
             >
               <b-form-textarea
                 id="formStopText"
-                v-model="formData.closeText"
+                v-model="formData.close_text"
                 :rows="3"
                 :max-rows="10"
               />
@@ -437,7 +437,7 @@
             <b-col>
               <b-form-input
                 id="formColDefault"
-                v-model="formData.form_cols[inEditFormColIndex].default"
+                v-model="formData.form_cols[inEditFormColIndex].default_value"
                 type="text"
               />
             </b-col>
@@ -648,11 +648,12 @@ export default {
         form_id: this.$data.formData.id,
         id: null,
         validations: {
+          id: null,
           input_type: 0,
-          min_value: 0,
-          max_value: 0,
-          min_length: 0,
-          max_length: 0,
+          min_value: '',
+          max_value: '',
+          min_length: '',
+          max_length: '',
           form_col_id: null,
           form_id: this.$data.formData.id,
           required: false

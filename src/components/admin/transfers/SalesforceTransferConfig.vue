@@ -238,7 +238,7 @@ export default {
     },
     endEdit: function () {
       this.$data.selectedObject = {}
-      this.$emit('changeModalState', 'salesforce', false)
+      this.$emit('changeModalState', 'Salesforce', false)
     },
     save: function () {
       this.$http.post(this.$props.serverUri + '/transfer/config', this.$data.transferConfig, this.$data.config)
