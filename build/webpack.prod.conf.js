@@ -1,5 +1,5 @@
 var path = require('path')
-var utils = require('./utils')
+var utils = require('./utils.js')
 var webpack = require('webpack')
 var config = require('../config')
 var merge = require('webpack-merge')
@@ -29,6 +29,7 @@ var env = process.env.NODE_ENV === 'testing' ?
 var webpackConfig = merge(baseWebpackConfig, {
   mode: 'production',
   module: {
+   　// この辺りの書き方がWebpack4から違うかも
     rules: utils.styleLoaders({
       sourceMap: config.build.productionSourceMap,
       extract: true
@@ -45,12 +46,12 @@ var webpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': env
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      },
-      sourceMap: true
-    }),
+    // new webpack.optimize.UglifyJsPlugin({
+    //   compress: {
+    //     warnings: false
+    //   },
+    //   sourceMap: true
+    // }),
     // extract css into its own file
     new CssExtractPlugin({
       filename: utils.assetsPath('css/[name].[contenthash].css')
@@ -83,31 +84,34 @@ var webpackConfig = merge(baseWebpackConfig, {
     // keep module.id stable when vender modules does not change
     new webpack.HashedModuleIdsPlugin(),
     // split vendor js into its own file
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks: function(module, count) {
-        // any required modules inside node_modules are extracted to vendor
-        return (
-          module.resource &&
-          /\.js$/.test(module.resource) &&
-          module.resource.indexOf(
-            path.join(__dirname, '../node_modules')
-          ) === 0
-        )
-      }
-    }),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: 'vendor',
+    //   minChunks: function(module, count) {
+    //     // any required modules inside node_modules are extracted to vendor
+    //     return (
+    //       module.resource &&
+    //       /\.js$/.test(module.resource) &&
+    //       module.resource.indexOf(
+    //         path.join(__dirname, '../node_modules')
+    //       ) === 0
+    //     )
+    //   }
+    // }),
     // extract webpack runtime and module manifest to its own file in order to
     // prevent vendor hash from being updated whenever app bundle is updated
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'manifest',
-      chunks: ['vendor']
-    }),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: 'manifest',
+    //   chunks: ['vendor']
+    // }),
     // copy custom static assets
-    new CopyWebpackPlugin([{
-      from: path.resolve(__dirname, '../static'),
-      to: config.build.assetsSubDirectory,
-      ignore: ['.*']
-    }]),
+    new CopyWebpackPlugin({
+      patterns:[
+        { 
+          from: path.resolve(__dirname, '../static'),
+          to: config.build.assetsSubDirectory,
+        }
+      ],
+    }),
     new VueLoaderPlugin()
   ]
 })

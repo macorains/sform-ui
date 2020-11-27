@@ -9,6 +9,7 @@ exports.assetsPath = function (_path) {
   return path.posix.join(assetsSubDirectory, _path)
 }
 
+/*
 exports.cssLoaders = function (options) {
   options = options || {}
 
@@ -35,7 +36,7 @@ exports.cssLoaders = function (options) {
     // Extract CSS when that option is specified
     // (which is the case during production build)
     if (options.extract) {
-      return ExtractTextPlugin.extract({
+      return ExtractTextPlugin.loader({
         use: loaders,
         fallback: 'vue-style-loader'
       })
@@ -69,3 +70,4 @@ exports.styleLoaders = function (options) {
   }
   return output
 }
+*/
