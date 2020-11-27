@@ -1,8 +1,9 @@
 var path = require('path')
 var utils = require('./utils.js')
 var config = require('../config')
-// var vueLoaderConfig = require('./vue-loader.conf._js')
+var vueLoaderConfig = require('./vue-loader.conf.js')
 var MiniCssExtractPlugin = require('mini-css-extract-plugin')
+var ExtractTextPlugin = require("extract-text-webpack-plugin")
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -49,9 +50,18 @@ module.exports = {
         ]
       },
       {
+        test: /\.scss$/,
+        use: [
+            'vue-style-loader',
+            'css-loader',
+            'postcss-loader',
+            'sass-loader',
+        ]
+      },
+      {
         test: /\.vue$/,
-        loader: 'vue-loader'
-        // options: vueLoaderConfig
+        loader: 'vue-loader',
+        options: vueLoaderConfig
       },
       {
         test: /\.js$/,
