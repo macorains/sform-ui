@@ -1,6 +1,6 @@
 var path = require('path')
 var config = require('../config')
-var ExtractTextPlugin = require('mini-css-extract-plugin')
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 exports.assetsPath = function (_path) {
   var assetsSubDirectory = process.env.NODE_ENV === 'production'
@@ -9,13 +9,13 @@ exports.assetsPath = function (_path) {
   return path.posix.join(assetsSubDirectory, _path)
 }
 
+
 exports.cssLoaders = function (options) {
   options = options || {}
-
   var cssLoader = {
     loader: 'css-loader',
     options: {
-      // minimize: process.env.NODE_ENV === 'production',
+      minimize: process.env.NODE_ENV === 'production',
       sourceMap: options.sourceMap
     }
   }
@@ -69,3 +69,4 @@ exports.styleLoaders = function (options) {
   }
   return output
 }
+
