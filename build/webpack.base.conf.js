@@ -1,13 +1,18 @@
 var path = require('path')
-var utils = require('./utils')
+var utils = require('./utils.js')
 var config = require('../config')
-var vueLoaderConfig = require('./vue-loader.conf')
+var vueLoaderConfig = require('./vue-loader.conf.js')
+var MiniCssExtractPlugin = require('mini-css-extract-plugin')
+var ExtractTextPlugin = require("extract-text-webpack-plugin")
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
 
 module.exports = {
+  plugins: [new MiniCssExtractPlugin({
+    filename: 'style.css'
+  })],
   entry: {
     app: './src/main.js'
   },
@@ -35,6 +40,23 @@ module.exports = {
         options: {
           formatter: require('eslint-friendly-formatter')
         }
+      },
+      {
+        test: /\.css$/,
+        use: [
+          process.env.NODE_ENV !== 'production' ? 'vue-style-loader' : MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader'
+        ]
+      },
+      {
+        test: /\.scss$/,
+        use: [
+            'vue-style-loader',
+            'css-loader',
+            'sass-loader',
+            'postcss-loader',
+        ]
       },
       {
         test: /\.vue$/,
