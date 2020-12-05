@@ -1,7 +1,7 @@
 require('./check-versions')()
 
 const envCheck = (env) => {
-  return env && (env === 'dev' || env === 'it' || env === 'production')
+  return env && (env === 'dev' || env === 'it' || env === 'production' || env === 'integration')
 }
 
 process.env.NODE_ENV = envCheck(process.argv[2]) ? process.argv[2] : 'production'
