@@ -102,6 +102,7 @@ export default {
       params.append('password', this.password)
       this.$http.post(this.$props.serverUri + '/signIn', params, config)
         .then(response => {
+          console.log(response)
           this.$emit('updateIsAdmin', true)
           this.$router.push({ name: 'codeinput', params: { formToken: response.data.formToken, serverUri: this.$props.serverUri } }).catch(err => { console.log(err) })
         })
