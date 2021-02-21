@@ -74,8 +74,7 @@
       >
         <b-col>
           <b-btn
-            class="mt-3"
-            block
+            class="mt-6"
             @click="endEdit"
           >
             <span
@@ -83,7 +82,18 @@
               title="check"
               aria-hidden="true"
             />
-            {{ $t('message.end_edit') }}
+            {{ $t('message.discard_edit') }}
+          </b-btn>
+          <b-btn
+            class="mt-6"
+            @click="saveEdit"
+          >
+            <span
+              class="oi oi-check"
+              title="check"
+              aria-hidden="true"
+            />
+            {{ $t('message.save_change') }}
           </b-btn>
         </b-col>
       </div>
@@ -131,6 +141,9 @@ export default {
     },
     endEdit: function () {
       this.$emit('endEditUser')
+    },
+    saveEdit: function () {
+      this.$emit('saveEditUser')
     }
   }
 }

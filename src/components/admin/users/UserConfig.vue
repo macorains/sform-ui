@@ -79,6 +79,7 @@
       :user="selectedUser"
       :modal-state="modalState"
       @endEditUser="endEditUser"
+      @saveEditUser="saveEditUser"
     />
     <b-modal
       id="modal_user_delete"
@@ -140,15 +141,18 @@ export default {
         'Access-Control-Allow-Origin': this.$props.serverUri
       }
     }
-    this.$http.get(this.$props.serverUri + '/user', this.$data.config)
-      .then(response => {
-        console.log(response.data)
-        this.$data.userlist = response.data.dataset
-      })
+    this.load()
   },
   methods: {
+    load: function () {
+      this.$http.get(this.$props.serverUri + '/user', this.$data.config)
+        .then(response => {
+          console.log(response.data)
+          this.$data.userlist = response.data.dataset
+        })
+    },
     editUser: function (index) {
-      this.$set(this.$data, 'selectedUser', this.$data.userlist[index])
+      this.$set(this.$data, 'selectedUser', JSON.parse(JSON.stringify(this.$data.userlist[index])))
       this.$data.modalState = 1
     },
     deleteUser: function (index) {
@@ -156,11 +160,29 @@ export default {
       // ToDo 削除更新処理追加
     },
     endEditUser: function () {
-      // ToDo 保存処理追加
       this.$data.modalState = 0
+      this.$data.selectedUser = {}
+    },
+    saveEditUser: function () {
+      var targetIndex = this.$data.userlist.length
+      if (this.$data.selectedUser.userId) {
+        targetIndex = this.$data.userlist.findIndex(dt => { return dt.userId === this.$data.selectedUser.userId })
+      }
+      // ToDo 保存処理追加
+      /*
+            this.$http.post(this.$props.serverUri + '/user', this.$data.config)
+        .then(response => {
+          console.log(response.data)
+          this.$data.userlist = response.data.dataset
+        })
+
+      */
+      // 個別セットよりもリロードの方が確実かも
+      // this.load()
+      this.$set(this.$data.userlist, targetIndex, JSON.parse(JSON.stringify(this.$data.selectedUser)))
+      this.endEditUser()
     },
     addUser: function () {
-      var newIndex = Object.keys(this.$data.userlist).length
       var tmp = {
         email: '',
         firstName: '',
@@ -168,8 +190,7 @@ export default {
         role: '',
         deletable: true
       }
-      this.$set(this.$data.userlist, newIndex, tmp)
-      this.$set(this.$data, 'selectedUser', this.$data.userlist[newIndex])
+      this.$set(this.$data, 'selectedUser', JSON.parse(JSON.stringify(tmp)))
       this.$data.modalState = 1
     }
   }
