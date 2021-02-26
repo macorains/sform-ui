@@ -225,6 +225,11 @@ export default {
       if (statusCode === 401 || statusCode === 403) {
         return this.$i18n.t('message.error_authorization')
       }
+      if (statusCode === 404) {
+        if (msg.indexOf('IdentityNotFoundException') > 0) {
+          return this.$i18n.t('message.error_user_not_found')
+        }
+      }
       return this.$i18n.t('message.error_undefined')
     }
   }
