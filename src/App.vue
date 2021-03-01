@@ -209,6 +209,7 @@ export default {
       return res
     },
     convertMessage: function (evt) {
+      console.log(evt)
       const msg = evt.reason.response.data.message
       const statusCode = evt.reason.response.status
       if (statusCode === 400) {
@@ -226,7 +227,7 @@ export default {
         return this.$i18n.t('message.error_authorization')
       }
       if (statusCode === 404) {
-        if (msg.indexOf('IdentityNotFoundException') > 0) {
+        if (msg.indexOf('IdentityNotFoundException') > 0 || msg.indexOf('InvalidPasswordException') > 0) {
           return this.$i18n.t('message.error_user_not_found')
         }
       }
