@@ -16,7 +16,7 @@
             :key="index"
           >
             <td>{{ index+1 }}</td>
-            <td>{{ user.lastName + ' ' + user.firstName }}</td>
+            <td>{{ user.last_name + ' ' + user.first_name }}</td>
             <td>{{ user.email }}</td>
             <td>
               <b-btn
@@ -147,8 +147,7 @@ export default {
     load: function () {
       this.$http.get(this.$props.serverUri + '/user', this.$data.config)
         .then(response => {
-          console.log(response.data)
-          this.$data.userlist = response.data.dataset
+          this.$set(this.$data, 'userlist', response.data.dataset)
         })
     },
     editUser: function (index) {
@@ -164,31 +163,22 @@ export default {
       this.$data.selectedUser = {}
     },
     saveEditUser: function () {
-      var targetIndex = this.$data.userlist.length
-      if (this.$data.selectedUser.userId) {
-        targetIndex = this.$data.userlist.findIndex(dt => { return dt.userId === this.$data.selectedUser.userId })
-      }
-      // ToDo 保存処理追加
-      /*
-            this.$http.post(this.$props.serverUri + '/user', this.$data.config)
+      this.$http.post(this.$props.serverUri + '/user', this.$data.selectedUser, this.$data.config)
         .then(response => {
-          console.log(response.data)
-          this.$data.userlist = response.data.dataset
+          this.load()
+          this.endEditUser()
         })
-
-      */
-      // 個別セットよりもリロードの方が確実かも
-      // this.load()
-      this.$set(this.$data.userlist, targetIndex, JSON.parse(JSON.stringify(this.$data.selectedUser)))
-      this.endEditUser()
     },
     addUser: function () {
       var tmp = {
-        email: '',
-        firstName: '',
-        lastName: '',
+        user_id: null,
+        user_group: '',
         role: '',
-        deletable: true
+        first_name: '',
+        last_name: '',
+        full_name: '',
+        email: '',
+        avatar_url: ''
       }
       this.$set(this.$data, 'selectedUser', JSON.parse(JSON.stringify(tmp)))
       this.$data.modalState = 1

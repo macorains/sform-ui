@@ -17,7 +17,7 @@
             >
               <b-form-input
                 id="lastName"
-                v-model="userData.lastName"
+                v-model="userData.last_name"
                 type="text"
               />
             </b-form-group>
@@ -30,7 +30,7 @@
             >
               <b-form-input
                 id="firstName"
-                v-model="userData.firstName"
+                v-model="userData.first_name"
                 type="text"
               />
             </b-form-group>
