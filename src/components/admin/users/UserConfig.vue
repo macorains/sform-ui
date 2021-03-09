@@ -155,8 +155,10 @@ export default {
       this.$data.modalState = 1
     },
     deleteUser: function (index) {
-      this.$delete(this.$data.userlist, index)
-      // ToDo 削除更新処理追加
+      this.$http.delete(this.$props.serverUri + '/user/' + this.$data.userlist[index].user_id, this.$data.config)
+        .then(response => {
+          this.load()
+        })
     },
     endEditUser: function () {
       this.$data.modalState = 0
