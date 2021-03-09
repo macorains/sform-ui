@@ -16,7 +16,7 @@
             :key="index"
           >
             <td>{{ index+1 }}</td>
-            <td>{{ user.lastName + ' ' + user.firstName }}</td>
+            <td>{{ user.last_name + ' ' + user.first_name }}</td>
             <td>{{ user.email }}</td>
             <td>
               <b-btn
@@ -79,6 +79,7 @@
       :user="selectedUser"
       :modal-state="modalState"
       @endEditUser="endEditUser"
+      @saveEditUser="saveEditUser"
     />
     <b-modal
       id="modal_user_delete"
@@ -140,36 +141,48 @@ export default {
         'Access-Control-Allow-Origin': this.$props.serverUri
       }
     }
-    this.$http.get(this.$props.serverUri + '/user', this.$data.config)
-      .then(response => {
-        console.log(response.data)
-        this.$data.userlist = response.data.dataset
-      })
+    this.load()
   },
   methods: {
+    load: function () {
+      this.$http.get(this.$props.serverUri + '/user', this.$data.config)
+        .then(response => {
+          this.$set(this.$data, 'userlist', response.data.dataset)
+        })
+    },
     editUser: function (index) {
-      this.$set(this.$data, 'selectedUser', this.$data.userlist[index])
+      this.$set(this.$data, 'selectedUser', JSON.parse(JSON.stringify(this.$data.userlist[index])))
       this.$data.modalState = 1
     },
     deleteUser: function (index) {
-      this.$delete(this.$data.userlist, index)
-      // ToDo 削除更新処理追加
+      this.$http.delete(this.$props.serverUri + '/user/' + this.$data.userlist[index].user_id, this.$data.config)
+        .then(response => {
+          this.load()
+        })
     },
     endEditUser: function () {
-      // ToDo 保存処理追加
       this.$data.modalState = 0
+      this.$data.selectedUser = {}
+    },
+    saveEditUser: function () {
+      this.$http.post(this.$props.serverUri + '/user', this.$data.selectedUser, this.$data.config)
+        .then(response => {
+          this.load()
+          this.endEditUser()
+        })
     },
     addUser: function () {
-      var newIndex = Object.keys(this.$data.userlist).length
       var tmp = {
-        email: '',
-        firstName: '',
-        lastName: '',
+        user_id: null,
+        user_group: '',
         role: '',
-        deletable: true
+        first_name: '',
+        last_name: '',
+        full_name: '',
+        email: '',
+        avatar_url: ''
       }
-      this.$set(this.$data.userlist, newIndex, tmp)
-      this.$set(this.$data, 'selectedUser', this.$data.userlist[newIndex])
+      this.$set(this.$data, 'selectedUser', JSON.parse(JSON.stringify(tmp)))
       this.$data.modalState = 1
     }
   }
