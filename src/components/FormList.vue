@@ -153,21 +153,22 @@ export default {
     }
   },
   created: function () {
-    var token = localStorage.getItem('sformToken')
+    // var token = localStorage.getItem('sformToken')
     if (!this.$props.serverUri) {
       this.$router.push({ path: 'signin' })
     }
     this.$data.serverUriString = this.$props.serverUri
-    this.$data.config = {
-      headers: {
-        'x-Requested-With': '*',
-        'X-Auth-Token': token,
-        'Access-Control-Allow-Origin': this.$props.serverUri,
-        timeout: 3000
-      }
-    }
+    // this.$data.config = {
+    //   headers: {
+    //     'x-Requested-With': '*',
+    //     'X-Auth-Token': token,
+    //     'Access-Control-Allow-Origin': this.$props.serverUri,
+    //     timeout: 3000
+    //   }
+    // }
     this.$data.loading = true
-    this.$http.get(this.$props.serverUri + '/form/list', this.$data.config)
+    // this.$http.get(this.$props.serverUri + '/form/list', this.$data.config)
+    this.$http.get('/form/list')
       .then(response => {
         this.$data.loading = false
         this.$data.formList = response.data.forms
