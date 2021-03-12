@@ -76,6 +76,7 @@ export default {
           console.log(response)
           const token = response.headers['x-auth-token']
           localStorage.setItem('sformToken', token)
+          this.$http.defaults.headers.common['X-Auth-Token'] = token
           this.$router.push({ path: 'formlist', params: { serverUri: this.$props.serverUri } })
         })
     },
