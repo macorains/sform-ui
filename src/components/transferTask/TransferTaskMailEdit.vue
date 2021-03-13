@@ -179,10 +179,6 @@
 export default {
   name: 'TransferTaskMailEdit',
   props: {
-    serverUri: {
-      type: String,
-      default: ''
-    },
     transferTask: {
       type: Object,
       default: () => ({})
@@ -212,19 +208,9 @@ export default {
       mailAddressList: []
     }
   },
-  created: function () {
-    var token = localStorage.getItem('sformToken')
-    this.$data.config = {
-      headers: {
-        'x-Requested-With': '*',
-        'X-Auth-Token': token,
-        'Access-Control-Allow-Origin': this.$props.serverUri
-      }
-    }
-  },
   methods: {
     modalInit: function () {
-      this.$http.get(this.$props.serverUri + '/transfer/config/' + this.$props.transferTask.transfer_config_id, this.$data.config)
+      this.$http.get('/transfer/config/' + this.$props.transferTask.transfer_config_id)
         .then(response => {
           this.$data.transferConfig = response.data
           this.$data.mailAddressList = this.$data.transferConfig.detail.mail.mail_address_list.map(addr => ({ value: addr.id, text: addr.name + '(' + addr.address + ')' }))

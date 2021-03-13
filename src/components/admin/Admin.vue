@@ -46,12 +46,6 @@ export default {
   components: {
     userConfig: UserConfig,
     transferConfig: TransferConfig
-  },
-  props: {
-    serverUri: {
-      type: String,
-      default: ''
-    }
   }
 }
 

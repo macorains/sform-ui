@@ -550,10 +550,6 @@ export default {
     formColEditOrder: FormColEditOrder
   },
   props: {
-    serverUri: {
-      type: String,
-      default: ''
-    },
     hashedFormId: {
       type: String,
       default: ''
@@ -605,21 +601,12 @@ export default {
     }
   },
   created: function () {
-    var token = localStorage.getItem('sformToken')
     if (!this.$props.hashedFormId) {
       this.$router.push({ path: '/formlist' })
       return
     }
     this.$data.loading = true
-    this.$data.config = {
-      headers: {
-        'x-Requested-With': '*',
-        'X-Auth-Token': token,
-        'Access-Control-Allow-Origin': this.$props.serverUri,
-        timeout: 3000
-      }
-    }
-    this.$http.get(this.$props.serverUri + '/form/' + this.$props.hashedFormId, this.$data.config)
+    this.$http.get('/form/' + this.$props.hashedFormId)
       .then(response => {
         this.$data.formData = response.data
         this.$data.loading = false
@@ -628,13 +615,13 @@ export default {
   methods: {
     save: function () {
       const op = (!this.$data.formData.id) ? '/form/new' : '/form'
-      this.$http.post(this.$props.serverUri + op, this.$data.formData, this.$data.config)
+      this.$http.post(op, this.$data.formData)
         .then(response => {
-          this.$router.push({ path: 'formlist', params: { serverUri: this.$props.serverUri } })
+          this.$router.push({ path: 'formlist' })
         })
     },
     cancel: function () {
-      this.$router.push({ path: 'formlist', params: { serverUri: this.$props.serverUri } })
+      this.$router.push({ path: 'formlist' })
     },
     addFormCol: function () {
       var i = Object.keys(this.$data.formData.form_cols).length

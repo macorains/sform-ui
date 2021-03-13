@@ -104,10 +104,6 @@
 export default {
   name: 'UserConfigEdit',
   props: {
-    serverUri: {
-      type: String,
-      default: ''
-    },
     user: {
       type: Object,
       default: () => ({})

@@ -44,12 +44,6 @@
 <script>
 export default {
   name: 'CodeInput',
-  props: {
-    serverUri: {
-      type: String,
-      default: ''
-    }
-  },
   data: function () {
     return {
       code: '',
@@ -61,27 +55,22 @@ export default {
   },
   methods: {
     send: function (event) {
-      const config = {
-        headers: {
-          'x-Requested-With': '*',
-          'Access-Control-Allow-Origin': this.$props.serverUri
-        }
-      }
       var reqdata = {
         form_token: this.$data.formToken,
         verification_code: this.$data.code
       }
-      this.$http.post(this.$props.serverUri + '/verification', reqdata, config)
+      this.$http.post('/verification', reqdata)
         .then(response => {
           console.log(response)
+          // 認証トークンを受け取ってLocalStorageに格納、axiosのデフォルトヘッダにセットする
           const token = response.headers['x-auth-token']
           localStorage.setItem('sformToken', token)
           this.$http.defaults.headers.common['X-Auth-Token'] = token
-          this.$router.push({ path: 'formlist', params: { serverUri: this.$props.serverUri } })
+          this.$router.push({ path: 'formlist' })
         })
     },
     resignin: function () {
-      this.$router.push({ path: 'signin', params: { serverUri: this.$props.serverUri } })
+      this.$router.push({ path: 'signin' })
     }
   }
 }
