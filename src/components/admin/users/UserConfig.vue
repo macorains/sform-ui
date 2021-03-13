@@ -117,12 +117,6 @@ export default {
   components: {
     UserConfigEdit: UserConfigEdit
   },
-  props: {
-    serverUri: {
-      type: String,
-      default: ''
-    }
-  },
   data: function () {
     return {
       config: {},
@@ -133,19 +127,11 @@ export default {
     }
   },
   created: function () {
-    var token = localStorage.getItem('sformToken')
-    this.$data.config = {
-      headers: {
-        'x-Requested-With': '*',
-        'X-Auth-Token': token,
-        'Access-Control-Allow-Origin': this.$props.serverUri
-      }
-    }
     this.load()
   },
   methods: {
     load: function () {
-      this.$http.get(this.$props.serverUri + '/user', this.$data.config)
+      this.$http.get('/user')
         .then(response => {
           this.$set(this.$data, 'userlist', response.data.dataset)
         })
@@ -155,7 +141,7 @@ export default {
       this.$data.modalState = 1
     },
     deleteUser: function (index) {
-      this.$http.delete(this.$props.serverUri + '/user/' + this.$data.userlist[index].user_id, this.$data.config)
+      this.$http.delete('/user/' + this.$data.userlist[index].user_id)
         .then(response => {
           this.load()
         })
@@ -165,7 +151,7 @@ export default {
       this.$data.selectedUser = {}
     },
     saveEditUser: function () {
-      this.$http.post(this.$props.serverUri + '/user', this.$data.selectedUser, this.$data.config)
+      this.$http.post('/user', this.$data.selectedUser)
         .then(response => {
           this.load()
           this.endEditUser()

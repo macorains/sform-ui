@@ -204,10 +204,6 @@
 export default {
   name: 'MailTransferConfig',
   props: {
-    serverUri: {
-      type: String,
-      default: ''
-    },
     isVisible: {
       type: Boolean,
       default: false
@@ -235,19 +231,9 @@ export default {
       newAddress: ''
     }
   },
-  created: function () {
-    var token = localStorage.getItem('sformToken')
-    this.$data.config = {
-      headers: {
-        'x-Requested-With': '*',
-        'X-Auth-Token': token,
-        'Access-Control-Allow-Origin': this.$props.serverUri
-      }
-    }
-  },
   methods: {
     modalInit: function () {
-      this.$http.get(this.$props.serverUri + '/transfer/config/' + this.$props.transferConfigId, this.$data.config)
+      this.$http.get('/transfer/config/' + this.$props.transferConfigId)
         .then(response => {
           this.$data.transferConfig = response.data
         })
@@ -265,7 +251,7 @@ export default {
       this.$data.inEdit = false
     },
     save: function () {
-      this.$http.post(this.$props.serverUri + '/transfer/config', this.$data.transferConfig, this.$data.config)
+      this.$http.post('/transfer/config', this.$data.transferConfig)
         .then(response => {
           this.modalClose()
         })
