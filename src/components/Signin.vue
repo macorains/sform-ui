@@ -60,12 +60,6 @@
 <script>
 export default {
   name: 'Signin',
-  props: {
-    serverUri: {
-      type: String,
-      default: ''
-    }
-  },
   data: function () {
     return {
       email: '',

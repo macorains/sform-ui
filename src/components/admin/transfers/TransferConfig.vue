@@ -56,13 +56,11 @@
       </table>
     </div>
     <mailTransferConfig
-      :server-uri="serverUri"
       :is-visible="modalState.Mail"
       :transfer-config-id="transferConfigId"
       @changeModalState="changeModalState"
     />
     <salesforceTransferConfig
-      :server-uri="serverUri"
       :is-visible="modalState.Salesforce"
       :transfer-config-id="transferConfigId"
       @changeModalState="changeModalState"

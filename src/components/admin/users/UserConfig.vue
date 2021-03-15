@@ -75,7 +75,6 @@
       </b-row>
     </div>
     <userConfigEdit
-      :server-uri="serverUri"
       :user="selectedUser"
       :modal-state="modalState"
       @endEditUser="endEditUser"

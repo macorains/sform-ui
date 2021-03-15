@@ -62,7 +62,7 @@ export default {
   },
   methods: {
     back: function () {
-      this.$router.push({ path: 'formlist', params: { serverUri: this.$props.serverUri } })
+      this.$router.push({ path: 'formlist' })
     }
   }
 }

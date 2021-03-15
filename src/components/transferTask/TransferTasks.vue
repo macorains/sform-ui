@@ -91,7 +91,6 @@
     </b-container>
     <transferTaskSalesforceEdit
       ref="TransferTaskSalesforceEdit"
-      :server-uri="serverUri"
       :is-visible="transferEditModalState.Salesforce"
       :transfer-task="formData.form_transfer_tasks[selectedTransferTask]"
       :form-cols="formData.form_cols"
@@ -99,7 +98,6 @@
     />
     <transferTaskMailEdit
       ref="transferTaskMailEdit"
-      :server-uri="serverUri"
       :is-visible="transferEditModalState.Mail"
       :transfer-task="formData.form_transfer_tasks[selectedTransferTask]"
       :form-cols="formData.form_cols"
