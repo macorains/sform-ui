@@ -281,7 +281,10 @@
         </b-row>
       </b-container>
       <formColEdit
-        :form-col-modal-edit-state="formColEditModalState"
+        :form-col-edit-modal-state="formColEditModalState"
+        :form-col-data="formColData"
+        :form-id="formData.id"
+        @endEditCol="endEditCol"
       />
     </div>
   </div>
@@ -309,6 +312,11 @@ export default {
   data: function () {
     return {
       formColData: { validations: {}, selectList: {} },
+      transferTask: {},
+      config: {},
+      formColEditModalState: 0,
+      formColEditOrderModalState: 0,
+      loading: false,
       formData: {
         form_cols: [
           {
@@ -326,20 +334,6 @@ export default {
           }
         ]
       },
-      transferTask: {},
-      config: {},
-      inEditFormColIndex: 0,
-      formColEditModalState: 0,
-      formColEditOrderModalState: 0,
-      optionFormColValidation: [
-        { value: 0, text: '無制限' },
-        { value: 1, text: '数値のみ' },
-        { value: 2, text: '英数字のみ' },
-        { value: 3, text: 'ひらがなのみ' },
-        { value: 4, text: 'カタカナのみ' },
-        { value: 5, text: 'メールアドレス' },
-        { value: 6, text: '郵便番号' }
-      ],
       optionFormColType: [
         { value: 1, text: 'テキスト' },
         { value: 2, text: 'コンボボックス（単一選択）' },
@@ -348,8 +342,7 @@ export default {
         { value: 5, text: 'テキストエリア' },
         { value: 6, text: '隠しテキスト' },
         { value: 7, text: '表示テキスト（非入力項目）' }
-      ],
-      loading: false
+      ]
     }
   },
   created: function () {
@@ -404,38 +397,14 @@ export default {
     startEditCol: function (index) {
       this.$data.inEditFormColIndex = index
       this.$data.formColData = this.$data.formData.form_cols[index]
-      this.$refs.modalColedit.show()
+      this.$data.formColEditModalState = 1
     },
-    endEditCol: function () {
-      this.$refs.modalColedit.hide()
+    endEditCol: function (formCol) {
+      this.$set(this.$data.formData.form_cols, this.$data.inEditFormColIndex, formCol)
+      this.$data.formColEditModalState = 0
     },
     deleteCol: function (index) {
       this.$delete(this.$data.formData.form_cols, index)
-    },
-    addColSelectList: function () {
-      var colSize = Object.keys(this.$data.formData.form_cols[this.$data.inEditFormColIndex].select_list).length
-      var tmp = {
-        form_id: this.$data.formData.id,
-        select_index: colSize,
-        select_name: '選択項目' + colSize,
-        select_value: colSize + '',
-        is_default: false,
-        view_style: 'display:inline',
-        edit_style: 'display:none'
-      }
-      this.$set(this.$data.formData.form_cols[this.$data.inEditFormColIndex].select_list, colSize, tmp)
-    },
-    deleteColSelectList: function (index) {
-      this.$delete(this.$data.formData.form_cols[this.$data.inEditFormColIndex].select_list, index)
-    },
-    editColSelectList: function (index) {
-      const selectList = this.$data.formData.form_cols[this.$data.inEditFormColIndex].select_list
-      for (var sel in selectList) {
-        this.$set(selectList[sel], 'in_edit', selectList[sel].select_index === index)
-      }
-    },
-    endEditColSelectList: function (index) {
-      this.$set(this.$data.formData.form_cols[this.$data.inEditFormColIndex].select_list[index], 'in_edit', false)
     },
     reorderColStart: function () {
       this.$data.formColEditOrderModalState = 1
@@ -458,7 +427,6 @@ export default {
         .shift()
     }
   }
-
 }
 </script>
 <style scoped>
