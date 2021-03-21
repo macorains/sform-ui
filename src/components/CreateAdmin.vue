@@ -91,12 +91,6 @@
 <script>
 export default {
   name: 'CreateAdmin',
-  props: {
-    serverUri: {
-      type: String,
-      default: ''
-    }
-  },
   data: function () {
     return {
       firstName: '',
@@ -109,19 +103,13 @@ export default {
   },
   methods: {
     send: function (event) {
-      const config = {
-        headers: {
-          'x-Requested-With': '*',
-          'Access-Control-Allow-Origin': this.$props.serverUri
-        }
-      }
       var params = new URLSearchParams()
       params.append('firstName', this.firstName)
       params.append('lastName', this.lastName)
       params.append('email', this.email)
       params.append('group', this.group)
       params.append('password', this.password)
-      this.$http.post(this.$props.serverUri + '/signUp', params, config)
+      this.$http.post('/signUp', params)
         .then(response => {
           this.modalMessage = response.data.message
           this.$bvModal.show('modalCreateAdminComplete')

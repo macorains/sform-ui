@@ -60,12 +60,6 @@
 <script>
 export default {
   name: 'Signin',
-  props: {
-    serverUri: {
-      type: String,
-      default: ''
-    }
-  },
   data: function () {
     return {
       email: '',
@@ -75,13 +69,7 @@ export default {
     }
   },
   created: function () {
-    const config = {
-      headers: {
-        'x-Requested-With': '*',
-        'Access-Control-Allow-Origin': this.$props.serverUri
-      }
-    }
-    this.$http.get(this.$props.serverUri + '/adminExistsCheck', config)
+    this.$http.get('/adminExistsCheck')
       .then(response => {
         if (response.data.result === false) {
           this.$router.push({ path: 'createadmin', params: {} })
@@ -90,20 +78,14 @@ export default {
   },
   methods: {
     send: function (event) {
-      const config = {
-        headers: {
-          'x-Requested-With': '*',
-          'Access-Control-Allow-Origin': this.$props.serverUri
-        }
-      }
       var params = new URLSearchParams()
       params.append('email', this.email)
       params.append('group', this.group)
       params.append('password', this.password)
-      this.$http.post(this.$props.serverUri + '/signIn', params, config)
+      this.$http.post('/signIn', params)
         .then(response => {
           this.$emit('updateIsAdmin', true)
-          this.$router.push({ name: 'codeinput', params: { formToken: response.data.formToken, serverUri: this.$props.serverUri } }).catch(err => { console.log(err) })
+          this.$router.push({ name: 'codeinput', params: { formToken: response.data.formToken } }).catch(err => { console.log(err) })
         })
     }
   }

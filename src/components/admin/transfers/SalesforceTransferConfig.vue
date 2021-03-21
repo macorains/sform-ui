@@ -193,10 +193,6 @@
 export default {
   name: 'SalesforceTransferConfig',
   props: {
-    serverUri: {
-      type: String,
-      default: ''
-    },
     isVisible: {
       type: Boolean,
       default: false
@@ -219,29 +215,19 @@ export default {
       selectedObject: {}
     }
   },
-  created: function () {
-    var token = localStorage.getItem('sformToken')
-    this.$data.config = {
-      headers: {
-        'x-Requested-With': '*',
-        'X-Auth-Token': token,
-        'Access-Control-Allow-Origin': this.$props.serverUri
-      }
-    }
-  },
   methods: {
     modalInit: function () {
-      this.$http.get(this.$props.serverUri + '/transfer/config/' + this.$props.transferConfigId, this.$data.config)
+      this.$http.get('/transfer/config/' + this.$props.transferConfigId)
         .then(response => {
           this.$data.transferConfig = response.data
         })
     },
     endEdit: function () {
       this.$data.selectedObject = {}
-      this.$emit('changeModalState', 'salesforce', false)
+      this.$emit('changeModalState', 'Salesforce', false)
     },
     save: function () {
-      this.$http.post(this.$props.serverUri + '/transfer/config', this.$data.transferConfig, this.$data.config)
+      this.$http.post('/transfer/config', this.$data.transferConfig)
         .then(response => {
           console.log(response)
         })
@@ -255,7 +241,7 @@ export default {
       }
       this.$bvToast.hide('checkResult')
       this.$data.inCheckWaiting = true
-      this.$http.post(this.$props.serverUri + '/transfer/salesforce/check', requestData, this.$data.config)
+      this.$http.post('/transfer/salesforce/check', requestData)
         .then(response => {
           this.$data.inCheckWaiting = false
           this.$data.checkResult = response.data
@@ -267,13 +253,13 @@ export default {
       this.$data.selectedObject = obj
     },
     importObject: function () {
-      this.$http.get(this.$props.serverUri + '/transfer/salesforce/object/' + this.$props.transferConfigId, this.$data.config)
+      this.$http.get('/transfer/salesforce/object/' + this.$props.transferConfigId)
         .then(response => {
           response.data.forEach(obj => this.appendObject(obj))
         })
     },
     importField: function (objName) {
-      this.$http.get(this.$props.serverUri + '/transfer/salesforce/field/' + this.$props.transferConfigId + '/' + objName, this.$data.config)
+      this.$http.get('/transfer/salesforce/field/' + this.$props.transferConfigId + '/' + objName)
         .then(response => {
           response.data.forEach(field => this.appendField(objName, field))
         })

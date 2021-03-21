@@ -1,5 +1,8 @@
 <template>
-  <div class="salesforce-transfer-edit">
+  <div
+    v-if="transferTask.salesforce"
+    class="salesforce-transfer-edit"
+  >
     <b-modal
       ref="modalSalesforceTransferRuleSetting"
       size="lg"
@@ -102,10 +105,6 @@ import axios from 'axios'
 export default {
   name: 'TransferTaskSalesforceEdit',
   props: {
-    serverUri: {
-      type: String,
-      default: ''
-    },
     transferTask: {
       type: Object,
       default: () => ({})
@@ -129,20 +128,10 @@ export default {
       column_list: []
     }
   },
-  created: function () {
-    var token = localStorage.getItem('sformToken')
-    this.$data.config = {
-      headers: {
-        'x-Requested-With': '*',
-        'X-Auth-Token': token,
-        'Access-Control-Allow-Origin': this.$props.serverUri
-      }
-    }
-  },
   methods: {
     modalInit: function () {
       this.$data.field_list = []
-      axios.get(this.$props.serverUri + '/transfer/config/' + this.$props.transferTask.transfer_config_id, this.$data.config)
+      axios.get('/transfer/config/' + this.$props.transferTask.transfer_config_id)
         .then(response => {
           this.$data.transferConfig = response.data
           this.$data.object_list = this.$data.transferConfig.detail.salesforce.objects.filter(o => o.active).map(o => ({ value: o.name, text: o.label }))

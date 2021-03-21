@@ -1,7 +1,13 @@
 import Axios from 'axios'
 
 const http = Axios.create({
-  withCredentials: true
+  baseURL: process.env.VUE_APP_API_URL,
+  withCredentials: true,
+  headers: {
+    'x-Requested-With': '*',
+    'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL,
+    timeout: 3000
+  }
 })
 
 http.interceptors.response.use(function (response) { return response }, function (error) {

@@ -56,14 +56,12 @@
       </table>
     </div>
     <mailTransferConfig
-      :server-uri="serverUri"
-      :is-visible="modalState.mail"
+      :is-visible="modalState.Mail"
       :transfer-config-id="transferConfigId"
       @changeModalState="changeModalState"
     />
     <salesforceTransferConfig
-      :server-uri="serverUri"
-      :is-visible="modalState.salesforce"
+      :is-visible="modalState.Salesforce"
       :transfer-config-id="transferConfigId"
       @changeModalState="changeModalState"
     />
@@ -78,33 +76,18 @@ export default {
     mailTransferConfig: MailTransferConfig,
     salesforceTransferConfig: SalesforceTransferConfig
   },
-  props: {
-    serverUri: {
-      type: String,
-      default: ''
-    }
-  },
   data: function () {
     return {
       transferConfigList: [],
       transferConfigId: 0,
       modalState: {
-        salesforce: false,
-        mail: false
+        Salesforce: false,
+        Mail: false
       }
     }
   },
   created: function () {
-    var token = localStorage.getItem('sformToken')
-    this.$data.config = {
-      headers: {
-        'x-Requested-With': '*',
-        'X-Auth-Token': token,
-        'Access-Control-Allow-Origin': this.$props.serverUri,
-        timeout: 3000
-      }
-    }
-    this.$http.get(this.$props.serverUri + '/transfer/config/list', this.$data.config)
+    this.$http.get('/transfer/config/list')
       .then(response => {
         this.$data.transferConfigList = response.data
       })
@@ -113,7 +96,7 @@ export default {
     edit: function (index) {
       const target = this.$data.transferConfigList[index]
       this.$data.transferConfigId = target.id
-      this.$data.modalState[target.type_code.toLowerCase()] = true
+      this.$data.modalState[target.type_code] = true
     },
     changeModalState: function (target, state) {
       this.$data.modalState[target] = state

@@ -6,14 +6,15 @@
     size="lg"
     :hide-header-close="true"
     :visible="isVisible"
+    @shown="modalInit()"
     @close="modalClose()"
     @hide="modalClose()"
-    @show="modalInit()"
   >
     <b-container class="text-left">
       <b-form-row>
         <b-col>
           <b-form-checkbox
+            v-if="transferConfig.detail.mail"
             id="use_cc"
             v-model="transferConfig.detail.mail.use_cc"
             name="use_cc"
@@ -25,6 +26,7 @@
       <b-form-row>
         <b-col>
           <b-form-checkbox
+            v-if="transferConfig.detail.mail"
             id="use_bcc"
             v-model="transferConfig.detail.mail.use_bcc"
             name="use_bcc"
@@ -36,6 +38,7 @@
       <b-form-row>
         <b-col>
           <b-form-checkbox
+            v-if="transferConfig.detail.mail"
             id="use_replyto"
             v-model="transferConfig.detail.mail.use_replyto"
             name="use_replyto"
@@ -64,7 +67,7 @@
             </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody v-if="transferConfig.detail.mail.mail_address_list">
           <tr
             v-for="item in transferConfig.detail.mail.mail_address_list"
             :key="item.address_index"
@@ -201,10 +204,6 @@
 export default {
   name: 'MailTransferConfig',
   props: {
-    serverUri: {
-      type: String,
-      default: ''
-    },
     isVisible: {
       type: Boolean,
       default: false
@@ -218,7 +217,12 @@ export default {
     return {
       transferConfig: {
         detail: {
-          mail: {}
+          mail: {
+            use_cc: false,
+            use_bcc: false,
+            use_replyto: false,
+            mail_address_list: []
+          }
         }
       },
       inEdit: false,
@@ -227,19 +231,9 @@ export default {
       newAddress: ''
     }
   },
-  created: function () {
-    var token = localStorage.getItem('sformToken')
-    this.$data.config = {
-      headers: {
-        'x-Requested-With': '*',
-        'X-Auth-Token': token,
-        'Access-Control-Allow-Origin': this.$props.serverUri
-      }
-    }
-  },
   methods: {
     modalInit: function () {
-      this.$http.get(this.$props.serverUri + '/transfer/config/' + this.$props.transferConfigId, this.$data.config)
+      this.$http.get('/transfer/config/' + this.$props.transferConfigId)
         .then(response => {
           this.$data.transferConfig = response.data
         })
@@ -247,7 +241,7 @@ export default {
     modalClose: function () {
       this.$data.newName = null
       this.$data.newAddress = null
-      this.$emit('changeModalState', 'mail', false)
+      this.$emit('changeModalState', 'Mail', false)
     },
     edit: function (index) {
       this.$data.inEdit = true
@@ -257,7 +251,7 @@ export default {
       this.$data.inEdit = false
     },
     save: function () {
-      this.$http.post(this.$props.serverUri + '/transfer/config', this.$data.transferConfig, this.$data.config)
+      this.$http.post('/transfer/config', this.$data.transferConfig)
         .then(response => {
           this.modalClose()
         })
