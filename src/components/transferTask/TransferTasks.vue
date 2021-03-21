@@ -91,7 +91,6 @@
     </b-container>
     <transferTaskSalesforceEdit
       ref="TransferTaskSalesforceEdit"
-      :server-uri="serverUri"
       :is-visible="transferEditModalState.Salesforce"
       :transfer-task="formData.form_transfer_tasks[selectedTransferTask]"
       :form-cols="formData.form_cols"
@@ -99,7 +98,6 @@
     />
     <transferTaskMailEdit
       ref="transferTaskMailEdit"
-      :server-uri="serverUri"
       :is-visible="transferEditModalState.Mail"
       :transfer-task="formData.form_transfer_tasks[selectedTransferTask]"
       :form-cols="formData.form_cols"
@@ -115,7 +113,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
 import TransferTaskSalesforceEdit from './TransferTaskSalesforceEdit.vue'
 import TransferTaskMailEdit from './TransferTaskMailEdit.vue'
 import TransferTaskDeleteModal from './TransferTaskDeleteModal.vue'
@@ -188,7 +185,7 @@ export default {
   },
   created: function () {
     if (this.$props.hashedFormId) {
-      axios.get('/transfer/config/selectlist')
+      this.$http.get('/transfer/selectlist')
         .then(response => {
           this.$data.transferList = response.data
           this.$data.optionTransferType = this.$data.transferList.map(tr => ({ value: tr.id, text: tr.name }))

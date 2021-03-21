@@ -18,7 +18,7 @@
               />
               {{ $t('message.transfer') }}
             </template>
-            <transferConfig :server-uri="serverUri" />
+            <transferConfig />
           </b-tab>
           <b-tab>
             <template slot="title">
@@ -29,7 +29,7 @@
               />
               {{ $t('message.user') }}
             </template>
-            <userConfig :server-uri="serverUri" />
+            <userConfig />
           </b-tab>
         </b-tabs>
       </b-card>

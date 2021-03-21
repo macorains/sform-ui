@@ -107,7 +107,6 @@
       </b-collapse>
     </b-navbar>
     <router-view
-      :server-uri="serverUri"
       :hashed-form-id="hashedFormId"
       @updateHashedFormId="updateHashedFormId"
       @updateIsAdmin="updateIsAdmin"
@@ -120,7 +119,6 @@ export default {
   name: 'App',
   data: function () {
     return {
-      serverUri: process.env.VUE_APP_API_URL,
       hashedFormId: '',
       isAdmin: false,
       axiosTimeout: 3000,
@@ -219,25 +217,26 @@ export default {
       return res
     },
     convertMessage: function (evt) {
-      console.log(evt)
       const msg = evt.reason.response.data.message
       const statusCode = evt.reason.response.status
       if (statusCode === 400) {
-        if (msg.indexOf('InvalidPasswordException') > 0) {
-          return this.$i18n.t('message.error_invalid_password_exception')
-        }
-        if (msg === 'LoginFailureLimitExceeded') {
-          return this.$i18n.t('message.error_login_failure_limit_exceeded')
-        }
-        if (msg === 'Invalid Verification Request' || msg === 'Verification Timeout') {
-          return this.$i18n.t('message.error_verification_failed')
+        if (msg) {
+          if (msg.indexOf('InvalidPasswordException') > 0) {
+            return this.$i18n.t('message.error_invalid_password_exception')
+          }
+          if (msg === 'LoginFailureLimitExceeded') {
+            return this.$i18n.t('message.error_login_failure_limit_exceeded')
+          }
+          if (msg === 'Invalid Verification Request' || msg === 'Verification Timeout') {
+            return this.$i18n.t('message.error_verification_failed')
+          }
         }
       }
       if (statusCode === 401 || statusCode === 403) {
         return this.$i18n.t('message.error_authorization')
       }
       if (statusCode === 404) {
-        if (msg.indexOf('IdentityNotFoundException') > 0 || msg.indexOf('InvalidPasswordException') > 0) {
+        if (msg && (msg.indexOf('IdentityNotFoundException') > 0 || msg.indexOf('InvalidPasswordException') > 0)) {
           return this.$i18n.t('message.error_user_not_found')
         }
       }
