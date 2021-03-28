@@ -51,7 +51,7 @@ export default {
     this.$http.get('/formpost/' + this.$props.hashedFormId)
       .then(response => {
         this.$data.formdata = response.data.data
-        this.$data.headerLabel = response.data.header.entries
+        this.$data.headerLabel = Object.entries(response.data.header).map(entry => ({ key: entry[0], label: entry[1] }))
       })
   },
   methods: {
