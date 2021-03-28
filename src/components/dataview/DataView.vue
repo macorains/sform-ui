@@ -33,7 +33,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
 export default {
   props: {
     hashedFormId: {
@@ -49,15 +48,10 @@ export default {
     }
   },
   created: function () {
-    axios.get('/formpost/' + this.$props.hashedFormId)
+    this.$http.get('/formpost/' + this.$props.hashedFormId)
       .then(response => {
-        this.$data.formdata = response.data.rows
-        this.$data.headerdata = response.data.cols
-        var res = []
-        for (const k in this.$data.headerdata) {
-          res.push({ key: this.$data.headerdata[k].colId, label: this.$data.headerdata[k].name })
-        }
-        this.$data.headerLabel = res
+        this.$data.formdata = response.data.data
+        this.$data.headerLabel = Object.entries(response.data.header).map(entry => ({ key: entry[0], label: entry[1] }))
       })
   },
   methods: {
