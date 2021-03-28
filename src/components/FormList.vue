@@ -217,6 +217,7 @@ export default {
         })
     },
     dataView: function (hashedId) {
+      console.log(hashedId)
       this.$emit('updateHashedFormId', hashedId)
       this.$router.push({ name: 'dataview', params: { hashedFormId: hashedId } })
     }
