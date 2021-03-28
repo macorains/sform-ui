@@ -56,13 +56,11 @@
       </table>
     </div>
     <mailTransferConfig
-      :server-uri="serverUri"
       :is-visible="modalState.Mail"
       :transfer-config-id="transferConfigId"
       @changeModalState="changeModalState"
     />
     <salesforceTransferConfig
-      :server-uri="serverUri"
       :is-visible="modalState.Salesforce"
       :transfer-config-id="transferConfigId"
       @changeModalState="changeModalState"
@@ -78,12 +76,6 @@ export default {
     mailTransferConfig: MailTransferConfig,
     salesforceTransferConfig: SalesforceTransferConfig
   },
-  props: {
-    serverUri: {
-      type: String,
-      default: ''
-    }
-  },
   data: function () {
     return {
       transferConfigList: [],
@@ -95,16 +87,7 @@ export default {
     }
   },
   created: function () {
-    var token = localStorage.getItem('sformToken')
-    this.$data.config = {
-      headers: {
-        'x-Requested-With': '*',
-        'X-Auth-Token': token,
-        'Access-Control-Allow-Origin': this.$props.serverUri,
-        timeout: 3000
-      }
-    }
-    this.$http.get(this.$props.serverUri + '/transfer/config/list', this.$data.config)
+    this.$http.get('/transfer/config/list')
       .then(response => {
         this.$data.transferConfigList = response.data
       })

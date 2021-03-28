@@ -33,13 +33,8 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
 export default {
   props: {
-    serverUri: {
-      type: String,
-      default: ''
-    },
     hashedFormId: {
       type: String,
       default: ''
@@ -53,28 +48,15 @@ export default {
     }
   },
   created: function () {
-    var token = localStorage.getItem('sformToken')
-    this.$data.config = {
-      headers: {
-        'x-Requested-With': '*',
-        'X-Auth-Token': token,
-        'Access-Control-Allow-Origin': this.$props.serverUri
-      }
-    }
-    axios.get(this.$props.serverUri + '/formpost/' + this.$props.hashedFormId, this.$data.config)
+    this.$http.get('/formpost/' + this.$props.hashedFormId)
       .then(response => {
-        this.$data.formdata = response.data.rows
-        this.$data.headerdata = response.data.cols
-        var res = []
-        for (const k in this.$data.headerdata) {
-          res.push({ key: this.$data.headerdata[k].colId, label: this.$data.headerdata[k].name })
-        }
-        this.$data.headerLabel = res
+        this.$data.formdata = response.data.data
+        this.$data.headerLabel = Object.entries(response.data.header).map(entry => ({ key: entry[0], label: entry[1] }))
       })
   },
   methods: {
     back: function () {
-      this.$router.push({ path: 'formlist', params: { serverUri: this.$props.serverUri } })
+      this.$router.push({ path: 'formlist' })
     }
   }
 }

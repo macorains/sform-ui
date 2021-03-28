@@ -107,7 +107,6 @@
       </b-collapse>
     </b-navbar>
     <router-view
-      :server-uri="serverUri"
       :hashed-form-id="hashedFormId"
       @updateHashedFormId="updateHashedFormId"
       @updateIsAdmin="updateIsAdmin"
@@ -120,7 +119,6 @@ export default {
   name: 'App',
   data: function () {
     return {
-      serverUri: process.env.VUE_APP_API_URL,
       hashedFormId: '',
       isAdmin: false,
       axiosTimeout: 3000,
@@ -129,6 +127,16 @@ export default {
     }
   },
   created: function () {
+    var token = localStorage.getItem('sformToken')
+    if (token) {
+      this.$http.defaults.headers.common['X-Auth-Token'] = token
+      this.$http.get('/user/isadmin').then(response => {
+        this.$data.isAdmin = true
+      })
+    } else {
+      this.$router.push({ path: 'signin' })
+    }
+
     window.addEventListener('error', event => {
       if (this.$route.path === '/user/isadmin') {
         this.$data.isAdmin = false
@@ -159,26 +167,26 @@ export default {
       }
     })
 
-    var token = localStorage.getItem('sformToken')
-    var config = {
-      headers: {
-        'x-Requested-With': '*',
-        'X-Auth-Token': token,
-        'Access-Control-Allow-Origin': this.$data.serverUri
-      }
-    }
-    if (token) {
-      if (this.$route.path !== '/' && this.$route.path !== '/signin') {
-        this.$http.get(this.$data.serverUri + '/user/isadmin', config)
-          .then(response => {
-            this.$data.isAdmin = true
-          }).catch(error => {
-            if (error.response.status === '401') {
-              this.$router.push({ path: 'signin' })
-            }
-          })
-      }
-    }
+    // var token = localStorage.getItem('sformToken')
+    // var config = {
+    //   headers: {
+    //     'x-Requested-With': '*',
+    //     'X-Auth-Token': token,
+    //     'Access-Control-Allow-Origin': this.$data.serverUri
+    //   }
+    // }
+    // if (token) {
+    //   if (this.$route.path !== '/' && this.$route.path !== '/signin') {
+    //     this.$http.get(this.$data.serverUri + '/user/isadmin', config)
+    //       .then(response => {
+    //         this.$data.isAdmin = true
+    //       }).catch(error => {
+    //         if (error.response.status === '401') {
+    //           this.$router.push({ path: 'signin' })
+    //         }
+    //       })
+    //   }
+    // }
   },
   methods: {
     updateHashedFormId: function (hashedFormId) {
@@ -188,10 +196,10 @@ export default {
       this.$data.isAdmin = isAdmin
     },
     openFormList: function () {
-      this.$router.push({ path: 'formlist', params: { serverUri: this.$data.serverUri } })
+      this.$router.push({ path: 'formlist' })
     },
     openAdmin: function () {
-      this.$router.push({ path: 'admin', params: { serverUri: this.$data.serverUri } })
+      this.$router.push({ path: 'admin' })
     },
     openOnlineHelp: function () {
       const routeData = this.$router.resolve({ name: 'help' })
@@ -212,18 +220,25 @@ export default {
       const msg = evt.reason.response.data.message
       const statusCode = evt.reason.response.status
       if (statusCode === 400) {
-        if (msg.indexOf('InvalidPasswordException') > 0) {
-          return this.$i18n.t('message.error_invalid_password_exception')
-        }
-        if (msg === 'LoginFailureLimitExceeded') {
-          return this.$i18n.t('message.error_login_failure_limit_exceeded')
-        }
-        if (msg === 'Invalid Verification Request' || msg === 'Verification Timeout') {
-          return this.$i18n.t('message.error_verification_failed')
+        if (msg) {
+          if (msg.indexOf('InvalidPasswordException') > 0) {
+            return this.$i18n.t('message.error_invalid_password_exception')
+          }
+          if (msg === 'LoginFailureLimitExceeded') {
+            return this.$i18n.t('message.error_login_failure_limit_exceeded')
+          }
+          if (msg === 'Invalid Verification Request' || msg === 'Verification Timeout') {
+            return this.$i18n.t('message.error_verification_failed')
+          }
         }
       }
       if (statusCode === 401 || statusCode === 403) {
         return this.$i18n.t('message.error_authorization')
+      }
+      if (statusCode === 404) {
+        if (msg && (msg.indexOf('IdentityNotFoundException') > 0 || msg.indexOf('InvalidPasswordException') > 0)) {
+          return this.$i18n.t('message.error_user_not_found')
+        }
       }
       return this.$i18n.t('message.error_undefined')
     }

@@ -134,16 +134,9 @@ import 'open-iconic/font/css/open-iconic-bootstrap.css'
 
 export default {
   name: 'FormList',
-  props: {
-    serverUri: {
-      type: String,
-      default: ''
-    }
-  },
   data: function () {
     return {
       formList: [],
-      serverUriString: '',
       checkedColumn: [],
       formStatus: ['無効', '有効', '停止中'],
       config: {},
@@ -153,21 +146,8 @@ export default {
     }
   },
   created: function () {
-    var token = localStorage.getItem('sformToken')
-    if (!this.$props.serverUri) {
-      this.$router.push({ path: 'signin' })
-    }
-    this.$data.serverUriString = this.$props.serverUri
-    this.$data.config = {
-      headers: {
-        'x-Requested-With': '*',
-        'X-Auth-Token': token,
-        'Access-Control-Allow-Origin': this.$props.serverUri,
-        timeout: 3000
-      }
-    }
     this.$data.loading = true
-    this.$http.get(this.$props.serverUri + '/form/list', this.$data.config)
+    this.$http.get('/form/list')
       .then(response => {
         this.$data.loading = false
         this.$data.formList = response.data.forms
@@ -176,7 +156,7 @@ export default {
   methods: {
     edit: function (hashedId) {
       this.$emit('updateHashedFormId', hashedId)
-      this.$router.push({ name: 'formedit', params: { hashedFormId: hashedId, serverUri: this.$props.serverUri } })
+      this.$router.push({ name: 'formedit', params: { hashedFormId: hashedId } })
     },
     add: function () {
       if (typeof this.$data.formList === 'undefined') {
@@ -216,7 +196,7 @@ export default {
         ]
       }
       this.$data.loading = true
-      this.$http.post(this.$props.serverUri + '/form/new', tmp, this.$data.config)
+      this.$http.post('/form/new', tmp)
         .then(response => {
           // TODO この辺りは新規データをリストに入れる形ではなくて、リロードした方が良さそう
           this.$data.loading = false
@@ -230,7 +210,7 @@ export default {
     deleteForm: function (index) {
       var form = this.$data.formList[index]
       this.$data.loading = true
-      this.$http.delete(this.$props.serverUri + '/form/' + form.hashed_id, this.$data.config)
+      this.$http.delete('/form/' + form.hashed_id)
         .then(response => {
           this.$delete(this.$data.formList, index)
           this.$data.loading = false
@@ -238,7 +218,7 @@ export default {
     },
     dataView: function (hashedId) {
       this.$emit('updateHashedFormId', hashedId)
-      this.$router.push({ name: 'dataview', params: { hashedFormId: hashedId, serverUri: this.$props.serverUri } })
+      this.$router.push({ name: 'dataview', params: { hashedFormId: hashedId } })
     }
   }
 }

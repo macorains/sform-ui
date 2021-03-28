@@ -91,7 +91,6 @@
     </b-container>
     <transferTaskSalesforceEdit
       ref="TransferTaskSalesforceEdit"
-      :server-uri="serverUri"
       :is-visible="transferEditModalState.Salesforce"
       :transfer-task="formData.form_transfer_tasks[selectedTransferTask]"
       :form-cols="formData.form_cols"
@@ -99,7 +98,6 @@
     />
     <transferTaskMailEdit
       ref="transferTaskMailEdit"
-      :server-uri="serverUri"
       :is-visible="transferEditModalState.Mail"
       :transfer-task="formData.form_transfer_tasks[selectedTransferTask]"
       :form-cols="formData.form_cols"
@@ -115,7 +113,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
 import TransferTaskSalesforceEdit from './TransferTaskSalesforceEdit.vue'
 import TransferTaskMailEdit from './TransferTaskMailEdit.vue'
 import TransferTaskDeleteModal from './TransferTaskDeleteModal.vue'
@@ -128,10 +125,6 @@ export default {
     transferTaskDeleteModal: TransferTaskDeleteModal
   },
   props: {
-    serverUri: {
-      type: String,
-      default: ''
-    },
     hashedFormId: {
       type: String,
       default: ''
@@ -191,16 +184,8 @@ export default {
     }
   },
   created: function () {
-    var token = localStorage.getItem('sformToken')
-    this.$data.config = {
-      headers: {
-        'x-Requested-With': '*',
-        'X-Auth-Token': token,
-        'Access-Control-Allow-Origin': this.$props.serverUri
-      }
-    }
     if (this.$props.hashedFormId) {
-      axios.get(this.$props.serverUri + '/transfer/config/selectlist', this.$data.config)
+      this.$http.get('/transfer/selectlist')
         .then(response => {
           this.$data.transferList = response.data
           this.$data.optionTransferType = this.$data.transferList.map(tr => ({ value: tr.id, text: tr.name }))
