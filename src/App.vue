@@ -132,13 +132,17 @@ export default {
       this.$http.defaults.headers.common['X-Auth-Token'] = token
       this.$http.get('/user/isadmin').then(response => {
         this.$data.isAdmin = true
+      }).catch(function (error) {
+        if (error.response && error.response.status === 403) {
+          this.$data.isAdmin = false
+        }
       })
     } else {
       this.$router.push({ path: 'signin' })
     }
 
     window.addEventListener('error', event => {
-      if (this.$route.path === '/user/isadmin') {
+      if (this.$route.path === '/signin') {
         this.$data.isAdmin = false
       } else {
         this.$bvModal.msgBoxOk(this.convertMessage(event), {
@@ -153,7 +157,7 @@ export default {
     })
 
     window.addEventListener('unhandledrejection', event => {
-      if (this.$route.path === '/user/isadmin') {
+      if (this.$route.path === '/signin') {
         this.$data.isAdmin = false
       } else {
         this.$bvModal.msgBoxOk(this.convertMessage(event), {
@@ -166,27 +170,6 @@ export default {
           })
       }
     })
-
-    // var token = localStorage.getItem('sformToken')
-    // var config = {
-    //   headers: {
-    //     'x-Requested-With': '*',
-    //     'X-Auth-Token': token,
-    //     'Access-Control-Allow-Origin': this.$data.serverUri
-    //   }
-    // }
-    // if (token) {
-    //   if (this.$route.path !== '/' && this.$route.path !== '/signin') {
-    //     this.$http.get(this.$data.serverUri + '/user/isadmin', config)
-    //       .then(response => {
-    //         this.$data.isAdmin = true
-    //       }).catch(error => {
-    //         if (error.response.status === '401') {
-    //           this.$router.push({ path: 'signin' })
-    //         }
-    //       })
-    //   }
-    // }
   },
   methods: {
     updateHashedFormId: function (hashedFormId) {
