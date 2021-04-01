@@ -73,6 +73,12 @@ export default {
       .then(response => {
         if (response.data.result === false) {
           this.$router.push({ path: 'createadmin', params: {} })
+        } else {
+          var token = localStorage.getItem('sformToken')
+          if (token) {
+            this.$http.defaults.headers.common['X-Auth-Token'] = token
+            this.$router.push({ path: 'formlist' })
+          }
         }
       })
   },
@@ -86,6 +92,8 @@ export default {
         .then(response => {
           this.$emit('updateIsAdmin', true)
           this.$router.push({ name: 'codeinput', params: { formToken: response.data.formToken } }).catch(err => { console.log(err) })
+        }).catch(function (error) {
+          console.log(error.response)
         })
     }
   }

@@ -189,8 +189,11 @@ export default {
       window.open(routeData.href, '_blank')
     },
     signout: function () {
-      localStorage.removeItem('sformToken')
-      this.$router.push({ path: 'signin' })
+      this.$http.get('/signOut').then(response => {
+        localStorage.removeItem('sformToken')
+        this.$http.defaults.headers.common['X-Auth-Token'] = null
+        this.$router.push({ path: 'signin' })
+      })
     },
     isMenuValid: function () {
       var res = true
@@ -216,6 +219,7 @@ export default {
         }
       }
       if (statusCode === 401 || statusCode === 403) {
+        localStorage.removeItem('sformToken')
         return this.$i18n.t('message.error_authorization')
       }
       if (statusCode === 404) {
