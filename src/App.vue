@@ -138,7 +138,7 @@ export default {
         }
       })
     } else {
-      this.$router.push({ path: 'signin' })
+      this.$router.push('signin', () => {})
     }
 
     window.addEventListener('error', event => {
@@ -150,7 +150,7 @@ export default {
         })
           .then(trigger => {
             if (event.reason.response.status === 401 || event.reason.response.status === 403) {
-              this.$router.push({ path: 'signin' })
+              this.$router.push('signin', () => {})
             }
           })
       }
@@ -165,7 +165,7 @@ export default {
         })
           .then(trigger => {
             if (event.reason.response.status === 401 || event.reason.response.status === 403) {
-              this.$router.push({ path: 'signin' })
+              this.$router.push('signin', () => {})
             }
           })
       }
@@ -203,8 +203,9 @@ export default {
       return res
     },
     convertMessage: function (evt) {
-      const msg = evt.reason.response.data.message
-      const statusCode = evt.reason.response.status
+      console.log(evt)
+      const msg = evt.reason.response?.data.message
+      const statusCode = evt.reason.response?.status
       if (statusCode === 400) {
         if (msg) {
           if (msg.indexOf('InvalidPasswordException') > 0) {
