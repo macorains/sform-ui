@@ -123,11 +123,11 @@ export default {
       isAdmin: false,
       axiosTimeout: 3000,
       errorMessage: this.$i18n.t('message.error'),
-      noMenuPages: ['/signin', '/help', '/codeinput', '/']
+      noMenuPages: ['/signin', '/help', '/codeinput', '/', '/activate']
     }
   },
   created: function () {
-    var token = localStorage.getItem('sformToken')
+    const token = localStorage.getItem('sformToken')
     if (token) {
       this.$http.defaults.headers.common['X-Auth-Token'] = token
       this.$http.get('/user/isadmin').then(response => {
@@ -138,7 +138,9 @@ export default {
         }
       })
     } else {
-      this.$router.push('signin', () => {})
+      if (!this.$route.path.startsWith('/activate')) {
+        this.$router.push('signin', () => {})
+      }
     }
 
     window.addEventListener('error', event => {
