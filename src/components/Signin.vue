@@ -85,13 +85,14 @@ export default {
   methods: {
     send: function (event) {
       var params = new URLSearchParams()
-      params.append('email', this.email)
+      params.append('username', this.email)
       params.append('group', this.group)
       params.append('password', this.password)
       this.$http.post('/signIn', params)
         .then(response => {
           this.$emit('updateIsAdmin', true)
-          this.$router.push({ name: 'codeinput', params: { formToken: response.data.formToken } }).catch(err => { console.log(err) })
+          console.log(response.data)
+          this.$router.push({ name: 'codeinput', params: { authkey: response.data.authkey } }).catch(err => { console.log(err) })
         }).catch(function (error) {
           console.log(error.response)
         })
