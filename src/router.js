@@ -10,6 +10,7 @@ import Help from '@/components/help/Help.vue'
 import DataView from '@/components/dataview/DataView.vue'
 import CreateAdmin from '@/components/CreateAdmin.vue'
 import CodeInput from '@/components/CodeInput.vue'
+import Activate from '@/components/Activate.vue'
 
 Vue.use(VueRouter)
 
@@ -56,6 +57,11 @@ var router = new VueRouter({
     path: '/codeinput',
     name: 'codeinput',
     component: CodeInput
+  },
+  {
+    path: '/activate/:id',
+    name: 'activate',
+    component: Activate
   }
   ]
 })

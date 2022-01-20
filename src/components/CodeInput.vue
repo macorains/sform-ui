@@ -51,17 +51,16 @@ export default {
     }
   },
   created: function () {
-    this.$data.formToken = this.$route.params.formToken
+    this.$data.formToken = this.$route.params.authkey
   },
   methods: {
     send: function (event) {
       var reqdata = {
-        form_token: this.$data.formToken,
+        authkey: this.$data.formToken,
         verification_code: this.$data.code
       }
       this.$http.post('/verification', reqdata)
         .then(response => {
-          console.log(response)
           // 認証トークンを受け取ってLocalStorageに格納、axiosのデフォルトヘッダにセットする
           const token = response.headers['x-auth-token']
           localStorage.setItem('sformToken', token)
