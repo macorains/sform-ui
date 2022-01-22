@@ -146,14 +146,17 @@ export default {
     }
   },
   created: function () {
-    this.$data.loading = true
-    this.$http.get('/form/list')
-      .then(response => {
-        this.$data.loading = false
-        this.$data.formList = response.data.forms
-      })
+    this.load()
   },
   methods: {
+    load: function () {
+      this.$data.loading = true
+      this.$http.get('/form/list')
+        .then(response => {
+          this.$data.loading = false
+          this.$data.formList = response.data.forms
+        })
+    },
     edit: function (hashedId) {
       this.$emit('updateHashedFormId', hashedId)
       this.$router.push({ name: 'formedit', params: { hashedFormId: hashedId } })
@@ -200,13 +203,8 @@ export default {
       this.$data.loading = true
       this.$http.post('/form/new', tmp)
         .then(response => {
-          // TODO この辺りは新規データをリストに入れる形ではなくて、リロードした方が良さそう
-          this.$data.loading = false
-          const data = response.data
-          tmp.id = data.id
-          tmp.hashed_id = data.hashed_id
           this.$data.modalFormAddComplete = true
-          this.$set(this.$data.formList, i, tmp)
+          this.load()
         })
     },
     deleteForm: function (index) {
@@ -214,8 +212,7 @@ export default {
       this.$data.loading = true
       this.$http.delete('/form/' + form.hashed_id)
         .then(response => {
-          this.$delete(this.$data.formList, index)
-          this.$data.loading = false
+          this.load()
         })
     },
     dataView: function (hashedId) {
