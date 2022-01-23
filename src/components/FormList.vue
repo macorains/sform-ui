@@ -146,14 +146,17 @@ export default {
     }
   },
   created: function () {
-    this.$data.loading = true
-    this.$http.get('/form/list')
-      .then(response => {
-        this.$data.loading = false
-        this.$data.formList = response.data.forms
-      })
+    this.load()
   },
   methods: {
+    load: function () {
+      this.$data.loading = true
+      this.$http.get('/form/list')
+        .then(response => {
+          this.$data.loading = false
+          this.$data.formList = response.data.forms
+        })
+    },
     edit: function (hashedId) {
       this.$emit('updateHashedFormId', hashedId)
       this.$router.push({ name: 'formedit', params: { hashedFormId: hashedId } })
@@ -162,11 +165,12 @@ export default {
       if (typeof this.$data.formList === 'undefined') {
         this.$data.formList = []
       }
-      var i = Object.keys(this.$data.formList).length
+      const i = Object.keys(this.$data.formList).length
       this.$data.addedFormName = 'フォーム' + i
-      var tmp = {
+      const tmp = {
         form_index: i,
-        id: '',
+        id: null,
+        hashed_id: '',
         status: 0,
         name: this.$data.addedFormName,
         title: this.$data.addedFormName,
@@ -193,27 +197,22 @@ export default {
               required: true
             }
           }
-        ]
+        ],
+        form_transfer_tasks: []
       }
       this.$data.loading = true
       this.$http.post('/form/new', tmp)
         .then(response => {
-          // TODO この辺りは新規データをリストに入れる形ではなくて、リロードした方が良さそう
-          this.$data.loading = false
-          var data = response.data
-          tmp.id = data.id
-          tmp.hashed_id = data.hashed_id
           this.$data.modalFormAddComplete = true
-          this.$set(this.$data.formList, i, tmp)
+          this.load()
         })
     },
     deleteForm: function (index) {
-      var form = this.$data.formList[index]
+      const form = this.$data.formList[index]
       this.$data.loading = true
       this.$http.delete('/form/' + form.hashed_id)
         .then(response => {
-          this.$delete(this.$data.formList, index)
-          this.$data.loading = false
+          this.load()
         })
     },
     dataView: function (hashedId) {
