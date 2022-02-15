@@ -1,0 +1,19 @@
+#----------------------------------
+# npm build part
+#----------------------------------
+FROM node:12 as sform-ui-builder
+ARG GITHUB_TOKEN
+
+RUN git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/macorains/sform2-config.git && \
+    git clone https://github.com/macorains/sform-ui.git -b develop-it && \
+    cd sform-ui && \
+    cp ../sform2-config/sform-ui/it.env.js config/it.env.js && \
+    npm install && \
+    npm run build_it
+
+#----------------------------------
+# nginx deploy part
+#----------------------------------
+FROM nginx:latest
+
+COPY --from=sform-ui-builder /sform-ui/dist/ /usr/share/nginx/html/
