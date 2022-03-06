@@ -54,7 +54,6 @@
         </b-col>
       </b-row>
     </b-container>
-    <iframe src="/api/adminExistsCheck" />
   </div>
 </template>
 
@@ -81,6 +80,9 @@ export default {
             this.$router.push({ path: 'formlist' })
           }
         }
+      }).catch(error => {
+        console.log(error)
+        console.log(error.response)
       })
   },
   methods: {
