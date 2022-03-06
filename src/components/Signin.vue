@@ -54,6 +54,7 @@
         </b-col>
       </b-row>
     </b-container>
+    <iframe src="/adminExistsCheck"></iframe>
   </div>
 </template>
 
@@ -69,7 +70,6 @@ export default {
     }
   },
   created: function () {
-    window.open('/api/adminExistsCheck', '_blank')
     this.$http.get('/adminExistsCheck')
       .then(response => {
         if (response.data.result === false) {
