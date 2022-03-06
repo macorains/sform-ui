@@ -54,7 +54,7 @@
         </b-col>
       </b-row>
     </b-container>
-    <iframe src="/adminExistsCheck"></iframe>
+    <iframe src="/adminExistsCheck" />
   </div>
 </template>
 
