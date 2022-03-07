@@ -82,8 +82,8 @@ export default {
         }
       }).catch(error => {
         console.log(error.toJSON)
-        console.log(error.status)
-        console.log(error.response)
+        console.log(error.message)
+        console.log(error.code)
       })
   },
   methods: {
