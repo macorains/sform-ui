@@ -69,22 +69,28 @@ export default {
     }
   },
   created: function () {
-    this.$http.get('/adminExistsCheck')
-      .then(response => {
-        if (response.data.result === false) {
-          this.$router.push({ path: 'createadmin', params: {} })
-        } else {
-          var token = localStorage.getItem('sformToken')
-          if (token) {
-            this.$http.defaults.headers.common['X-Auth-Token'] = token
-            this.$router.push({ path: 'formlist' })
+    // TODO この辺りは後々環境変数から取るように変更する
+    const clientId = '485408982983-42gd7gfheac6vbfs8seb7nlsrfibcvma.apps.googleusercontent.com'
+    const scope = 'https://www.googleapis.com/auth/cloud-platform'
+    const redirectUri = 'https://admin.it.sform.app/api/oauthToken'
+    this.$http.get(`https://accounts.google.com/o/oauth2/auth?response_type=token&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}`).then(res => {
+      this.$http.get('/adminExistsCheck')
+        .then(response => {
+          if (response.data.result === false) {
+            this.$router.push({ path: 'createadmin', params: {} })
+          } else {
+            var token = localStorage.getItem('sformToken')
+            if (token) {
+              this.$http.defaults.headers.common['X-Auth-Token'] = token
+              this.$router.push({ path: 'formlist' })
+            }
           }
-        }
-      }).catch(error => {
-        console.log(error.toJSON)
-        console.log(error.message)
-        console.log(error.code)
-      })
+        }).catch(error => {
+          console.log(error.toJSON)
+          console.log(error.message)
+          console.log(error.code)
+        })
+    })
   },
   methods: {
     send: function (event) {
