@@ -75,24 +75,24 @@ export default {
     const scope = 'https://www.googleapis.com/auth/cloud-platform'
     const redirectUri = 'https://admin.it.sform.app/api/oauthToken'
     const requestUri = `https://accounts.google.com/o/oauth2/auth?response_type=token&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}`
-    Axios.get(requestUri, { headers: {} }).then(res => {
-      this.$http.get('/adminExistsCheck')
-        .then(response => {
-          if (response.data.result === false) {
-            this.$router.push({ path: 'createadmin', params: {} })
-          } else {
-            var token = localStorage.getItem('sformToken')
-            if (token) {
-              this.$http.defaults.headers.common['X-Auth-Token'] = token
-              this.$router.push({ path: 'formlist' })
-            }
+    // TODO OAuth tokenがLocalstorageに無い時だけ呼ぶように変更する
+    window.local.href(requestUri)
+    this.$http.get('/adminExistsCheck')
+      .then(response => {
+        if (response.data.result === false) {
+          this.$router.push({ path: 'createadmin', params: {} })
+        } else {
+          var token = localStorage.getItem('sformToken')
+          if (token) {
+            this.$http.defaults.headers.common['X-Auth-Token'] = token
+            this.$router.push({ path: 'formlist' })
           }
-        }).catch(error => {
-          console.log(error.toJSON)
-          console.log(error.message)
-          console.log(error.code)
-        })
-    })
+        }
+      }).catch(error => {
+        console.log(error.toJSON)
+        console.log(error.message)
+        console.log(error.code)
+      })
   },
   methods: {
     send: function (event) {
