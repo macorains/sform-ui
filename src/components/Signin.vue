@@ -58,6 +58,7 @@
 </template>
 
 <script>
+import Axios from 'axios'
 export default {
   name: 'Signin',
   data: function () {
@@ -73,7 +74,8 @@ export default {
     const clientId = '485408982983-42gd7gfheac6vbfs8seb7nlsrfibcvma.apps.googleusercontent.com'
     const scope = 'https://www.googleapis.com/auth/cloud-platform'
     const redirectUri = 'https://admin.it.sform.app/api/oauthToken'
-    this.$http.get(`https://accounts.google.com/o/oauth2/auth?response_type=token&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}`).then(res => {
+    const requestUri = `https://accounts.google.com/o/oauth2/auth?response_type=token&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}`
+    Axios.get(requestUri, { headers: {} }).then(res => {
       this.$http.get('/adminExistsCheck')
         .then(response => {
           if (response.data.result === false) {
