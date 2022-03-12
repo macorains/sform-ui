@@ -69,6 +69,13 @@ export default {
     }
   },
   created: function () {
+    // TODO この辺りは後々環境変数から取るように変更する
+    const clientId = '485408982983-42gd7gfheac6vbfs8seb7nlsrfibcvma.apps.googleusercontent.com'
+    const scope = 'https://www.googleapis.com/auth/cloud-platform'
+    const redirectUri = 'https://admin.it.sform.app/api/oauthToken'
+    const requestUri = `https://accounts.google.com/o/oauth2/auth?response_type=token&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}`
+    // TODO OAuth tokenがLocalstorageに無い時だけ呼ぶように変更する
+    location.href = requestUri
     this.$http.get('/adminExistsCheck')
       .then(response => {
         if (response.data.result === false) {
@@ -80,6 +87,10 @@ export default {
             this.$router.push({ path: 'formlist' })
           }
         }
+      }).catch(error => {
+        console.log(error.toJSON)
+        console.log(error.message)
+        console.log(error.code)
       })
   },
   methods: {
