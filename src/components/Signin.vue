@@ -72,7 +72,8 @@ export default {
     // TODO この辺りは後々環境変数から取るように変更する
     const clientId = '485408982983-42gd7gfheac6vbfs8seb7nlsrfibcvma.apps.googleusercontent.com'
     const scope = 'https://www.googleapis.com/auth/cloud-platform'
-    const redirectUri = 'https://admin.it.sform.app/api/oauthToken'
+    // const redirectUri = 'https://admin.it.sform.app/api/oauthToken'
+    const redirectUri = 'http://localhost:9001/oauthToken'
     const requestUri = `https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}`
     // TODO OAuth tokenがLocalstorageに無い時だけ呼ぶように変更する
     location.href = requestUri
