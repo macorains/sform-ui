@@ -75,23 +75,28 @@ export default {
     // const redirectUri = 'https://admin.it.sform.app/api/oauthToken'
     const redirectUri = 'http://localhost:9001/oauthToken'
     const requestUri = `https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}`
-    // TODO OAuth tokenがLocalstorageに無い時だけ呼ぶように変更する
-    location.href = requestUri
-    this.$http.get('/adminExistsCheck')
-      .then(response => {
-        if (response.data.result === false) {
-          this.$router.push({ path: 'createadmin', params: {} })
-        } else {
-          var token = localStorage.getItem('sformToken')
-          if (token) {
-            this.$http.defaults.headers.common['X-Auth-Token'] = token
-            this.$router.push({ path: 'formlist' })
-          }
+
+    this.$http.get('/oauthTokenString')
+      .then(tokenResponse => {
+        if (tokenResponse.data.token === '') {
+          location.href = requestUri
         }
-      }).catch(error => {
-        console.log(error.toJSON)
-        console.log(error.message)
-        console.log(error.code)
+        this.$http.get('/adminExistsCheck')
+          .then(response => {
+            if (response.data.result === false) {
+              this.$router.push({ path: 'createadmin', params: {} })
+            } else {
+              var token = localStorage.getItem('sformToken')
+              if (token) {
+                this.$http.defaults.headers.common['X-Auth-Token'] = token
+                this.$router.push({ path: 'formlist' })
+              }
+            }
+          }).catch(error => {
+            console.log(error.toJSON)
+            console.log(error.message)
+            console.log(error.code)
+          })
       })
   },
   methods: {

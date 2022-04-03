@@ -113,6 +113,10 @@ export default {
         .then(response => {
           this.modalMessage = response.data.message
           this.$bvModal.show('modalCreateAdminComplete')
+        }).catch(error => {
+          console.log(error.toJSON)
+          console.log(error.message)
+          console.log(error.code)
         })
     },
     finish: function (event) {
