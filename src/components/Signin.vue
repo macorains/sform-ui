@@ -69,13 +69,10 @@ export default {
     }
   },
   created: function () {
-    // TODO この辺りは後々環境変数から取るように変更する
-    const clientId = '485408982983-42gd7gfheac6vbfs8seb7nlsrfibcvma.apps.googleusercontent.com'
-    const scope = 'https://www.googleapis.com/auth/cloud-platform'
-    // const redirectUri = 'https://admin.it.sform.app/api/oauthToken'
-    const redirectUri = 'http://localhost:9001/oauthToken'
+    const clientId = process.env.VUE_APP_GCP_CLIENT_ID
+    const scope = process.env.VUE_APP_GCP_SCOPE
+    const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
     const requestUri = `https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}`
-
     this.$http.get('/oauthTokenString')
       .then(tokenResponse => {
         if (tokenResponse.data.token === '') {
@@ -86,7 +83,7 @@ export default {
             if (response.data.result === false) {
               this.$router.push({ path: 'createadmin', params: {} })
             } else {
-              var token = localStorage.getItem('sformToken')
+              const token = localStorage.getItem('sformToken')
               if (token) {
                 this.$http.defaults.headers.common['X-Auth-Token'] = token
                 this.$router.push({ path: 'formlist' })
