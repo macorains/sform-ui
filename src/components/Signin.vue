@@ -73,8 +73,7 @@ export default {
     const scope = process.env.VUE_APP_GCP_SCOPE
     const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
     const requestUri = `https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}`
-    console.log(requestUri)
-    /*
+
     this.$http.get('/oauthTokenString')
       .then(tokenResponse => {
         if (tokenResponse.data.token === '') {
@@ -97,7 +96,6 @@ export default {
             console.log(error.code)
           })
       })
-     */
   },
   methods: {
     send: function (event) {
