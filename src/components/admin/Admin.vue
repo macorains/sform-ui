@@ -31,6 +31,17 @@
             </template>
             <userConfig />
           </b-tab>
+          <b-tab>
+            <template slot="title">
+              <span
+                class="oi oi-person"
+                title="person"
+                aria-hidden="true"
+              />
+              {{ $t('message.apitoken') }}
+            </template>
+            <apiToken />
+          </b-tab>
         </b-tabs>
       </b-card>
     </div>
@@ -40,12 +51,14 @@
 <script>
 import UserConfig from './users/UserConfig.vue'
 import TransferConfig from './transfers/TransferConfig.vue'
+import ApiToken from './apitoken/ApiToken.vue'
 
 export default {
   name: 'Admin',
   components: {
     userConfig: UserConfig,
-    transferConfig: TransferConfig
+    transferConfig: TransferConfig,
+    apiToken: ApiToken
   }
 }
 
