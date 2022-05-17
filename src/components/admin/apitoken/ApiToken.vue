@@ -30,7 +30,7 @@
         </b-btn>
       </p>
       <div
-        v-if="apiToken"
+        v-if="isTokenRegisterSuccess"
         class="alert alert-warning"
         role="alert"
       >
@@ -50,7 +50,8 @@ export default {
   data: function () {
     return {
       apiToken: '',
-      expiry: ''
+      expiry: '',
+      isTokenRegisterSuccess: false
     }
   },
   created: function () {
@@ -71,7 +72,6 @@ export default {
     generate: function () {
       this.$http.get('/apitoken/generate')
         .then(response => {
-          console.log(response)
           this.$data.apiToken = response.data.token
           const requestData = {
             token: this.$data.apiToken,
@@ -79,7 +79,7 @@ export default {
           }
           this.$http.post('/apitoken', requestData)
             .then(saveResponse => {
-              console.log(saveResponse)
+              this.$data.isTokenRegisterSuccess = true
             })
         })
     }
