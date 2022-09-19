@@ -166,7 +166,8 @@ export default {
           title: this.$i18n.t('message.error')
         })
           .then(trigger => {
-            if (event.reason.response.status === 401 || event.reason.response.status === 403) {
+            const status = event.reason.response?.status
+            if (status != null && (status === 401 || status === 403)) {
               this.$router.push('signin', () => {})
             }
           })
