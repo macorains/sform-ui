@@ -152,7 +152,7 @@ export default {
         })
     },
     modalClose: function () {
-      this.$emit('transferTaskEditModalClose', 'Salesforce')
+      this.$emit('transferTaskEditModalClose', 'salesforce')
     },
     updateFieldList: function () {
       this.$data.field_list = this.$data.transferConfig.detail.salesforce.objects.filter(o => o.name === this.$props.transferTask.salesforce.object_name).flatMap(o => o.fields).filter(f => f.active)
