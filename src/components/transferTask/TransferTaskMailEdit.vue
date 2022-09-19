@@ -84,12 +84,11 @@
                     v-model="transferTask.mail.to_address_id"
                     :options="mailAddressList"
                   />
-                  <b-form-input
+                  <b-form-select
                     v-if="transferTask.mail.to_address_type === 'to_mail_address_field'"
                     id="transferTask.mail.to_address_field"
-                    ref="to_address"
                     v-model="transferTask.mail.to_address_field"
-                    type="text"
+                    :options="fieldList"
                   />
                 </b-col>
               </b-row>
@@ -123,19 +122,17 @@
                     v-model="transferTask.mail.cc_address"
                     type="text"
                   />
-                  <b-form-input
+                  <b-form-select
                     v-if="transferTask.mail.cc_address_type === 'cc_mail_address_id'"
                     id="transferTask.mail.cc_address_id"
-                    ref="cc_address_id"
                     v-model="transferTask.mail.cc_address_id"
-                    type="text"
+                    :options="mailAddressList"
                   />
-                  <b-form-input
+                  <b-form-select
                     v-if="transferTask.mail.cc_address_type === 'cc_mail_address_field'"
                     id="transferTask.mail.cc_address_field"
-                    ref="cc_address_field"
                     v-model="transferTask.mail.cc_address_field"
-                    type="text"
+                    :options="fieldList"
                   />
                 </b-col>
               </b-row>
@@ -265,7 +262,8 @@ export default {
         }
       },
       selectedTagIndex: -1,
-      mailAddressList: []
+      mailAddressList: [],
+      fieldList: []
     }
   },
   methods: {
@@ -274,6 +272,7 @@ export default {
         .then(response => {
           this.$data.transferConfig = response.data
           this.$data.mailAddressList = this.$data.transferConfig.detail.mail.mail_address_list.map(addr => ({ value: addr.id, text: addr.name + '(' + addr.address + ')' }))
+          this.$data.fieldList = this.$props.formCols.map(col => ({ value: col.id, text: col.name }))
           this.setAddressType()
         })
     },
