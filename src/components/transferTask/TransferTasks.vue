@@ -91,14 +91,14 @@
     </b-container>
     <transferTaskSalesforceEdit
       ref="TransferTaskSalesforceEdit"
-      :is-visible="transferEditModalState.Salesforce"
+      :is-visible="transferEditModalState.salesforce"
       :transfer-task="formData.form_transfer_tasks[selectedTransferTask]"
       :form-cols="formData.form_cols"
       @transferTaskEditModalClose="transferTaskEditModalClose"
     />
     <transferTaskMailEdit
       ref="transferTaskMailEdit"
-      :is-visible="transferEditModalState.Mail"
+      :is-visible="transferEditModalState.mail"
       :transfer-task="formData.form_transfer_tasks[selectedTransferTask]"
       :form-cols="formData.form_cols"
       @transferTaskEditModalClose="transferTaskEditModalClose"
@@ -137,7 +137,7 @@ export default {
   data: function () {
     return {
       defaultTransferTask: {
-        Mail: {
+        mail: {
           form_id: this.$props.formData.id,
           form_transfer_task_conditions: [],
           id: null,
@@ -157,7 +157,7 @@ export default {
           task_index: null,
           transfer_config_id: null
         },
-        Salesforce: {
+        salesforce: {
           form_id: this.$props.formData.id,
           form_transfer_task_conditions: [],
           id: null,
@@ -174,8 +174,8 @@ export default {
       },
       transferList: [],
       transferEditModalState: {
-        Mail: false,
-        Salesforce: false
+        mail: false,
+        salesforce: false
       },
       transferTaskDeleteModalState: false,
       selectedTransferTask: 0,

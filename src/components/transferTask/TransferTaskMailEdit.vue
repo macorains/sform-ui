@@ -8,6 +8,7 @@
       :title="$t('message.mail_transfer_setting')"
       :visible="isVisible"
       @shown="modalInit"
+      @hide="cancel"
     >
       <b-container>
         <b-row>
@@ -219,7 +220,13 @@ export default {
     updateTransferTask: function () {
       this.$data.selectedTagIndex = -1
       this.$refs.modalMailTransferRuleSetting.hide()
-      this.$emit('transferTaskEditModalClose', 'Mail')
+      this.$emit('transferTaskEditModalClose', 'mail')
+    },
+    cancel: function () {
+      // TODO とりあえずupdateと同じにしてあるが、キャンセル時にデータを戻すよう後で改良する
+      this.$data.selectedTagIndex = -1
+      this.$refs.modalMailTransferRuleSetting.hide()
+      this.$emit('transferTaskEditModalClose', 'mail')
     },
     insertTag: function (target) {
       var targetObj = this.$refs[target]
