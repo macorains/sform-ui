@@ -66,6 +66,7 @@ export default {
         })
         .catch(error => {
           // TODO 何か工夫する？
+          alert('apiTokenの有効期限が切れています')
           console.log(error)
         })
     },
