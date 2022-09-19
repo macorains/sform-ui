@@ -241,7 +241,7 @@ export default {
     modalClose: function () {
       this.$data.newName = null
       this.$data.newAddress = null
-      this.$emit('changeModalState', 'Mail', false)
+      this.$emit('changeModalState', 'mail', false)
     },
     edit: function (index) {
       this.$data.inEdit = true

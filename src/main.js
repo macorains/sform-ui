@@ -27,10 +27,10 @@ const i18n = new VueI18n({
 Vue.config.lang = 'ja'
 
 Vue.config.errorHandler = function (e, vm, info) {
-  console.log('*** error ***')
-  console.log(e)
-  console.log(vm)
-  console.log(info)
+  console.error('*** error ***')
+  console.error(e)
+  console.error(vm)
+  console.error(info)
   return false
 }
 

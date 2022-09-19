@@ -27,7 +27,7 @@
             :key="item.config_index"
           >
             <th scope="row">
-              {{ Number(item.config_index) + 1 }}
+              {{ Number(item.config_index) }}
             </th>
             <td>
               {{ item.name }}
@@ -54,14 +54,33 @@
           </tr>
         </tbody>
       </table>
+      <b-row>
+        <b-col>
+          <b-btn
+            class="mt-4"
+            @click="addTransferConfig"
+          >
+            <span
+              class="oi oi-plus"
+              title="plus"
+              aria-hidden="true"
+            />
+            {{ $t("message.add_transfer_config") }}
+          </b-btn>
+        </b-col>
+      </b-row>
     </div>
+    <transferConfigAdd
+      :is-visible="modalState.transferConfigAdd"
+      @changeModalState="changeModalState"
+    />
     <mailTransferConfig
-      :is-visible="modalState.Mail"
+      :is-visible="modalState.mail"
       :transfer-config-id="transferConfigId"
       @changeModalState="changeModalState"
     />
     <salesforceTransferConfig
-      :is-visible="modalState.Salesforce"
+      :is-visible="modalState.salesforce"
       :transfer-config-id="transferConfigId"
       @changeModalState="changeModalState"
     />
@@ -70,9 +89,11 @@
 <script>
 import MailTransferConfig from './MailTransferConfig.vue'
 import SalesforceTransferConfig from './SalesforceTransferConfig.vue'
+import TransferConfigAdd from './TransferConfigAdd'
 export default {
   name: 'TransferConfig',
   components: {
+    transferConfigAdd: TransferConfigAdd,
     mailTransferConfig: MailTransferConfig,
     salesforceTransferConfig: SalesforceTransferConfig
   },
@@ -81,8 +102,9 @@ export default {
       transferConfigList: [],
       transferConfigId: 0,
       modalState: {
-        Salesforce: false,
-        Mail: false
+        transferConfigAdd: false,
+        salesforce: false,
+        mail: false
       }
     }
   },
@@ -94,14 +116,16 @@ export default {
   },
   methods: {
     edit: function (index) {
-      const target = this.$data.transferConfigList[index]
+      const target = this.$data.transferConfigList.filter(config => config.config_index === index)[0]
       this.$data.transferConfigId = target.id
       this.$data.modalState[target.type_code] = true
     },
     changeModalState: function (target, state) {
       this.$data.modalState[target] = state
+    },
+    addTransferConfig: function () {
+      this.$data.modalState.transferConfigAdd = true
     }
-
   }
 }
 </script>

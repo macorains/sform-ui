@@ -46,14 +46,59 @@
           <b-form-row>
             <b-col>
               <b-form-group
-                id="securityTokenGroup"
-                label-for="security_token"
-                :label="$t('message.security_token')"
+                id="salesforceClientIdGroup"
+                label-for="salesforce_client_id"
+                :label="$t('message.salesforce_client_id')"
               >
                 <b-form-input
-                  id="security_token"
-                  v-model="transferConfig.detail.salesforce.sf_security_token"
-                  type="password"
+                  id="salesforce_client_id"
+                  v-model="transferConfig.detail.salesforce.sf_client_id"
+                  type="text"
+                />
+              </b-form-group>
+            </b-col>
+          </b-form-row>
+          <b-form-row>
+            <b-col>
+              <b-form-group
+                id="salesforceClientSecretGroup"
+                label-for="salesforce_client_secret"
+                :label="$t('message.salesforce_client_secret')"
+              >
+                <b-form-input
+                  id="salesforce_client_secret"
+                  v-model="transferConfig.detail.salesforce.sf_client_secret"
+                  type="text"
+                />
+              </b-form-group>
+            </b-col>
+          </b-form-row>
+          <b-form-row>
+            <b-col>
+              <b-form-group
+                id="salesforceDomainGroup"
+                label-for="salesforce_domain"
+                :label="$t('message.salesforce_domain')"
+              >
+                <b-form-input
+                  id="salesforce_domain"
+                  v-model="transferConfig.detail.salesforce.sf_domain"
+                  type="text"
+                />
+              </b-form-group>
+            </b-col>
+          </b-form-row>
+          <b-form-row>
+            <b-col>
+              <b-form-group
+                id="salesforceApiVersionGroup"
+                label-for="salesforce_api_version"
+                :label="$t('message.salesforce_api_version')"
+              >
+                <b-form-input
+                  id="salesforce_api_version"
+                  v-model="transferConfig.detail.salesforce.api_version"
+                  type="text"
                 />
               </b-form-group>
             </b-col>
@@ -224,7 +269,7 @@ export default {
     },
     endEdit: function () {
       this.$data.selectedObject = {}
-      this.$emit('changeModalState', 'Salesforce', false)
+      this.$emit('changeModalState', 'salesforce', false)
     },
     save: function () {
       this.$http.post('/transfer/config', this.$data.transferConfig)
@@ -237,7 +282,10 @@ export default {
       const requestData = {
         username: this.$data.transferConfig.detail.salesforce.sf_user_name,
         password: this.$data.transferConfig.detail.salesforce.sf_password,
-        security_token: this.$data.transferConfig.detail.salesforce.sf_security_token
+        client_id: this.$data.transferConfig.detail.salesforce.sf_client_id,
+        client_secret: this.$data.transferConfig.detail.salesforce.sf_client_secret,
+        api_version: this.$data.transferConfig.detail.salesforce.api_version,
+        domain: this.$data.transferConfig.detail.salesforce.sf_domain
       }
       this.$bvToast.hide('checkResult')
       this.$data.inCheckWaiting = true
