@@ -176,56 +176,18 @@
             />
             <span
               v-for="field in fieldList"
-              v-bind:key="field.id"
+              :key="field.value"
             >
               <b-button
-                @click="insertTag('subject')"
+                @click="insertTag(field.value)"
+                pill
               >
-                {{ field.label }}
+                {{ field.text }}
               </b-button>
             </span>
           </b-col>
         </b-row>
       </b-container>
-
-      <!--
-      <h5>{{ $t('message.tags_of_form_column') }}</h5>
-      <b-list-group
-        v-for="item in formCols"
-        id="form_col_tags"
-        :key="item.col_index"
-        class="mb-2"
-      >
-        <b-list-group-item
-          :active="selectedTagIndex == item.col_index"
-          class="tags"
-          @click="selectTag(item.col_index)"
-        >
-          {{ item.name }}
-        </b-list-group-item>
-      </b-list-group>
-      <b-button
-        @click="insertTag('subject')"
-      >
-        {{ $t('message.mail_subject') }}
-      </b-button>
-      <b-button
-        @click="insertTag('to_address')"
-      >
-        {{ $t('message.mail_to') }}
-      </b-button>
-      <b-button
-        v-if="transferConfig.detail.mail.use_cc"
-        @click="insertTag('cc_address')"
-      >
-        {{ $t('message.mail_cc') }}
-      </b-button>
-      <b-button
-        @click="insertTag('body')"
-      >
-        {{ $t('message.mail_body') }}
-      </b-button>
-      -->
       <b-btn
         class="mt-3"
         block
@@ -276,7 +238,7 @@ export default {
         .then(response => {
           this.$data.transferConfig = response.data
           this.$data.mailAddressList = this.$data.transferConfig.detail.mail.mail_address_list.map(addr => ({ value: addr.id, text: addr.name + '(' + addr.address + ')' }))
-          this.$data.fieldList = this.$props.formCols.map(col => ({ value: col.id, text: col.name }))
+          this.$data.fieldList = this.$props.formCols.map(col => ({ value: col.col_id, text: col.name }))
           this.setAddressType()
         })
     },
@@ -291,12 +253,13 @@ export default {
       this.$refs.modalMailTransferRuleSetting.hide()
       this.$emit('transferTaskEditModalClose', 'mail')
     },
-    insertTag: function (target) {
+    insertTag: function (colId) {
+      const target = 'body'
       const targetObj = this.$refs[target]
       const cursorPosition = targetObj.selectionStart
       const textBefore = targetObj.value.substr(0, cursorPosition)
       const textAfter = targetObj.value.substr(cursorPosition, targetObj.length)
-      this.$set(this.$props.transferTask.mail, target, textBefore + '{%' + this.$props.formCols[this.$data.selectedTagIndex].col_id + '%}' + textAfter)
+      this.$set(this.$props.transferTask.mail, target, textBefore + '{%' + colId + '%}' + textAfter)
     },
     selectTag: function (index) {
       this.$data.selectedTagIndex = index
