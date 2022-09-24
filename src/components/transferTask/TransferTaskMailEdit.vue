@@ -244,6 +244,15 @@ export default {
     },
     updateTransferTask: function () {
       this.$data.selectedTagIndex = -1
+      const transferTaskMail = this.$props.transferTask.mail
+      // 選択してないところのデータをクリアする
+      this.$props.transferTask.mail.to_address = transferTaskMail.to_address_type === 'to_mail_address' ? this.$props.transferTask.mail.to_address : null
+      this.$props.transferTask.mail.to_address_id = transferTaskMail.to_address_type === 'to_mail_address_id' ? this.$props.transferTask.mail.to_address_id : null
+      this.$props.transferTask.mail.to_address_field = transferTaskMail.to_address_type === 'to_mail_address_field' ? this.$props.transferTask.mail.to_address_field : null
+      this.$props.transferTask.mail.cc_address = transferTaskMail.cc_address_type === 'cc_mail_address' ? this.$props.transferTask.mail.cc_address : null
+      this.$props.transferTask.mail.cc_address_id = transferTaskMail.cc_address_type === 'cc_mail_address_id' ? this.$props.transferTask.mail.cc_address_id : null
+      this.$props.transferTask.mail.cc_address_field = transferTaskMail.cc_address_type === 'cc_mail_address_field' ? this.$props.transferTask.mail.cc_address_field : null
+      //
       this.$refs.modalMailTransferRuleSetting.hide()
       this.$emit('transferTaskEditModalClose', 'mail')
     },
