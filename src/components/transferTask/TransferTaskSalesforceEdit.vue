@@ -146,10 +146,6 @@ export default {
             }
           })
         })
-        .catch(function (error) {
-          console.error(error.text)
-          this.$router.push({ path: '/signin' })
-        })
     },
     modalClose: function () {
       this.$emit('transferTaskEditModalClose', 'salesforce')
