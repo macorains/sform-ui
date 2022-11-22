@@ -36,6 +36,7 @@ jobs:
 
       - name: 'Set Project ID'
         run: |
+          echo $PROJECT_ID
           gcloud config set project sform-296512
 
       - name: 'Set up Cloud SDK'
