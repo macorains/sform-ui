@@ -7,7 +7,7 @@ on:
       - feature/SFORM-74
 
 env:
-  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  PROJECT_ID: 'sform-296512'
   WORKLOAD_IDENTITY_POOL_ID: ${{ secrets.WORKLOAD_IDENTITY_POOL_ID }}
   PROVIDER_ID: ${{ secrets.PROVIDER_ID }}
   SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
@@ -36,8 +36,7 @@ jobs:
 
       - name: 'Set Project ID'
         run: |
-          echo $PROJECT_ID
-          gcloud config set project sform-296512
+          gcloud config set project $PROJECT_ID
 
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v1'
