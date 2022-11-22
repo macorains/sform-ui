@@ -51,7 +51,7 @@ jobs:
           docker build \
             --tag "$IMAGE" \
             --build-arg GITHUB_TOKEN="$SFORM_GITHUB_TOKEN" \
-            -f Dockerfile-prod
+            -f Dockerfile-prod \
             .
 
       - name: Publish
