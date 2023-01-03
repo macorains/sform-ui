@@ -74,6 +74,11 @@ export default {
     const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
     const requestUri = `https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}`
 
+    console.log('****************')
+    console.log('clientId:' + clientId)
+    console.log('scope:' + scope)
+    console.log('requestUri:' + requestUri)
+    console.log('****************')
     this.$http.get('/oauthTokenString')
       .then(tokenResponse => {
         if (tokenResponse.data.token === '') {
