@@ -100,6 +100,10 @@ export default {
             console.log(error.message)
             console.log(error.code)
           })
+      }).catch(error => {
+        console.log(error.toJSON)
+        console.log(error.message)
+        console.log(error.code)
       })
   },
   methods: {
