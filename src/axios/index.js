@@ -5,10 +5,10 @@ const http = Axios.create({
   withCredentials: true,
   headers: {
     'x-Requested-With': '*',
-    'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL,
+    'Access-Control-Allow-Origin': '*',
     timeout: 3000,
-    get: {
-      'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL
+    common: {
+      'Access-Control-Allow-Origin': '*'
     }
   }
 })
