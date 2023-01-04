@@ -83,23 +83,24 @@ export default {
       .then(tokenResponse => {
         if (tokenResponse.data.token === '') {
           location.href = requestUri
-        }
-        this.$http.get('/adminExistsCheck')
-          .then(response => {
-            if (response.data.result === false) {
-              this.$router.push({ path: 'createadmin', params: {} })
-            } else {
-              const token = localStorage.getItem('sformToken')
-              if (token) {
-                this.$http.defaults.headers.common['X-Auth-Token'] = token
-                this.$router.push({ path: 'formlist' })
+        } else {
+          this.$http.get('/adminExistsCheck')
+            .then(response => {
+              if (response.data.result === false) {
+                this.$router.push({ path: 'createadmin', params: {} })
+              } else {
+                const token = localStorage.getItem('sformToken')
+                if (token) {
+                  this.$http.defaults.headers.common['X-Auth-Token'] = token
+                  this.$router.push({ path: 'formlist' })
+                }
               }
-            }
-          }).catch(error => {
-            console.log(error.toJSON)
-            console.log(error.message)
-            console.log(error.code)
-          })
+            }).catch(error => {
+              console.log(error.toJSON)
+              console.log(error.message)
+              console.log(error.code)
+            })
+        }
       }).catch(error => {
         console.log(error.toJSON)
         console.log(error.message)
