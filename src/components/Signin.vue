@@ -78,6 +78,7 @@ export default {
     console.log('clientId:' + clientId)
     console.log('scope:' + scope)
     console.log('requestUri:' + requestUri)
+    console.log(this.$http.defaults)
     console.log('****************')
     this.$http.get('/oauthTokenString')
       .then(tokenResponse => {
