@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - feature/SFORM-74
 
 env:
   PROJECT_ID: 'sform-296512'
