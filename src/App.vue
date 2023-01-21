@@ -128,6 +128,11 @@ export default {
   },
   created: function () {
     const token = localStorage.getItem('sformToken')
+    const clientId = process.env.VUE_APP_GCP_CLIENT_ID
+    const scope = process.env.VUE_APP_GCP_SCOPE
+    const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
+    const requestUri = `https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}`
+
     if (token) {
       this.$http.defaults.headers.common['X-Auth-Token'] = token
       this.$http.get('/user/isadmin').then(response => {
@@ -136,6 +141,8 @@ export default {
         console.log(error)
         if (error.response && error.response.status === 403) {
           this.$data.isAdmin = false
+        } else {
+          location.href = requestUri
         }
       })
     } else {
