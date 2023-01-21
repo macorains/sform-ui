@@ -133,6 +133,7 @@ export default {
       this.$http.get('/user/isadmin').then(response => {
         this.$data.isAdmin = true
       }).catch(function (error) {
+        console.log(error)
         if (error.response && error.response.status === 403) {
           this.$data.isAdmin = false
         }
