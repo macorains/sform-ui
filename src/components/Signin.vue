@@ -73,11 +73,13 @@ export default {
     const scope = process.env.VUE_APP_GCP_SCOPE
     const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
     const requestUri = `https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}`
+    const token = localStorage.getItem('sformToken')
 
     console.log('****************')
     console.log('clientId:' + clientId)
     console.log('scope:' + scope)
     console.log('requestUri:' + requestUri)
+    console.log('sformToken:' + token)
     console.log(this.$http)
     console.log('****************')
     this.$http.get('/oauthTokenString')
