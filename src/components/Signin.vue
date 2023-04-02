@@ -82,7 +82,10 @@ export default {
     console.log('****************')
     this.$http.get('/oauthTokenString')
       .then(tokenResponse => {
+        console.log('tokenResponse')
+        console.log(tokenResponse)
         if (tokenResponse.data.token === '') {
+          alert('!')
           location.href = requestUri
         } else {
           this.$http.get('/adminExistsCheck')
