@@ -83,9 +83,6 @@ export default {
     console.log(this.$http)
     console.log('****************')
 
-    // テスト
-    location.href = 'https://admin.it.sform.app/api/oauthTokenString'
-
     this.$http.get('/oauthTokenString')
       .then(tokenResponse => {
         console.log('tokenResponse')
