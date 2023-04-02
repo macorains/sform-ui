@@ -6,6 +6,9 @@ const http = Axios.create({
   headers: {
     'x-Requested-With': '*',
     'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'X-Requested-With,content-type',
+    'Access-Control-Allow-Credentials': 'true',
     timeout: 3000,
     common: {
       'Access-Control-Allow-Origin': '*'
