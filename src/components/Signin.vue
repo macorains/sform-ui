@@ -100,13 +100,13 @@ export default {
                 }
               }
             }).catch(error => {
-              console.log(error.toJSON)
+              console.log(error)
               console.log(error.message)
               console.log(error.code)
             })
         }
       }).catch(error => {
-        console.log(error.toJSON)
+        console.log(error)
         console.log(error.message)
         console.log(error.code)
       })
