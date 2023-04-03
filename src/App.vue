@@ -147,8 +147,8 @@ export default {
       })
     } else {
       if (!this.$route.path.startsWith('/activate')) {
-        location.href = requestUri
-        // this.$router.push('signin', () => {})
+        // location.href = requestUri
+        this.$router.push('signin', () => {})
       }
     }
 
