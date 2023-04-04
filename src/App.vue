@@ -153,6 +153,7 @@ export default {
             const token = tokenResponse.data.token
             console.log('*** token ***')
             console.log(token)
+            localStorage.setItem('sformToken', token)
             if (tokenResponse.data.token === '') {
               // TODO エラーハンドリング
               alert('Can\'t get token!')
