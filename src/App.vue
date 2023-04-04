@@ -142,6 +142,7 @@ export default {
         if (error.response && error.response.status === 403) {
           this.$data.isAdmin = false
         } else {
+          alert('error1')
           location.href = requestUri
         }
       })
@@ -159,6 +160,7 @@ export default {
               // TODO adminExistsCheck
               this.$http.defaults.headers.common['X-Auth-Token'] = token
               // this.$router.push('signin', () => {})
+              alert('error2')
               location.href = requestUri
             }
           })
