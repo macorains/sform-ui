@@ -160,8 +160,8 @@ export default {
               // TODO adminExistsCheck
               this.$http.defaults.headers.common['X-Auth-Token'] = token
               // this.$router.push('signin', () => {})
-              //alert('error2')
-              //location.href = requestUri
+              // alert('error2')
+              // location.href = requestUri
             }
           })
       }
