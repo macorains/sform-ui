@@ -69,50 +69,7 @@ export default {
     }
   },
   created: function () {
-    const clientId = process.env.VUE_APP_GCP_CLIENT_ID
-    const scope = process.env.VUE_APP_GCP_SCOPE
-    const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
-    const requestUri = `https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}`
-    const token = localStorage.getItem('sformToken')
-
-    console.log('****************')
-    console.log('clientId:' + clientId)
-    console.log('scope:' + scope)
-    console.log('requestUri:' + requestUri)
-    console.log('sformToken:' + token)
-    console.log(this.$http)
-    console.log('****************')
-
-    this.$http.get('/oauthTokenString')
-      .then(tokenResponse => {
-        console.log('tokenResponse')
-        console.log(tokenResponse)
-        if (tokenResponse.data.token === '') {
-          alert('!')
-          location.href = requestUri
-        } else {
-          this.$http.get('/adminExistsCheck')
-            .then(response => {
-              if (response.data.result === false) {
-                this.$router.push({ path: 'createadmin', params: {} })
-              } else {
-                const token = localStorage.getItem('sformToken')
-                if (token) {
-                  this.$http.defaults.headers.common['X-Auth-Token'] = token
-                  this.$router.push({ path: 'formlist' })
-                }
-              }
-            }).catch(error => {
-              console.log(error)
-              console.log(error.message)
-              console.log(error.code)
-            })
-        }
-      }).catch(error => {
-        console.log(error)
-        console.log(error.message)
-        console.log(error.code)
-      })
+    console.log('signin')
   },
   methods: {
     send: function (event) {
