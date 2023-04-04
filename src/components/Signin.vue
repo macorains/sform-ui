@@ -77,6 +77,9 @@ export default {
       params.append('username', this.email)
       params.append('group', this.group)
       params.append('password', this.password)
+      const token = localStorage.getItem('sformToken')
+      this.$http.defaults.headers.common['X-Auth-Token'] = token
+
       this.$http.post('/signIn', params)
         .then(response => {
           this.$emit('updateIsAdmin', true)
