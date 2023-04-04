@@ -147,8 +147,21 @@ export default {
       })
     } else {
       if (!this.$route.path.startsWith('/activate')) {
-        location.href = requestUri
-        // this.$router.push('signin', () => {})
+        this.$http.get('/oauthTokenString')
+          .then(tokenResponse => {
+            const token = tokenResponse.data.token
+            console.log('*** token ***')
+            console.log(token)
+            if (tokenResponse.data.token === '') {
+              // TODO エラーハンドリング
+              alert('Can\'t get token!')
+            } else {
+              // TODO adminExistsCheck
+              this.$http.defaults.headers.common['X-Auth-Token'] = token
+              // this.$router.push('signin', () => {})
+              location.href = requestUri
+            }
+          })
       }
     }
 
