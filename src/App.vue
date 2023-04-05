@@ -127,12 +127,10 @@ export default {
     }
   },
   created: function () {
-    const token = JSON.parse(localStorage.getItem('sformToken'))
-    console.log(token)
+    const token = localStorage.getItem('sformToken')
     const clientId = process.env.VUE_APP_GCP_CLIENT_ID
     const scope = process.env.VUE_APP_GCP_SCOPE
-    // const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
-    const redirectUri = 'https://admin.it.sform.app/api/oauthToken'
+    const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
     const requestUri = `https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}`
 
     if (token) {
