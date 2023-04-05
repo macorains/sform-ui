@@ -127,7 +127,8 @@ export default {
     }
   },
   created: function () {
-    const token = JSON.parse(localStorage.getItem('sformToken')).data.token
+    const token = JSON.parse(localStorage.getItem('sformToken'))
+    console.log(token)
     const clientId = process.env.VUE_APP_GCP_CLIENT_ID
     const scope = process.env.VUE_APP_GCP_SCOPE
     const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
