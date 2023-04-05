@@ -131,7 +131,8 @@ export default {
     console.log(token)
     const clientId = process.env.VUE_APP_GCP_CLIENT_ID
     const scope = process.env.VUE_APP_GCP_SCOPE
-    const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
+    // const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
+    const redirectUri = 'https://admin.it.sform.app/api/oauthToken'
     const requestUri = `https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}`
 
     if (token) {
@@ -143,11 +144,12 @@ export default {
         if (error.response && error.response.status === 403) {
           this.$data.isAdmin = false
         } else {
-          alert('error1')
           location.href = requestUri
         }
       })
     } else {
+      location.href = requestUri
+      /*
       if (!this.$route.path.startsWith('/activate')) {
         this.$http.get('/oauthTokenString')
           .then(tokenResponse => {
@@ -167,6 +169,7 @@ export default {
             }
           })
       }
+      */
     }
 
     window.addEventListener('error', event => {
