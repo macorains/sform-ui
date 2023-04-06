@@ -79,7 +79,7 @@ export default {
       params.append('password', this.password)
       const token = localStorage.getItem('sformToken')
       console.log(token)
-      this.$http.defaults.headers.common['X-Auth-Token'] = token
+      this.$http.defaults.headers.common['X-Auth-Token'] = 'Bearer ' + token
 
       this.$http.post('/signIn', params)
         .then(response => {

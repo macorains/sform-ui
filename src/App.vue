@@ -134,7 +134,7 @@ export default {
     const requestUri = `https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}`
 
     if (token) {
-      this.$http.defaults.headers.common['X-Auth-Token'] = token
+      this.$http.defaults.headers.common['X-Auth-Token'] = 'Bearer ' + token
       this.$http.get('/user/isadmin').then(response => {
         this.$data.isAdmin = true
       }).catch(function (error) {
