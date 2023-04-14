@@ -128,13 +128,30 @@ export default {
   },
   created: function () {
     const token = localStorage.getItem('sformToken')
+    if (token) {
+      this.$router.push('signin', () => {})
+    } else {
+      const newToken = this._getToken(location)
+      if (newToken) {
+        localStorage.setItem('sformToken', newToken)
+      } else {
+        const clientId = process.env.VUE_APP_GCP_CLIENT_ID
+        const scope = process.env.VUE_APP_GCP_SCOPE
+        const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
+        const authEndpoint = 'https://accounts.google.com/o/oauth2/auth'
+        const requestUri = `${authEndpoint}?response_type=token&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}`
+        location.href = requestUri
+      }
+    }
+    /*
+    const token = localStorage.getItem('sformToken')
     const clientId = process.env.VUE_APP_GCP_CLIENT_ID
     const scope = process.env.VUE_APP_GCP_SCOPE
     const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
     const requestUri = `https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}`
 
     if (token) {
-      this.$http.defaults.headers.common['X-Auth-Token'] = 'Bearer ' + token
+      this.$http.defaults.headers.common['X-Auth-Token'] = token
       this.$http.get('/user/isadmin').then(response => {
         this.$data.isAdmin = true
       }).catch(function (error) {
@@ -146,30 +163,11 @@ export default {
         }
       })
     } else {
-      location.href = requestUri
-      /*
       if (!this.$route.path.startsWith('/activate')) {
-        this.$http.get('/oauthTokenString')
-          .then(tokenResponse => {
-            const token = tokenResponse.data.token
-            console.log('*** token ***')
-            console.log(token)
-            localStorage.setItem('sformToken', token)
-            if (tokenResponse.data.token === '') {
-              // TODO エラーハンドリング
-              alert('Can\'t get token!')
-            } else {
-              // TODO adminExistsCheck
-              this.$http.defaults.headers.common['X-Auth-Token'] = token
-              // this.$router.push('signin', () => {})
-              // alert('error2')
-              // location.href = requestUri
-            }
-          })
+        this.$router.push('signin', () => {})
       }
-      */
     }
-
+    */
     window.addEventListener('error', event => {
       if (this.$route.path === '/signin') {
         this.$data.isAdmin = false
@@ -259,6 +257,35 @@ export default {
         }
       }
       return this.$i18n.t('message.error_undefined')
+    },
+    _getToken: function (loc) {
+      for (const value of loc.hash.split('&')) {
+        if (value.includes('access_token=')) {
+          return value.split('=')[1]
+        }
+      }
+      return null
+    },
+    getToken: function (code) {
+      console.log('*** code ***')
+      console.log(code)
+      const data = {
+        grant_type: 'authorization_code',
+        code: code,
+        redirect_uri: process.env.VUE_APP_GCP_REDIRECT_URI,
+        client_id: process.env.VUE_APP_GCP_CLIENT_ID
+      }
+
+      this.$http.post('https://oauth2.googleapis.com/token', data)
+        .then(response => {
+          // アクセストークンを取得して、サーバーに送信する
+          const accessToken = response.data.access_token
+          console.log('***** access token *****')
+          console.log(accessToken)
+          localStorage.setItem('sformToken', accessToken)
+          // sendTokenToServer(accessToken)
+        })
+        .catch(r => console.error(r))
     }
   }
 }
