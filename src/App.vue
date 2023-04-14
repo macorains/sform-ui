@@ -129,6 +129,7 @@ export default {
   created: function () {
     const token = localStorage.getItem('sformToken')
     if (token) {
+      alert('token!')
       this.$router.push('signin', () => {})
     } else {
       const newToken = this._getToken(location)
