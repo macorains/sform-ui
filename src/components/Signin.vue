@@ -58,6 +58,7 @@
 </template>
 
 <script>
+import jwt from 'jsonwebtoken'
 export default {
   name: 'Signin',
   data: function () {
@@ -73,20 +74,37 @@ export default {
   },
   methods: {
     send: function (event) {
-      this.$http.get('https://accounts.google.com/.well-known/openid-configuration')
+      this.$http.get('https://www.gstatic.com/iap/verify/public_key-jwk')
         .then(response => {
-          const res = JSON.parse(response)
-          console.log(res)
+          const publicKeys = response.keys
+
+          // JWTライブラリを使用してトークンを検証する
+          const ticket = await jwt.verify(idToken, (header, callback) => {
+            const kid = header.kid;
+            const publicKey = publicKeys.find(key => key.kid === kid);
+            if (publicKey) {
+              const cert = google.auth.JWT.fromJSON(publicKey);
+              callback(null, cert);
+            } else {
+              callback(new Error('Invalid key ID'));
+            }
+          });
+
+          console.log('***** ticket *****')
+          console.log(ticket)
+
+          var params = new URLSearchParams()
+          params.append('username', this.email)
+          params.append('group', this.group)
+          params.append('password', this.password)
+
+          const token = localStorage.getItem('sformToken')
+          console.log('***** token *****')
+          console.log(token)
+          this.$http.defaults.headers.common.Authorization = 'Bearer ' + token
+
         })
 
-      var params = new URLSearchParams()
-      params.append('username', this.email)
-      params.append('group', this.group)
-      params.append('password', this.password)
-      const token = localStorage.getItem('sformToken')
-      console.log('***** token *****')
-      console.log(token)
-      this.$http.defaults.headers.common.Authorization = 'Bearer ' + token
 
       this.$http.post('/signIn', params)
         .then(response => {

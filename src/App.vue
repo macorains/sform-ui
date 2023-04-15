@@ -260,6 +260,7 @@ export default {
       return this.$i18n.t('message.error_undefined')
     },
     _getToken: function (loc) {
+      console.log(loc.hash)
       for (const value of loc.hash.split('&')) {
         if (value.includes('access_token=')) {
           return value.split('=')[1]

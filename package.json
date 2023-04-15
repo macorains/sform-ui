@@ -22,6 +22,7 @@
     "bootstrap-vue": "^2.11.0",
     "diff": "^4.0.2",
     "jquery": "^3.5.0",
+    "jsonwebtoken": "^9.0.0",
     "nyc": "^15.0.1",
     "open-iconic": "^1.1.1",
     "popper.js": "^1.16.1",
