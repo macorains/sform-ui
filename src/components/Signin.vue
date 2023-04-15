@@ -78,8 +78,15 @@ export default {
       params.append('group', this.group)
       params.append('password', this.password)
       const token = localStorage.getItem('sformToken')
+      console.log('***** token *****')
       console.log(token)
       this.$http.defaults.headers.common.Authorization = 'Bearer ' + token
+
+      this.$http.get('https://accounts.google.com/.well-known/openid-configuration')
+        .then(response => {
+          const res = JSON.parse(response)
+          console.log(res)
+        })
 
       this.$http.post('/signIn', params)
         .then(response => {
