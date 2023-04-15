@@ -73,6 +73,12 @@ export default {
   },
   methods: {
     send: function (event) {
+      this.$http.get('https://accounts.google.com/.well-known/openid-configuration')
+        .then(response => {
+          const res = JSON.parse(response)
+          console.log(res)
+        })
+
       var params = new URLSearchParams()
       params.append('username', this.email)
       params.append('group', this.group)
@@ -82,11 +88,6 @@ export default {
       console.log(token)
       this.$http.defaults.headers.common.Authorization = 'Bearer ' + token
 
-      this.$http.get('https://accounts.google.com/.well-known/openid-configuration')
-        .then(response => {
-          const res = JSON.parse(response)
-          console.log(res)
-        })
 
       this.$http.post('/signIn', params)
         .then(response => {
