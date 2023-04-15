@@ -88,7 +88,6 @@ export default {
       console.log(token)
       this.$http.defaults.headers.common.Authorization = 'Bearer ' + token
 
-
       this.$http.post('/signIn', params)
         .then(response => {
           this.$emit('updateIsAdmin', true)
