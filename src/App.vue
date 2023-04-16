@@ -115,6 +115,7 @@
 </template>
 
 <script>
+import { IapVerifier } from 'google-auth-library'
 export default {
   name: 'App',
   data: function () {
@@ -129,12 +130,26 @@ export default {
   created: function () {
     const token = localStorage.getItem('sformToken')
     if (token) {
-      alert('token!')
+      // IDtokenが検証済みの場合はsigninへ
       this.$router.push('signin', () => {})
     } else {
       const newToken = this._getToken(location)
       if (newToken) {
+        // IDtoken作成済みなら保存して検証
         localStorage.setItem('sformToken', newToken)
+        const iapVerifier = new IapVerifier({
+          project: 'sform-296512',
+          backendService: 'sform-api'
+        })
+        iapVerifier.verifyJwtToken(newToken)
+          .success(result => {
+            console.log('***** success *****')
+            console.log(result)
+            this.$router.push('signin', () => {})
+          }).error((c) => {
+            console.error('***** error *****')
+            console.error(c)
+          })
       } else {
         const clientId = process.env.VUE_APP_GCP_CLIENT_ID
         const scope = process.env.VUE_APP_GCP_SCOPE
