@@ -8,7 +8,7 @@ RUN git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/macorains/sform2-
     git clone https://github.com/macorains/sform-ui.git -b develop-it && \
     cd sform-ui && \
     cp ../sform2-config/sform-ui/it.env.js config/it.env.js && \
-    npm install && \
+    npm install --force && \
     npm run build_it
 
 #----------------------------------
