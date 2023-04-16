@@ -1,7 +1,7 @@
 #----------------------------------
 # npm build part
 #----------------------------------
-FROM node:12 as sform-ui-builder
+FROM node:16 as sform-ui-builder
 ARG GITHUB_TOKEN
 
 RUN git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/macorains/sform2-config.git && \
