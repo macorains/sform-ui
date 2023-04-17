@@ -136,7 +136,7 @@ export default {
       if (newToken) {
         // IDtoken作成済みなら検証
         // TODO play側でJWT検証ロジック書いて呼び出すようにする
-        this.$http.get('/iapVerify/' + newToken).then(response => {
+        this.$http.get('/iapVerify/' + newToken, { headers: { Authorization: 'Bearer ' + newToken } }).then(response => {
           console.log('***** jwt *****')
           console.log(response)
         })
