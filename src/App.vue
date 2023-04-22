@@ -127,21 +127,26 @@ export default {
     }
   },
   created: function () {
-    const jwt = localStorage.getItem('sformJWT')
-    if (jwt) {
-      // IDtokenが検証済みの場合はsigninへ
+    // const jwt = localStorage.getItem('sformJWT')
+    const token = localStorage.getItem('sformToken')
+    if (token) {
+      // tokenがある場合はsigninへ
       this.$router.push('signin', () => {})
     } else {
       const newToken = this._getToken(location)
       if (newToken) {
         // IDtoken作成済みなら検証
         // TODO play側でJWT検証ロジック書いて呼び出すようにする
-        this.$http.get('/iapVerify/' + newToken, { headers: { Authorization: 'Bearer ' + newToken } }).then(response => {
-          console.log('***** jwt *****')
-          console.log(response)
-        })
+        // this.$http.post('/iapVerify', { iapToken: newToken }, { headers: { Authorization: 'Bearer ' + newToken } }).then(response => {
+        // this.$http.post('/iapVerify', { iapToken: newToken }).then(response => {
+        // this.$http.get('/iapVerify').then(response => {
+        // console.log('***** jwt *****')
+        // console.log(response)
+        // })
         // TODO 返ってきたJWTをlocalstorageへ
-        // localStorage.setItem('sformJWT', newJwt)
+        // localStorage.setItem
+        this.$http.defaults.headers.common.Authorization = 'Bearer ' + newToken
+        localStorage.setItem('sformToken', newToken)
       } else {
         const clientId = process.env.VUE_APP_GCP_CLIENT_ID
         const scope = process.env.VUE_APP_GCP_SCOPE
