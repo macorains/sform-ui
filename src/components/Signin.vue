@@ -76,7 +76,7 @@ export default {
       const token = localStorage.getItem('sformToken')
       console.log('***** token *****')
       console.log(token)
-      this.$http.defaults.headers.common.Authorization = 'Bearer ' + token
+      // this.$http.defaults.headers.common.Authorization = 'Bearer ' + token
 
       var params = new URLSearchParams()
       params.append('username', this.email)
