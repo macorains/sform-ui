@@ -145,7 +145,7 @@ export default {
         // })
         // TODO 返ってきたJWTをlocalstorageへ
         // localStorage.setItem
-        this.$http.defaults.headers.common.Authorization = 'Bearer ' + newToken
+        // this.$http.defaults.headers.common.Authorization = 'Bearer ' + newToken
         localStorage.setItem('sformToken', newToken)
       } else {
         const clientId = process.env.VUE_APP_GCP_CLIENT_ID
