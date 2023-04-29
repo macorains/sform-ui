@@ -136,31 +136,29 @@ export default {
 
       this.$router.push('signin', () => {})
     } else {
-      const newToken = this._getToken(location)
       const newCode = this.getAuthCode(location)
-      if (newToken) {
-        // IDtoken作成済みなら検証
-        // TODO play側でJWT検証ロジック書いて呼び出すようにする
-        // this.$http.post('/iapVerify', { iapToken: newToken }, { headers: { Authorization: 'Bearer ' + newToken } }).then(response => {
-        // this.$http.post('/iapVerify', { iapToken: newToken }).then(response => {
-        // this.$http.get('/iapVerify').then(response => {
-        // console.log('***** jwt *****')
-        // console.log(response)
-        // })
-        // TODO 返ってきたJWTをlocalstorageへ
-        // localStorage.setItem
-        // this.$http.defaults.headers.common.Authorization = 'Bearer ' + newToken
+      if (newCode) {
+        const codeVerifier = localStorage.getItem('sformCodeVerifier')
         localStorage.setItem('sformAuthCode', newCode)
+        const clientId = '485408982983-42gd7gfheac6vbfs8seb7nlsrfibcvma.apps.googleusercontent.com'
+        const scope = process.env.VUE_APP_GCP_SCOPE
+        const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
+        const tokenEndpoint = 'https://oauth2.googleapis.com/token'
+        const requestUri = `${tokenEndpoint}?response_type=code&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}&code_verifier=${codeVerifier}`
+        this.$http.get(requestUri).then(response => {
+          console.log('*** token response ***')
+          console.log(response)
+          // TODO codeを交換して取得したtokenを保存する
+          // localStorage.setItem('sformJWT', hogehoge)
+        })
       } else {
-        // const clientId = process.env.VUE_APP_GCP_CLIENT_ID
-        // code_verifierを取得して、code_challengeを作る
-        // jsSHAを使う
         var shaObj = new JsSHA('SHA-256', 'TEXT', { encoding: 'UTF8' })
         const codeVerifier = 'xxxxxx'
         shaObj.update(codeVerifier)
         const codeChallenge = shaObj.getHash('HEX')
-        localStorage.setItem('sformCodeChallenge', codeChallenge)
+        localStorage.setItem('sformCodeVerifier', codeVerifier)
 
+        // const clientId = process.env.VUE_APP_GCP_CLIENT_ID
         const clientId = '485408982983-42gd7gfheac6vbfs8seb7nlsrfibcvma.apps.googleusercontent.com'
         const scope = process.env.VUE_APP_GCP_SCOPE
         const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
@@ -169,31 +167,7 @@ export default {
         location.href = requestUri
       }
     }
-    /*
-    const token = localStorage.getItem('sformToken')
-    const clientId = process.env.VUE_APP_GCP_CLIENT_ID
-    const scope = process.env.VUE_APP_GCP_SCOPE
-    const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
-    const requestUri = `https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}`
 
-    if (token) {
-      this.$http.defaults.headers.common['X-Auth-Token'] = token
-      this.$http.get('/user/isadmin').then(response => {
-        this.$data.isAdmin = true
-      }).catch(function (error) {
-        console.log(error)
-        if (error.response && error.response.status === 403) {
-          this.$data.isAdmin = false
-        } else {
-          location.href = requestUri
-        }
-      })
-    } else {
-      if (!this.$route.path.startsWith('/activate')) {
-        this.$router.push('signin', () => {})
-      }
-    }
-    */
     window.addEventListener('error', event => {
       if (this.$route.path === '/signin') {
         this.$data.isAdmin = false
@@ -284,16 +258,9 @@ export default {
       }
       return this.$i18n.t('message.error_undefined')
     },
-    _getToken: function (loc) {
-      console.log(loc.hash)
-      for (const value of loc.hash.split('&')) {
-        if (value.includes('access_token=')) {
-          return value.split('=')[1]
-        }
-      }
-      return null
-    },
     getAuthCode: function (loc) {
+      console.log('*** getAuthCode ***')
+      console.log('[loc]')
       console.log(loc)
       for (const value of loc.hash.split('&')) {
         if (value.includes('access_token=')) {
