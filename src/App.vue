@@ -262,8 +262,8 @@ export default {
       console.log('*** getAuthCode ***')
       console.log('[loc]')
       console.log(loc)
-      for (const value of loc.hash.split('&')) {
-        if (value.includes('access_token=')) {
+      for (const value of loc.search.replace('?', '').split('&')) {
+        if (value.includes('code=')) {
           return value.split('=')[1]
         }
       }
