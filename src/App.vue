@@ -144,7 +144,7 @@ export default {
         const scope = process.env.VUE_APP_GCP_SCOPE
         const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
         const tokenEndpoint = 'https://oauth2.googleapis.com/token'
-        const requestUri = `${tokenEndpoint}?response_type=code&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}&code_verifier=${codeVerifier}`
+        const requestUri = `${tokenEndpoint}?response_type=code&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}&code_verifier=${codeVerifier}&grant_type=authorization_code`
         this.$http.get(requestUri).then(response => {
           console.log('*** token response ***')
           console.log(response)
