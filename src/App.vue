@@ -144,6 +144,12 @@ export default {
         const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
         const tokenEndpoint = 'https://oauth2.googleapis.com/token'
 
+        // Cloudfunctionsにアクセスできるか試す
+        this.http.get('https://asia-northeast1-sform-296512.cloudfunctions.net/testfunc2').then(response => {
+          console.log('*** test ***')
+          console.log(response)
+        })
+
         var params = new URLSearchParams()
         params.append('client_id', clientId)
         params.append('code', newCode)
@@ -151,7 +157,7 @@ export default {
         params.append('code_verifier', codeVerifier)
         params.append('grant_type', 'authorization_code')
 
-        this.$http.post(tokenEndpoint, params).then(response => {
+        this.$http.post(tokenEndpoint, params, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }).then(response => {
           console.log('*** token response ***')
           console.log(response)
           // TODO codeを交換して取得したtokenを保存する
