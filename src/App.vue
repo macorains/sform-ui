@@ -145,7 +145,7 @@ export default {
         const tokenEndpoint = 'https://oauth2.googleapis.com/token'
 
         // Cloudfunctionsにアクセスできるか試す
-        this.http.get('https://asia-northeast1-sform-296512.cloudfunctions.net/testfunc2').then(response => {
+        this.$http.get('https://asia-northeast1-sform-296512.cloudfunctions.net/testfunc2').then(response => {
           console.log('*** test ***')
           console.log(response)
         })
