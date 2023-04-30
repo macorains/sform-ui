@@ -115,7 +115,7 @@
 </template>
 
 <script>
-import JsSHA from 'jssha'
+// import JsSHA from 'jssha'
 export default {
   name: 'App',
   data: function () {
@@ -158,10 +158,12 @@ export default {
           // localStorage.setItem('sformJWT', hogehoge)
         })
       } else {
-        var shaObj = new JsSHA('SHA-256', 'TEXT', { encoding: 'UTF8' })
-        const codeVerifier = 'xxxxxx'
-        shaObj.update(codeVerifier)
-        const codeChallenge = shaObj.getHash('HEX')
+        // var shaObj = new JsSHA('SHA-256', 'TEXT', { encoding: 'UTF8' })
+        const codeVerifier = this.generateRandomString()
+        const sha256 = crypto.subtle.digest('SHA-256', new TextEncoder().encode(codeVerifier))
+        const codeChallenge = btoa(String.fromCharCode(...new Uint8Array(sha256))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
+        // shaObj.update(codeVerifier)
+        // const codeChallenge = shaObj.getHash('HEX')
         localStorage.setItem('sformCodeVerifier', codeVerifier)
 
         // const clientId = process.env.VUE_APP_GCP_CLIENT_ID
@@ -295,6 +297,14 @@ export default {
           // sendTokenToServer(accessToken)
         })
         .catch(r => console.error(r))
+    },
+    generateRandomString: function () {
+      var randomValues = new Uint8Array(43)
+      window.crypto.getRandomValues(randomValues)
+      return btoa(String.fromCharCode.apply(null, randomValues))
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=/g, '')
     }
   }
 }
