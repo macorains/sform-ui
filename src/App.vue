@@ -141,11 +141,15 @@ export default {
         const codeVerifier = localStorage.getItem('sformCodeVerifier')
         localStorage.setItem('sformAuthCode', newCode)
         const clientId = '485408982983-42gd7gfheac6vbfs8seb7nlsrfibcvma.apps.googleusercontent.com'
-        const scope = process.env.VUE_APP_GCP_SCOPE
         const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
         const tokenEndpoint = 'https://oauth2.googleapis.com/token'
-        const requestUri = `${tokenEndpoint}?response_type=code&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}&code_verifier=${codeVerifier}&grant_type=authorization_code`
-        this.$http.get(requestUri).then(response => {
+        this.$http.post(tokenEndpoint, {
+          client_id: clientId,
+          code: newCode,
+          redirect_uri: redirectUri,
+          code_verifier: codeVerifier,
+          grant_type: 'authorization_code'
+        }).then(response => {
           console.log('*** token response ***')
           console.log(response)
           // TODO codeを交換して取得したtokenを保存する
