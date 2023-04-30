@@ -143,13 +143,15 @@ export default {
         const clientId = '485408982983-42gd7gfheac6vbfs8seb7nlsrfibcvma.apps.googleusercontent.com'
         const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
         const tokenEndpoint = 'https://oauth2.googleapis.com/token'
-        this.$http.post(tokenEndpoint, {
-          client_id: clientId,
-          code: newCode,
-          redirect_uri: redirectUri,
-          code_verifier: codeVerifier,
-          grant_type: 'authorization_code'
-        }).then(response => {
+
+        var params = new URLSearchParams()
+        params.append('client_id', clientId)
+        params.append('code', newCode)
+        params.append('redirect_uri', redirectUri)
+        params.append('code_verifier', codeVerifier)
+        params.append('grant_type', 'authorization_code')
+
+        this.$http.post(tokenEndpoint, params).then(response => {
           console.log('*** token response ***')
           console.log(response)
           // TODO codeを交換して取得したtokenを保存する
