@@ -161,8 +161,8 @@ export default {
       } else {
         // var shaObj = new JsSHA('SHA-256', 'TEXT', { encoding: 'UTF8' })
         const codeVerifier = this.generateRandomString()
-        const sha256 = crypto.subtle.digest('SHA-256', new TextEncoder().encode(codeVerifier))
-        const codeChallenge = btoa(String.fromCharCode(...new Uint8Array(sha256))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
+        // const sha256 = crypto.subtle.digest('SHA-256', new TextEncoder().encode(codeVerifier))
+        // const codeChallenge = btoa(String.fromCharCode(...new Uint8Array(sha256))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
         // shaObj.update(codeVerifier)
         // const codeChallenge = shaObj.getHash('HEX')
         localStorage.setItem('sformCodeVerifier', codeVerifier)
@@ -172,7 +172,8 @@ export default {
         const scope = process.env.VUE_APP_GCP_SCOPE
         const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
         const authEndpoint = 'https://accounts.google.com/o/oauth2/auth'
-        const requestUri = `${authEndpoint}?response_type=code&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}&code_challenge=${codeChallenge}&code_challenge_method=S256`
+        // const requestUri = `${authEndpoint}?response_type=code&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}&code_challenge=${codeChallenge}&code_challenge_method=S256`
+        const requestUri = `${authEndpoint}?response_type=code&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}`
         location.href = requestUri
       }
     }
