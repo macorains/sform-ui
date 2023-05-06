@@ -145,9 +145,14 @@ export default {
         const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
         // const tokenEndpoint = 'https://oauth2.googleapis.com/token'
         const tokenEndpoint = 'https://sform-token-endpoint-nxkzsgbc4a-an.a.run.app/'
-        const requestUri = `${tokenEndpoint}?code=${newCode}&redirect_uri=${redirectUri}`
+        // const requestUri = `${tokenEndpoint}?code=${newCode}&redirect_uri=${redirectUri}`
 
-        this.$http.get(requestUri).then(response => {
+        this.$http.get(tokenEndpoint, {
+          params: {
+            code: newCode,
+            redirect_uri: redirectUri
+          }
+        }).then(response => {
           console.log('*** token response ***')
           console.log(response)
           // TODO codeを交換して取得したtokenを保存する
