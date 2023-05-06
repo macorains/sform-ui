@@ -138,13 +138,15 @@ export default {
     } else {
       const newCode = this.getAuthCode(location)
       if (newCode) {
-        const codeVerifier = localStorage.getItem('sformCodeVerifier')
+        // const codeVerifier = localStorage.getItem('sformCodeVerifier')
         localStorage.setItem('sformAuthCode', newCode)
-        const clientId = '485408982983-42gd7gfheac6vbfs8seb7nlsrfibcvma.apps.googleusercontent.com'
-        const scope = process.env.VUE_APP_GCP_SCOPE
+        // const clientId = '485408982983-42gd7gfheac6vbfs8seb7nlsrfibcvma.apps.googleusercontent.com'
+        // const scope = process.env.VUE_APP_GCP_SCOPE
         const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
-        const tokenEndpoint = 'https://oauth2.googleapis.com/token'
-        const requestUri = `${tokenEndpoint}?response_type=code&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}&code_verifier=${codeVerifier}&grant_type=authorization_code`
+        // const tokenEndpoint = 'https://oauth2.googleapis.com/token'
+        const tokenEndpoint = 'https://sform-token-endpoint-nxkzsgbc4a-an.a.run.app/'
+        const requestUri = `${tokenEndpoint}?code=${newCode}&redirect_uri=${redirectUri}`
+
         this.$http.get(requestUri).then(response => {
           console.log('*** token response ***')
           console.log(response)
