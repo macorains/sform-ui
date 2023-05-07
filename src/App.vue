@@ -128,17 +128,16 @@ export default {
     }
   },
   created: function () {
-    // const jwt = localStorage.getItem('sformJWT')
+    const jwt = localStorage.getItem('sformJWT')
     // const token = localStorage.getItem('sformToken')
-    const code = localStorage.getItem('sformAuthCode')
-    if (code) {
+    // const code = localStorage.getItem('sformAuthCode')
+    if (jwt) {
       // codeがある場合はトークン取得してsigninへ
 
       this.$router.push('signin', () => {})
     } else {
       const newCode = this.getAuthCode(location)
       if (newCode) {
-        // const codeVerifier = localStorage.getItem('sformCodeVerifier')
         localStorage.setItem('sformAuthCode', newCode)
         // const clientId = '485408982983-42gd7gfheac6vbfs8seb7nlsrfibcvma.apps.googleusercontent.com'
         // const scope = process.env.VUE_APP_GCP_SCOPE
@@ -155,16 +154,12 @@ export default {
         }).then(response => {
           console.log('*** token response ***')
           console.log(response)
+
           // TODO codeを交換して取得したtokenを保存する
-          // localStorage.setItem('sformJWT', hogehoge)
+          localStorage.setItem('sformJWT', response)
         })
       } else {
-        // var shaObj = new JsSHA('SHA-256', 'TEXT', { encoding: 'UTF8' })
         const codeVerifier = this.generateRandomString()
-        // const sha256 = crypto.subtle.digest('SHA-256', new TextEncoder().encode(codeVerifier))
-        // const codeChallenge = btoa(String.fromCharCode(...new Uint8Array(sha256))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
-        // shaObj.update(codeVerifier)
-        // const codeChallenge = shaObj.getHash('HEX')
         localStorage.setItem('sformCodeVerifier', codeVerifier)
 
         // const clientId = process.env.VUE_APP_GCP_CLIENT_ID
@@ -172,7 +167,6 @@ export default {
         const scope = process.env.VUE_APP_GCP_SCOPE
         const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
         const authEndpoint = 'https://accounts.google.com/o/oauth2/auth'
-        // const requestUri = `${authEndpoint}?response_type=code&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}&code_challenge=${codeChallenge}&code_challenge_method=S256`
         const requestUri = `${authEndpoint}?response_type=code&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}`
         location.href = requestUri
       }
