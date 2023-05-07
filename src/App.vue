@@ -129,16 +129,16 @@ export default {
   },
   created: function () {
     const jwt = localStorage.getItem('sformJWT')
+    console.log('*** jwt ***')
+    console.log(jwt)
     // const token = localStorage.getItem('sformToken')
     // const code = localStorage.getItem('sformAuthCode')
     if (jwt) {
-      // codeがある場合はトークン取得してsigninへ
-
+      this.$http.defaults.headers.common.Authorization = 'Bearer ' + jwt
       this.$router.push('signin', () => {})
     } else {
       const newCode = this.getAuthCode(location)
       if (newCode) {
-        localStorage.setItem('sformAuthCode', newCode)
         const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
         const tokenEndpoint = 'https://sform-token-endpoint-nxkzsgbc4a-an.a.run.app/'
 
@@ -150,8 +150,6 @@ export default {
         }).then(response => {
           console.log('*** token response ***')
           console.log(response)
-
-          // TODO codeを交換して取得したtokenを保存する
           localStorage.setItem('sformJWT', response)
         }).catch(error => {
           console.error('*** error at /token ***')
