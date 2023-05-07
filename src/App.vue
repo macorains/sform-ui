@@ -272,7 +272,8 @@ export default {
       console.log('*** getAuthCode ***')
       console.log('[loc]')
       console.log(loc)
-      for (const value of loc.search.replace('?', '').split('&')) {
+      // for (const value of loc.search.replace('?', '').split('&')) {
+      for (const value of loc.search.replace('?', '')) {
         if (value.includes('code=')) {
           return value.split('=')[1]
         }
