@@ -138,6 +138,8 @@ export default {
       this.$router.push('signin', () => {})
     } else {
       const newCode = this.getAuthCode(location)
+      console.log('*** newCode ***')
+      console.log(newCode)
       if (newCode) {
         const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
         const tokenEndpoint = 'https://sform-token-endpoint-nxkzsgbc4a-an.a.run.app/'
