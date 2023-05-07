@@ -139,12 +139,8 @@ export default {
       const newCode = this.getAuthCode(location)
       if (newCode) {
         localStorage.setItem('sformAuthCode', newCode)
-        // const clientId = '485408982983-42gd7gfheac6vbfs8seb7nlsrfibcvma.apps.googleusercontent.com'
-        // const scope = process.env.VUE_APP_GCP_SCOPE
         const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
-        // const tokenEndpoint = 'https://oauth2.googleapis.com/token'
         const tokenEndpoint = 'https://sform-token-endpoint-nxkzsgbc4a-an.a.run.app/'
-        // const requestUri = `${tokenEndpoint}?code=${newCode}&redirect_uri=${redirectUri}`
 
         this.$http.get(tokenEndpoint, {
           params: {
@@ -157,11 +153,11 @@ export default {
 
           // TODO codeを交換して取得したtokenを保存する
           localStorage.setItem('sformJWT', response)
+        }).catch(error => {
+          console.error('*** error at /token ***')
+          console.error(error)
         })
       } else {
-        const codeVerifier = this.generateRandomString()
-        localStorage.setItem('sformCodeVerifier', codeVerifier)
-
         // const clientId = process.env.VUE_APP_GCP_CLIENT_ID
         const clientId = '485408982983-42gd7gfheac6vbfs8seb7nlsrfibcvma.apps.googleusercontent.com'
         const scope = process.env.VUE_APP_GCP_SCOPE
