@@ -163,7 +163,7 @@ export default {
         const scope = process.env.VUE_APP_GCP_SCOPE
         const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
         const authEndpoint = 'https://accounts.google.com/o/oauth2/auth'
-        const requestUri = `${authEndpoint}?response_type=code&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}`
+        const requestUri = `${authEndpoint}?response_type=code&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}&access_type=offline`
         location.href = requestUri
       }
     }
