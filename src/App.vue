@@ -134,7 +134,7 @@ export default {
     // const token = localStorage.getItem('sformToken')
     // const code = localStorage.getItem('sformAuthCode')
     if (jwt) {
-      this.$http.defaults.headers.common.Authorization = 'Bearer ' + jwt
+      this.$http.defaults.headers.common.Authorization = jwt
       this.$router.push('signin', () => {})
     } else {
       const newCode = this.getAuthCode(location)
