@@ -152,7 +152,7 @@ export default {
         }).then(response => {
           console.log('*** token response ***')
           console.log(response)
-          localStorage.setItem('sformJWT', response)
+          localStorage.setItem('sformJWT', response.data.access_token)
         }).catch(error => {
           console.error('*** error at /token ***')
           console.error(error)
