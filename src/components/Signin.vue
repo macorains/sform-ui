@@ -84,7 +84,13 @@ export default {
       params.append('group', this.group)
       params.append('password', this.password)
 
-      this.$http.post('/signIn', params)
+      const config = {
+        headers: {
+          Authorization: 'Bearer ' + token
+        }
+      }
+
+      this.$http.post('/signIn', params, config)
         .then(response => {
           this.$emit('updateIsAdmin', true)
           console.log(response.data)
