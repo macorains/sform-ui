@@ -159,7 +159,8 @@ export default {
         })
       } else {
         // const clientId = process.env.VUE_APP_GCP_CLIENT_ID
-        const clientId = '485408982983-42gd7gfheac6vbfs8seb7nlsrfibcvma.apps.googleusercontent.com'
+        // const clientId = '485408982983-42gd7gfheac6vbfs8seb7nlsrfibcvma.apps.googleusercontent.com'
+        const clientId = '485408982983-1q5m8nbput49j9hpd03id605bd7tnbji.apps.googleusercontent.com'
         const scope = process.env.VUE_APP_GCP_SCOPE
         const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
         const authEndpoint = 'https://accounts.google.com/o/oauth2/auth'
