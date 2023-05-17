@@ -86,7 +86,8 @@ export default {
 
       const config = {
         headers: {
-          Authorization: 'Bearer ' + token,
+          // Authorization: 'Bearer ' + token
+          'Proxy-Authorization': 'Bearer ' + token,
           'Content-Type': 'application/json'
         }
       }
