@@ -99,6 +99,10 @@ export default {
           console.log(response.data)
           this.$router.push({ name: 'codeinput', params: { authkey: response.data.authkey } }).catch(err => { console.log(err) })
         }).catch(function (error) {
+          switch (error.response?.status) {
+            case 401:
+              window.open('https://admin.it.sform.app?gcp-iap-mode=DO_SESSION_REFRESH')
+          }
           console.log(error.response)
         })
     }
