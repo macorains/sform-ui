@@ -162,11 +162,12 @@ export default {
         // const clientId = '485408982983-42gd7gfheac6vbfs8seb7nlsrfibcvma.apps.googleusercontent.com'
         const clientId = '485408982983-1q5m8nbput49j9hpd03id605bd7tnbji.apps.googleusercontent.com'
         const scope = process.env.VUE_APP_GCP_SCOPE
-        // const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
-        const redirectUri = 'https://sform-token-endpoint-nxkzsgbc4a-an.a.run.app/'
+        const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
+        // const redirectUri = 'https://sform-token-endpoint-nxkzsgbc4a-an.a.run.app/'
         const authEndpoint = 'https://accounts.google.com/o/oauth2/auth'
         const requestUri = `${authEndpoint}?response_type=code&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}`
-        location.href = requestUri
+        console.log(requestUri)
+        // location.href = requestUri
       }
     }
 
