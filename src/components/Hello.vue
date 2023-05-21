@@ -18,6 +18,9 @@ export default {
       msg: 'Sform administration'
     }
   },
+  created: function () {
+    console.log(document.cookie)
+  },
   methods: {
     signin: function () {
       this.$router.push({ path: '/signin' })
