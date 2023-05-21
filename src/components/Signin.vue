@@ -101,7 +101,7 @@ export default {
         }).catch(function (error) {
           switch (error.response?.status) {
             case 401:
-              window.open('https://admin.it.sform.app?gcp-iap-mode=DO_SESSION_REFRESH')
+              window.open('https://admin.it.sform.app?gcp-iap-mode=DO_SESSION_REFRESH', 'hoge', null)
           }
           console.log(error.response)
         })
