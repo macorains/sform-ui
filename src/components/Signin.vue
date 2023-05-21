@@ -85,9 +85,10 @@ export default {
       params.append('password', this.password)
 
       const config = {
+        withCredentials: true,
         headers: {
           // Authorization: 'Bearer ' + token
-          'Proxy-Authorization': 'Bearer ' + token,
+          // 'Proxy-Authorization': 'Bearer ' + token,
           'Content-Type': 'application/json'
         }
       }
