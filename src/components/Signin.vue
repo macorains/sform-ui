@@ -73,12 +73,6 @@ export default {
   },
   methods: {
     send: function (event) {
-      // const token = localStorage.getItem('sformToken')
-      const token = localStorage.getItem('sformJWT')
-      console.log('***** token *****')
-      console.log(token)
-      this.$http.defaults.headers.common.Authorization = 'Bearer ' + token
-
       var params = new URLSearchParams()
       params.append('username', this.email)
       params.append('group', this.group)
@@ -87,8 +81,6 @@ export default {
       const config = {
         withCredentials: true,
         headers: {
-          // Authorization: 'Bearer ' + token
-          // 'Proxy-Authorization': 'Bearer ' + token,
           'Content-Type': 'application/json'
         }
       }

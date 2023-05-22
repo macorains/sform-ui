@@ -128,49 +128,6 @@ export default {
     }
   },
   created: function () {
-    const jwt = localStorage.getItem('sformJWT')
-    console.log('*** jwt ***')
-    console.log(jwt)
-    // const token = localStorage.getItem('sformToken')
-    // const code = localStorage.getItem('sformAuthCode')
-    if (jwt) {
-      this.$http.defaults.headers.common.Authorization = 'Bearer ' + jwt
-      this.$router.push('signin', () => {})
-    } else {
-      const newCode = this.getAuthCode(location)
-      console.log('*** newCode ***')
-      console.log(newCode)
-      if (newCode) {
-        const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
-        const tokenEndpoint = 'https://sform-token-endpoint-nxkzsgbc4a-an.a.run.app/'
-
-        this.$http.get(tokenEndpoint, {
-          params: {
-            code: newCode,
-            redirect_uri: redirectUri
-          }
-        }).then(response => {
-          console.log('*** token response ***')
-          console.log(response)
-          localStorage.setItem('sformJWT', response.data.access_token)
-        }).catch(error => {
-          console.error('*** error at /token ***')
-          console.error(error)
-        })
-      } else {
-        // const clientId = process.env.VUE_APP_GCP_CLIENT_ID
-        // const clientId = '485408982983-42gd7gfheac6vbfs8seb7nlsrfibcvma.apps.googleusercontent.com'
-        const clientId = '485408982983-1q5m8nbput49j9hpd03id605bd7tnbji.apps.googleusercontent.com'
-        const scope = process.env.VUE_APP_GCP_SCOPE
-        const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
-        // const redirectUri = 'https://sform-token-endpoint-nxkzsgbc4a-an.a.run.app/'
-        const authEndpoint = 'https://accounts.google.com/o/oauth2/auth'
-        const requestUri = `${authEndpoint}?response_type=code&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}`
-        console.log(requestUri)
-        // location.href = requestUri
-      }
-    }
-
     window.addEventListener('error', event => {
       if (this.$route.path === '/signin') {
         this.$data.isAdmin = false
