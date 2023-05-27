@@ -73,15 +73,18 @@ export default {
   },
   methods: {
     send: function (event) {
-      var params = new URLSearchParams()
+      const params = new URLSearchParams()
       params.append('username', this.email)
       params.append('group', this.group)
       params.append('password', this.password)
 
+      const jwt = localStorage.getItem('sformToken')
+
       const config = {
         withCredentials: true,
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          Authorization: jwt
         }
       }
 
