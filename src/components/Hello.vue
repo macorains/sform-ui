@@ -19,7 +19,9 @@ export default {
     }
   },
   created: function () {
-    console.log(document.cookie)
+    const jwt = localStorage.getItem('sformToken')
+    console.log('*** jwt ***')
+    console.log(jwt)
   },
   methods: {
     signin: function () {
