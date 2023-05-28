@@ -18,6 +18,9 @@ export default {
       msg: 'Sform administration'
     }
   },
+  created: function () {
+    // localstorageのJWTをチェック、存在しない場合はJWT取得のアクションへリダイレクトかける
+  },
   methods: {
     signin: function () {
       this.$router.push({ path: '/signin' })
