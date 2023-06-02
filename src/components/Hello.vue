@@ -19,7 +19,18 @@ export default {
     }
   },
   created: function () {
-    // localstorageのJWTをチェック、存在しない場合はJWT取得のアクションへリダイレクトかける
+    const token = localStorage.getItem('sformToken')
+    if (!token) {
+      location.href = process.env.VUE_APP_API_URL + '/jwt'
+    }
+    this.$http.defaults.headers.common['X-Auth-Token'] = token
+
+    this.$http.get('/adminExistsCheck')
+      .then(response => {
+        if (response.data.result === false) {
+          this.$router.push({ path: 'createadmin', params: {} })
+        }
+      })
   },
   methods: {
     signin: function () {
