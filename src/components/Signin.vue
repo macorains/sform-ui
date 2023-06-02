@@ -68,36 +68,18 @@ export default {
       formList: {}
     }
   },
-  created: function () {
-    console.log('signin')
-  },
   methods: {
     send: function (event) {
-      const params = new URLSearchParams()
+      var params = new URLSearchParams()
       params.append('username', this.email)
       params.append('group', this.group)
       params.append('password', this.password)
-
-      const jwt = localStorage.getItem('sformToken')
-
-      const config = {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: jwt
-        }
-      }
-
-      this.$http.post('/signIn', params, config)
+      this.$http.post('/signIn', params)
         .then(response => {
           this.$emit('updateIsAdmin', true)
           console.log(response.data)
           this.$router.push({ name: 'codeinput', params: { authkey: response.data.authkey } }).catch(err => { console.log(err) })
         }).catch(function (error) {
-          switch (error.response?.status) {
-            case 401:
-              window.open('https://admin.it.sform.app?gcp-iap-mode=DO_SESSION_REFRESH', 'hoge', null)
-          }
           console.log(error.response)
         })
     }
