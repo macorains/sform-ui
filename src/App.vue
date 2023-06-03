@@ -128,6 +128,12 @@ export default {
     }
   },
   created: function () {
+    const token = localStorage.getItem('sformToken')
+    if (!token) {
+      location.href = process.env.VUE_APP_API_URL + '/jwt'
+    }
+    this.$http.defaults.headers.common['X-Auth-Token'] = token
+
     window.addEventListener('error', event => {
       if (this.$route.path === '/signin') {
         this.$data.isAdmin = false
