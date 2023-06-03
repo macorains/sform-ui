@@ -18,7 +18,7 @@ export default {
       msg: 'Sform administration'
     }
   },
-  created: function () {
+  mounted: function () {
     this.$http.get('/adminExistsCheck')
       .then(response => {
         if (response.data.result === false) {
