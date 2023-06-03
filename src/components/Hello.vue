@@ -18,6 +18,14 @@ export default {
       msg: 'Sform administration'
     }
   },
+  mounted: function () {
+    this.$http.get('/adminExistsCheck')
+      .then(response => {
+        if (response.data.result === false) {
+          this.$router.push({ path: 'createadmin', params: {} })
+        }
+      })
+  },
   methods: {
     signin: function () {
       this.$router.push({ path: '/signin' })
