@@ -19,12 +19,15 @@ export default {
     }
   },
   mounted: function () {
-    this.$http.get('/adminExistsCheck')
-      .then(response => {
-        if (response.data.result === false) {
-          this.$router.push({ path: 'createadmin', params: {} })
-        }
-      })
+    const token = localStorage.getItem('sformToken')
+    if (token) {
+      this.$http.get('/adminExistsCheck')
+        .then(response => {
+          if (response.data.result === false) {
+            this.$router.push({ path: 'createadmin', params: {} })
+          }
+        })
+    }
   },
   methods: {
     signin: function () {
