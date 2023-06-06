@@ -107,7 +107,6 @@
       </b-collapse>
     </b-navbar>
     <router-view
-      v-if="loaded"
       :hashed-form-id="hashedFormId"
       @updateHashedFormId="updateHashedFormId"
       @updateIsAdmin="updateIsAdmin"
