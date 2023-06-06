@@ -1,5 +1,8 @@
 <template>
-  <div class="hello">
+  <div
+    v-if="loaded"
+    class="hello"
+  >
     <h1>{{ msg }}</h1>
     <b-button
       size="sm"
@@ -15,6 +18,7 @@ export default {
   name: 'Hello',
   data () {
     return {
+      loaded: false,
       msg: 'Sform administration'
     }
   },
@@ -27,6 +31,7 @@ export default {
             this.$router.push({ path: 'createadmin', params: {} })
           }
         })
+      this.$data.loaded = true
     }
   },
   methods: {

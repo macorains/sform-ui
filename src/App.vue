@@ -121,7 +121,6 @@ export default {
   name: 'App',
   data: function () {
     return {
-      loaded: false,
       hashedFormId: '',
       isAdmin: false,
       axiosTimeout: 3000,
@@ -132,11 +131,10 @@ export default {
   created: function () {
     const token = localStorage.getItem('sformToken')
     if (!token) {
-      // TODO この時画面切り替わりに時間かかるケースがあるので、何とかする
       location.href = process.env.VUE_APP_API_URL + '/jwt'
     }
     this.$http.defaults.headers.common['X-Auth-Token'] = token
-    this.$data.loaded = true
+
     window.addEventListener('error', event => {
       if (this.$route.path === '/signin') {
         this.$data.isAdmin = false
