@@ -1,5 +1,8 @@
 <template>
-  <div class="hello">
+  <div
+    v-if="loaded"
+    class="hello"
+  >
     <h1>{{ msg }}</h1>
     <b-button
       size="sm"
@@ -15,7 +18,20 @@ export default {
   name: 'Hello',
   data () {
     return {
+      loaded: false,
       msg: 'Sform administration'
+    }
+  },
+  mounted: function () {
+    const token = localStorage.getItem('sformToken')
+    if (token) {
+      this.$http.get('/adminExistsCheck')
+        .then(response => {
+          if (response.data.result === false) {
+            this.$router.push({ path: 'createadmin', params: {} })
+          }
+        })
+      this.$data.loaded = true
     }
   },
   methods: {

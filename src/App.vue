@@ -128,28 +128,10 @@ export default {
   },
   created: function () {
     const token = localStorage.getItem('sformToken')
-    const clientId = process.env.VUE_APP_GCP_CLIENT_ID
-    const scope = process.env.VUE_APP_GCP_SCOPE
-    const redirectUri = process.env.VUE_APP_GCP_REDIRECT_URI
-    const requestUri = `https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}`
-
-    if (token) {
-      this.$http.defaults.headers.common['X-Auth-Token'] = token
-      this.$http.get('/user/isadmin').then(response => {
-        this.$data.isAdmin = true
-      }).catch(function (error) {
-        console.log(error)
-        if (error.response && error.response.status === 403) {
-          this.$data.isAdmin = false
-        } else {
-          location.href = requestUri
-        }
-      })
-    } else {
-      if (!this.$route.path.startsWith('/activate')) {
-        this.$router.push('signin', () => {})
-      }
+    if (!token) {
+      location.href = process.env.VUE_APP_API_URL + '/jwt'
     }
+    this.$http.defaults.headers.common['X-Auth-Token'] = token
 
     window.addEventListener('error', event => {
       if (this.$route.path === '/signin') {
@@ -158,7 +140,7 @@ export default {
         this.$bvModal.msgBoxOk(this.convertMessage(event), {
           title: this.$i18n.t('message.error')
         })
-          .then(trigger => {
+          .then(() => {
             if (event.reason.response.status === 401 || event.reason.response.status === 403) {
               this.$router.push('signin', () => {})
             }
@@ -173,7 +155,7 @@ export default {
         this.$bvModal.msgBoxOk(this.convertMessage(event), {
           title: this.$i18n.t('message.error')
         })
-          .then(trigger => {
+          .then(() => {
             const status = event.reason.response?.status
             if (status != null && (status === 401 || status === 403)) {
               this.$router.push('signin', () => {})
