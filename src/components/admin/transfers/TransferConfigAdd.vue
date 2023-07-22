@@ -67,10 +67,13 @@ export default {
   },
   methods: {
     modalInit: function () {
+      // TODO 必要な処理があれば追加、↓の部分は不要と思われるので別途削除 (2023/07/20)
+      /*
       this.$http.get('/transfer/config/' + this.$props.transferConfigId)
         .then(response => {
           this.$data.transferConfig = response.data
         })
+      */
     },
     modalClose: function () {
       this.$data.newName = null
@@ -78,6 +81,8 @@ export default {
       this.$emit('changeModalState', 'transferConfigAdd', false)
     },
     add: function (index) {
+      // TODO TransferConfigを追加するコードを追加する (2023/07/20)
+      // POST /transfer/config/ で追加できる
     }
   }
 }
