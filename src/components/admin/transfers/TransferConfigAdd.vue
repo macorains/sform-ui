@@ -11,6 +11,7 @@
     @shown="modalInit()"
     @close="modalClose()"
     @hide="modalClose()"
+    @ok="add()"
   >
     <b-container class="text-left">
       <b-form-row>
@@ -54,12 +55,28 @@ export default {
     return {
       transferConfig: {
         detail: {
-          mail: {
-            use_cc: false,
-            use_bcc: false,
-            use_replyto: false,
-            mail_address_list: []
-          }
+          mail: null,
+          salesforce: null
+        }
+      },
+      defaultConfig: {
+        mail: {
+          use_cc: false,
+          use_bcc: false,
+          use_replyto: false,
+          mail_address_list: []
+        },
+        salesforce: {
+          sf_domain: '',
+          api_version: '',
+          sf_user_name: '',
+          sf_password: '',
+          sf_client_id: '',
+          sf_client_secret: '',
+          iv_user_name: '',
+          iv_password: '',
+          iv_client_id: '',
+          iv_client_secret: ''
         }
       },
       selectedTransferType: ''
@@ -81,8 +98,16 @@ export default {
       this.$emit('changeModalState', 'transferConfigAdd', false)
     },
     add: function (index) {
+      // alert(this.$data.selectedTransferType)
+      const transferType = this.$data.selectedTransferType
+      const data = JSON.parse(JSON.stringify(this.$data.transferConfig))
+      data.detail[transferType] = JSON.parse(JSON.stringify(this.$data.defaultConfig[transferType]))
       // TODO TransferConfigを追加するコードを追加する (2023/07/20)
       // POST /transfer/config/ で追加できる
+      this.$http.post('/transfer/config', data).then(response => {
+        console.info('hoge') // TODO 何か処理入れる (2023/08/19)
+        console.log(response)
+      })
     }
   }
 }

@@ -65,8 +65,8 @@ export default {
           this.$data.expiry = response.data.expiry
         })
         .catch(error => {
-          // TODO 何か工夫する？
-          alert('apiTokenの有効期限が切れています')
+          // TODO ここに入れるといちいちうるさいので入れる位置を考え直す (2023/08/20)
+          // alert('apiTokenの有効期限が切れています')
           console.log(error)
         })
     },
