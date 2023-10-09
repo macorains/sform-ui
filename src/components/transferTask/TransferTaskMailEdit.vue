@@ -179,8 +179,8 @@
               :key="field.value"
             >
               <b-button
-                @click="insertTag(field.value)"
                 pill
+                @click="insertTag(field.value)"
               >
                 {{ field.text }}
               </b-button>

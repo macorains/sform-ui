@@ -54,6 +54,11 @@ export default {
   data: function () {
     return {
       transferConfig: {
+        id: null,
+        name: '転送設定:',
+        status: 1,
+        type_code: '',
+        config_index: null,
         detail: {
           mail: null,
           salesforce: null
@@ -61,12 +66,16 @@ export default {
       },
       defaultConfig: {
         mail: {
+          id: null,
+          transfer_config_id: null,
           use_cc: false,
           use_bcc: false,
           use_replyto: false,
           mail_address_list: []
         },
         salesforce: {
+          id: null,
+          transfer_config_id: null,
           sf_domain: '',
           api_version: '',
           sf_user_name: '',
@@ -76,7 +85,8 @@ export default {
           iv_user_name: '',
           iv_password: '',
           iv_client_id: '',
-          iv_client_secret: ''
+          iv_client_secret: '',
+          objects: []
         }
       },
       selectedTransferType: ''
@@ -98,12 +108,10 @@ export default {
       this.$emit('changeModalState', 'transferConfigAdd', false)
     },
     add: function (index) {
-      // alert(this.$data.selectedTransferType)
       const transferType = this.$data.selectedTransferType
       const data = JSON.parse(JSON.stringify(this.$data.transferConfig))
       data.detail[transferType] = JSON.parse(JSON.stringify(this.$data.defaultConfig[transferType]))
-      // TODO TransferConfigを追加するコードを追加する (2023/07/20)
-      // POST /transfer/config/ で追加できる
+      data.type_code = transferType
       this.$http.post('/transfer/config', data).then(response => {
         console.info('hoge') // TODO 何か処理入れる (2023/08/19)
         console.log(response)

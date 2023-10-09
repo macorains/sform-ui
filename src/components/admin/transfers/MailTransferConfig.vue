@@ -13,6 +13,15 @@
     <b-container class="text-left">
       <b-form-row>
         <b-col>
+          名前
+          <b-form-input
+            v-model="transferConfig.name"
+            type="text"
+          />
+        </b-col>
+      </b-form-row>
+      <b-form-row>
+        <b-col>
           <b-form-checkbox
             v-if="transferConfig.detail.mail"
             id="use_cc"
@@ -216,6 +225,11 @@ export default {
   data: function () {
     return {
       transferConfig: {
+        id: null,
+        name: '転送設定:',
+        status: 1,
+        type_code: '',
+        config_index: null,
         detail: {
           mail: {
             use_cc: false,

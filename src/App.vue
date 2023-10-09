@@ -127,9 +127,12 @@ export default {
     }
   },
   created: function () {
-    const token = localStorage.getItem('sformToken')
+    let token = localStorage.getItem('sformToken')
     if (!token) {
-      location.href = process.env.VUE_APP_API_URL + '/jwt'
+      if (location.hostname !== 'localhost') {
+        location.href = process.env.VUE_APP_API_URL + '/jwt'
+      }
+      token = 'hogehoge' // 開発環境ではJWT使ってないので
     }
     this.$http.defaults.headers.common['X-Auth-Token'] = token
 
