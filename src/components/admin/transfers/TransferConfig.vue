@@ -33,7 +33,7 @@
               {{ item.name }}
             </td>
             <td>
-              {{ item.status }}
+              {{ item.status == 1 ? '有効' : '無効' }}
             </td>
             <td>
               {{ item.type_code }}
@@ -109,12 +109,15 @@ export default {
     }
   },
   created: function () {
-    this.$http.get('/transfer/config/list')
-      .then(response => {
-        this.$data.transferConfigList = response.data
-      })
+    this.getList()
   },
   methods: {
+    getList: function () {
+      this.$http.get('/transfer/config/list')
+        .then(response => {
+          this.$data.transferConfigList = response.data
+        })
+    },
     edit: function (index) {
       const target = this.$data.transferConfigList.filter(config => config.config_index === index)[0]
       this.$data.transferConfigId = target.id
@@ -122,6 +125,9 @@ export default {
     },
     changeModalState: function (target, state) {
       this.$data.modalState[target] = state
+      if (!state) {
+        this.getList()
+      }
     },
     addTransferConfig: function () {
       this.$data.modalState.transferConfigAdd = true
